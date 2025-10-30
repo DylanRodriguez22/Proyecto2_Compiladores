@@ -1,0 +1,37 @@
+let int x = 5$
+void principal є э ¿
+    let int y = 10$
+    let int z = x + y$
+    
+    output x$
+    output z$
+    
+    decide of є x > 5 э ¿
+        output x$
+    ? elif є x == 5 э ¿
+        output y$
+    ? else ¿
+        output z$
+    ?
+    
+    loop
+        let int contador = 0$
+        exit when є true == 10 э$
+    end loop$
+    
+    
+    for є let int i = 0$ step 1 to 10 э do ¿
+        output i$
+    ?
+    
+    let int volatil = xє3, 3.5э$
+    
+    
+?
+ 
+
+int x  int a, float f э¿
+    let float f$
+    return a + f$
+?
+
