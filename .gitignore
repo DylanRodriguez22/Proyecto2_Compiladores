@@ -1,6 +1,7 @@
 # Ignorar todo dentro de Programa/Analizador
-Programa/Analizador/*
+info.txt
 
+/Programa/Analizador
 # Pero no ignorar la carpeta src ni su contenido
 #!Programa/Analizador/src/
 #!Programa/Analizador/src/**
