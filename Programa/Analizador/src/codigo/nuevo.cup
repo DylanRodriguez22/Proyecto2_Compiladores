@@ -498,15 +498,15 @@ output_statement ::= output_keyword identifier delimiter
                   ;
 
 //Decide of. Ya están separadas ambas  keywords
-decide_of ::= decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis block end_keyword decide_keyword delimiter
+decide_of ::= decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block end_keyword decide_keyword delimiter
               {: System.out.println("decide of normal"); :}
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis block elif_list end_keyword decide_keyword delimiter
+           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block elif_list end_keyword decide_keyword delimiter
            {: System.out.println("decide of con elif"); :}
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis block else_part end_keyword decide_keyword delimiter
+           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block else_part end_keyword decide_keyword delimiter
               {: System.out.println("decide of con else"); :}          
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis block elif_list else_part end_keyword decide_keyword delimiter
+           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block elif_list else_part end_keyword decide_keyword delimiter
               {: System.out.println("decide of con elif y else"); :}
-            | decide_keyword of_keyword left_parenthesis error right_parenthesis block end_keyword decide_keyword delimiter
+            | decide_keyword of_keyword left_parenthesis error right_parenthesis minus_operator greater_operator block end_keyword decide_keyword delimiter
            {: System.err.println("Error en condicion de decide of"); :}
            ;
 
@@ -514,10 +514,10 @@ elif_list ::= elif_part
            |  elif_list elif_part
            ;
 
-elif_part ::= elseif_keyword left_parenthesis logical_expresion_and right_parenthesis block
+elif_part ::= left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block
            {: System.out.println("elif"); :};
 
-else_part ::= else_keyword block
+else_part ::= else_keyword minus_operator greater_operator block
            {: System.out.println("else"); :}
 ;
 
