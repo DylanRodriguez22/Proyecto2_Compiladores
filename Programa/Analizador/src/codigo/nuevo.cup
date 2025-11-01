@@ -497,15 +497,15 @@ output_statement ::= output_keyword identifier delimiter
                   ;
 
 //Decide of. Ya están separadas ambas  keywords
-decide_of ::= decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block end_keyword decide_keyword delimiter
+decide_of ::= decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block end_keyword decide_keyword delimiter
               {: System.out.println("decide of normal"); :}
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block elif_list end_keyword decide_keyword delimiter
+           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block elif_list end_keyword decide_keyword delimiter
            {: System.out.println("decide of con elif"); :}
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block else_part end_keyword decide_keyword delimiter
+           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block else_part end_keyword decide_keyword delimiter
               {: System.out.println("decide of con else"); :}          
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block elif_list else_part end_keyword decide_keyword delimiter
+           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block elif_list else_part end_keyword decide_keyword delimiter
               {: System.out.println("decide of con elif y else"); :}
-            | decide_keyword of_keyword left_parenthesis error right_parenthesis minus_operator greater_operator block end_keyword decide_keyword delimiter
+            | decide_keyword of_keyword left_parenthesis error right_parenthesis minus_operator greater_operator left_block loop_content right_block end_keyword decide_keyword delimiter
            {: System.err.println("Error en condicion de decide of"); :}
            ;
 
@@ -513,10 +513,10 @@ elif_list ::= elif_part
            |  elif_list elif_part
            ;
 
-elif_part ::= left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator block
+elif_part ::= left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block
            {: System.out.println("elif"); :};
 
-else_part ::= else_keyword minus_operator greater_operator block
+else_part ::= else_keyword minus_operator greater_operator left_block loop_content right_block
            {: System.out.println("else"); :}
 ;
 
@@ -537,15 +537,15 @@ break_statement ::= break_keyword delimiter
 ;
 
 //For
-for_loop ::= for_keyword reassignment step_keyword int_literal to_keyword int_literal do_keyword block
+for_loop ::= for_keyword reassignment step_keyword int_literal to_keyword int_literal do_keyword left_block loop_content right_block
         {: System.out.println("for loop int to"); :}
-          |  for_keyword reassignment step_keyword int_literal downto_keyword int_literal do_keyword block
+          |  for_keyword reassignment step_keyword int_literal downto_keyword int_literal do_keyword left_block loop_content right_block
         {: System.out.println("for loop int downto"); :}
-          |  for_keyword reassignment step_keyword float_literal to_keyword float_literal do_keyword block
+          |  for_keyword reassignment step_keyword float_literal to_keyword float_literal do_keyword left_block loop_content right_block
         {: System.out.println("for loop float to"); :}
-          |  for_keyword reassignment step_keyword float_literal downto_keyword float_literal do_keyword block
+          |  for_keyword reassignment step_keyword float_literal downto_keyword float_literal do_keyword left_block loop_content right_block
         {: System.out.println("for loop float downto"); :}  
-          | for_keyword error do_keyword block
+          | for_keyword error do_keyword left_block loop_content right_block
           {: 
           System.err.println("Error en condicion de for")
           :}
