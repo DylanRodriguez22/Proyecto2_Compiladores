@@ -1,7 +1,7 @@
 
 
 void principal є э ¿
-    let int y = 10$
+    let int y = 10 * True$
     let int z = x + y$
     
     output x$
@@ -18,6 +18,7 @@ void principal є э ¿
         let int elsea$
         decide of є x > 5 э -> ¿
         output x$
+        
          let int dentroDecideElse = x + y$
         ?
         end decide $
@@ -40,7 +41,7 @@ void principal є э ¿
         output i$
     ?
     
-    let int volatil = xє3, 3.5э$
+   volatil = xє3, 3.5э$
     
     
 ?

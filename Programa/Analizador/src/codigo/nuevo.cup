@@ -1,6 +1,6 @@
 package codigo;
 import java_cup.runtime.*;
-
+import java.lang.String;
 action code {: 
     TablaDeSimbolos tablaGlobal = new TablaDeSimbolos("Global"); //
     TablaDeSimbolos tablaActual = tablaGlobal; //Al principio es la global
@@ -41,6 +41,22 @@ action code {:
         System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + "con el tipo "+ pTipo);
         tablaActual.agregarSimbolo(new Simbolo(pSimbolo, pTipo));
     }
+    
+    //Busca en la jerarquía de tablas el símbolo de la entrada y lo retorno si existiera
+    public Simbolo buscarSimbolo(String pSimbolo){
+        return tablaActual.obtenerSimbolo(pSimbolo);
+    }
+
+    //Reporta el error de que ese id no existe en la tabla
+    public void reportarErrorNoExisteSimbolo(String pSimbolo){
+        Simbolo simbolo = buscarSimbolo(pSimbolo);
+        if(simbolo == null){
+             System.err.println("Error Semantico: El identificador " + pSimbolo + " no ha sido declarado previamente");
+        }
+    }
+
+
+   
 :}
 
 parser code {:
@@ -254,36 +270,62 @@ arithmetic_expression ::= arithmetic_expression plus_operator term
                        |  term
                        ;
 
-term ::= term multiplication_operator power
-      {: System.out.println("Multiplicacion (*)"); :}
+term ::= term:e1 multiplication_operator power:e2
+      {: 
+        System.out.println("Multiplicacion (*)"); 
+        String operadorMulti = "null";
+        //Verificar que el tipo de ambas expresiones sea igual
+        if(!(e1.toString().equals("int") || e1.toString().equals("float"))){
+            System.err.println("Error Semantico: El primer factor de la multiplicacion debe ser flotante o entero");
+        }
+        if(!(e2.toString().equals("int") || e2.toString().equals("float"))){
+            System.err.println("Error Semantico: El segundo factor de la multiplicacion debe ser flotante o entero");
+        }
+        if(!(e1.toString().equals(e2.toString()))){
+            System.err.println("Error Semantico: Los tipos de los operadores de la multiplicacion deben ser iguales");
+        }else{
+            operadorMulti = e1.toString();
+        }
+        RESULT = operadorMulti;
+      :}
       |  term division_operator power
       {: System.out.println("Division (/)"); :}
       |  term int_division_operator power
       {: System.out.println("Division entera (//)"); :}
       |  term modulo_operator power
       {: System.out.println("Modulo (%)"); :}
-      |  power
+      |  power:e {: RESULT = e;:}
       ;
 
 power ::= factor power_operator power
        {: System.out.println("Potencia (^)"); :}
-       |  factor
+       |  factor:e {: RESULT = e;:}
        ;
 
-factor ::= left_parenthesis logical_expresion_and right_parenthesis
-        {: System.out.println("Expresion entre parentesis reconocida"); :}
-        |  arithmetic_operands
+factor ::= left_parenthesis logical_expresion_and:e right_parenthesis
+        {: System.out.println("Expresion entre parentesis reconocida"); RESULT = e;:}
+        |  arithmetic_operands:e {: RESULT = e;:}
         ;
 
-arithmetic_operands ::= int_literal:n {: RESULT = n+":int"; :}
-                     |  float_literal:n {: RESULT = n+":float"; :}
-                     |  identifier:n {: RESULT = n+":if"; :}
+arithmetic_operands ::= int_literal:n {: RESULT = "int"; :}
+                     |  float_literal:n {: RESULT = "float"; :}
+                     |  identifier:n 
+                    {: 
+                        //Verificar que exista el identificador
+                        reportarErrorNoExisteSimbolo(n);
+                        //Obtener el tipo
+                        Simbolo simbolo = buscarSimbolo(n);
+                        if(simbolo != null){
+                            RESULT = simbolo.getTipo();
+                        }
+                       
+                    :}
                      |  unary_negative 
                      |  postfix_expression
                      |  array_access
                      |  function_call
-                     |  bool_literal:n {: RESULT = n+":bool"; :}
-                     |  not_operator logical_expresion_and
+                     |  bool_literal:n {: RESULT = "bool"; :}
+                     |  not_operator logical_expresion_and //Esto definitivamente hay que hacerlo diferente
                      ;
 
 // Expresiones logicas and, or y negación

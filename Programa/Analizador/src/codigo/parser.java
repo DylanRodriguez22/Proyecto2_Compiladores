@@ -6,6 +6,7 @@
 package codigo;
 
 import java_cup.runtime.*;
+import java.lang.String;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -1170,6 +1171,22 @@ class CUP$parser$actions {
         System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + "con el tipo "+ pTipo);
         tablaActual.agregarSimbolo(new Simbolo(pSimbolo, pTipo));
     }
+    
+    //Busca en la jerarquía de tablas el símbolo de la entrada y lo retorno si existiera
+    public Simbolo buscarSimbolo(String pSimbolo){
+        return tablaActual.obtenerSimbolo(pSimbolo);
+    }
+
+    //Reporta el error de que ese id no existe en la tabla
+    public void reportarErrorNoExisteSimbolo(String pSimbolo){
+        Simbolo simbolo = buscarSimbolo(pSimbolo);
+        if(simbolo == null){
+             System.err.println("Error Semantico: El identificador " + pSimbolo + " no ha sido declarado previamente");
+        }
+    }
+
+
+   
 
   private final parser parser;
 
@@ -1291,7 +1308,29 @@ class CUP$parser$actions {
           case 10: // term ::= term multiplication_operator power 
             {
               Object RESULT =null;
-		 System.out.println("Multiplicacion (*)"); 
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 
+        System.out.println("Multiplicacion (*)"); 
+        String operadorMulti = "null";
+        //Verificar que el tipo de ambas expresiones sea igual
+        if(!(e1.toString().equals("int") || e1.toString().equals("float"))){
+            System.err.println("Error Semantico: El primer factor de la multiplicacion debe ser flotante o entero");
+        }
+        if(!(e2.toString().equals("int") || e2.toString().equals("float"))){
+            System.err.println("Error Semantico: El segundo factor de la multiplicacion debe ser flotante o entero");
+        }
+        if(!(e1.toString().equals(e2.toString()))){
+            System.err.println("Error Semantico: Los tipos de los operadores de la multiplicacion deben ser iguales");
+        }else{
+            operadorMulti = e1.toString();
+        }
+        RESULT = operadorMulti;
+      
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1327,7 +1366,10 @@ class CUP$parser$actions {
           case 14: // term ::= power 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1345,7 +1387,10 @@ class CUP$parser$actions {
           case 16: // power ::= factor 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("power",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1354,7 +1399,10 @@ class CUP$parser$actions {
           case 17: // factor ::= left_parenthesis logical_expresion_and right_parenthesis 
             {
               Object RESULT =null;
-		 System.out.println("Expresion entre parentesis reconocida"); 
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 System.out.println("Expresion entre parentesis reconocida"); RESULT = e;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("factor",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1363,7 +1411,10 @@ class CUP$parser$actions {
           case 18: // factor ::= arithmetic_operands 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("factor",5, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1375,7 +1426,7 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = n+":int"; 
+		 RESULT = "int"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1387,7 +1438,7 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = n+":float"; 
+		 RESULT = "float"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1399,7 +1450,16 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = n+":if"; 
+		 
+                        //Verificar que exista el identificador
+                        reportarErrorNoExisteSimbolo(n);
+                        //Obtener el tipo
+                        Simbolo simbolo = buscarSimbolo(n);
+                        if(simbolo != null){
+                            RESULT = simbolo.getTipo();
+                        }
+                       
+                    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1447,7 +1507,7 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = n+":bool"; 
+		 RESULT = "bool"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

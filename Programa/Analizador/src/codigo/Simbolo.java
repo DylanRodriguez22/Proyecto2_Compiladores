@@ -17,6 +17,14 @@ public class Simbolo {
         this.tipo = pTipo;
     }
     
+    public String getSimbolo(){
+        return simbolo;
+    }
+    
+    public String getTipo(){
+        return tipo;
+    }
+    
 @Override
    public String toString(){
        return "Simbolo: " + simbolo + 
