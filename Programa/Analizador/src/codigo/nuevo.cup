@@ -90,7 +90,6 @@ terminal String and_operator;
 terminal String not_operator;
 terminal String decide_keyword;
 terminal String of_keyword;
-terminal String elseif_keyword;
 terminal String else_keyword;
 terminal String int_literal;
 terminal String float_literal;
@@ -538,15 +537,15 @@ break_statement ::= break_keyword delimiter
 ;
 
 //For
-for_loop ::= for_keyword left_parenthesis declaration step_keyword int_literal to_keyword int_literal right_parenthesis do_keyword block
+for_loop ::= for_keyword reassignment step_keyword int_literal to_keyword int_literal do_keyword block
         {: System.out.println("for loop int to"); :}
-          |  for_keyword left_parenthesis declaration step_keyword int_literal downto_keyword int_literal right_parenthesis do_keyword block
+          |  for_keyword reassignment step_keyword int_literal downto_keyword int_literal do_keyword block
         {: System.out.println("for loop int downto"); :}
-          |  for_keyword left_parenthesis declaration step_keyword float_literal to_keyword float_literal right_parenthesis do_keyword block
+          |  for_keyword reassignment step_keyword float_literal to_keyword float_literal do_keyword block
         {: System.out.println("for loop float to"); :}
-          |  for_keyword left_parenthesis declaration step_keyword float_literal downto_keyword float_literal right_parenthesis do_keyword block
+          |  for_keyword reassignment step_keyword float_literal downto_keyword float_literal do_keyword block
         {: System.out.println("for loop float downto"); :}  
-          | for_keyword left_parenthesis error right_parenthesis do_keyword block
+          | for_keyword error do_keyword block
           {: 
           System.err.println("Error en condicion de for")
           :}

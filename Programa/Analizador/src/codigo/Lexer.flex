@@ -140,7 +140,6 @@ import java.util.ArrayList;
             case sym.return_keyword: return "RETURN";
             case sym.break_keyword: return "BREAK";
             case sym.decide_keyword: return "DECIDE";
-            case sym.elseif_keyword: return "ELIF";
             case sym.else_keyword: return "ELSE";
             case sym.EOF: return "EOF";
             default: return "UNKNOWN";
@@ -270,7 +269,6 @@ StringLiteral = \"([^\"\n\\]|\\n)*\"
     "break"    { return symbol(sym.break_keyword, yytext()); }
     "decide"     { return symbol(sym.decide_keyword, yytext()); }
     "of"          { return symbol(sym.of_keyword, yytext()); }
-    "elif"       { return symbol(sym.elseif_keyword, yytext()); }
     "else"       { return symbol(sym.else_keyword, yytext()); }
     "end"       { return symbol(sym.end_keyword, yytext()); }
     "True"              { return symbol(sym.bool_literal, yytext()); }
