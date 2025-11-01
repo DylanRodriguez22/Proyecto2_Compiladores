@@ -117,21 +117,11 @@ public class JflexCup {
             System.out.println("\n Log de tokens en: " + logTokens);
             System.out.println("\n" + "=".repeat(45));
             
-            System.out.println("\n=== Crear tabla de símbolos ===");
-            ArrayList<TablaDeSimbolos> tablas = crearTablasDeSimbolos(tokens);
+  
             
-            String texto = "";
-            
-            //Escribirlas en archivo
-            for (TablaDeSimbolos tabla : tablas) {
-                texto += tabla.toString();
-            }
-            
-            escribirEnArchivo(texto, "tablaDeSimbolos.txt");
-            
-            //Mover el archivo
-            moveFile(basePath + "/tablaDeSimbolos.txt", basePath + "/src/codigo/tablaDeSimbolos.txt");
+    
 
+         
         } catch (FileNotFoundException e) {
             System.err.println("\n❌ ERROR: Archivo no encontrado");
             System.err.println("   " + e.getMessage());
@@ -162,81 +152,7 @@ public class JflexCup {
     /*
         Leo cada elemento. Primero voy con las globales y van en esa lista. Luego voy reconociendo cada función y creo una tabla para cada variable que aparezca
     */
-    private static ArrayList<TablaDeSimbolos> crearTablasDeSimbolos(ArrayList<Token> tokens){
-        ArrayList<TablaDeSimbolos> tablasDeSimbolos = new ArrayList<>();
-        ArrayList<Integer> pila = new ArrayList<>(); 
-        boolean global = true;
-        boolean noAgregarPila = false;
-        Token tokenActual;
-        TablaDeSimbolos tablaActual = new TablaDeSimbolos("Global"); 
-        
-        for (int i = 0; i<tokens.size(); i++) {
-            tokenActual = tokens.get(i);
-            //Primero intento reconocer variables globales
-            if(global){
-                if(tokenActual.nombre.equals("LET")){
-                    //Debo de obtener el siguiente token el cual es el tipo y el que sigue que sería el identificador
-                    tablaActual.agregarSimbolo(new Simbolo(tokens.get(i+2).lexema, tokens.get(i+1).lexema, tokens.get(i+2).linea, tokens.get(i+2).columna));
-                }
-                //Debo de reconocer hasta que encuentre el void ya que ese es la primera funcion
-                if(tokenActual.nombre.equals("VOID")){
-                    //La tabla de globales pasa a la lista
-                    tablasDeSimbolos.add(tablaActual);
-                    
-                    //Bajo la bandera para que ya no busque globales
-                    global = false;
-                }
-            }else{
-                //Si la pila está vacía y encuentro un tipo significa que es una función
-            if(pila.size() < 1 && (tokenActual.nombre.equals("VOID") || tokenActual.nombre.equals("INT") || tokenActual.nombre.equals("FLOAT") || tokenActual.nombre.equals("BOOL") || tokenActual.nombre.equals("CHAR") || tokenActual.nombre.equals("STRING") || tokenActual.nombre.equals("PRINCIPAL")) ){
-                //Creo la tabla con el nombre de la función
-                if(tokenActual.nombre.equals("PRINCIPAL")){
-                    tablaActual = new TablaDeSimbolos("Principal");
-                }else{
-                    tablaActual = new TablaDeSimbolos(tokens.get(i+1).lexema);
-                }
-                
-   
-                
-                //Agrego un a la pila y levanto una bandera para no poner doble
-                pila.add(1);
-                noAgregarPila = true;
-            }else{
-                //Caso donde tengo algo en la pila que significa que estoy dentro de alguna función
-                if(pila.size() > 0){
-                    if(tokenActual.nombre.equals("LEFT_BLOCK") && noAgregarPila){
-                        //Bajo la bandera
-                        noAgregarPila = false;
-                    }else{
-                        if(tokenActual.nombre.equals("LEFT_BLOCK") && !noAgregarPila){
-                        //Agrego a la pila
-                        pila.add(1);
-                    }
-
-                    if(tokenActual.nombre.equals("RIGHT_BLOCK")){
-                        //Debo de desapilar y verificar si ya se quedó vacía
-                        pila.remove(0);
-
-                        if(pila.size() < 1){
-                            //Guardo esa tabla de símbolos porque ya recorrí toda la función
-                            tablasDeSimbolos.add(tablaActual);
-                        }
-                    }
-
-                    //Reconocer identificadores
-                    if(tokenActual.nombre.equals("LET")){
-                        //Debo de obtener el siguiente token el cual es el tipo y el que sigue que sería el identificador
-                        tablaActual.agregarSimbolo(new Simbolo(tokens.get(i+2).lexema, tokens.get(i+1).lexema, tokens.get(i+2).linea, tokens.get(i+2).columna));
-                    }
-                    }
-
-
-                }
-                }   
-            }   
-        }
-        return tablasDeSimbolos;
-    }
+    
     
     private static void escribirEnArchivo(String pEntrada, String pArchivo) {
         try (FileWriter writer = new FileWriter(pArchivo)) { 

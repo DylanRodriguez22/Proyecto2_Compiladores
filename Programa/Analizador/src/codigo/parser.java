@@ -1162,7 +1162,7 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
     public static int syntaxErrors = 0;
-
+    
     public void syntax_error(Symbol s) {
         syntaxErrors++;
         System.err.println("\n ERROR DE SINTAXIS:");
@@ -1198,6 +1198,14 @@ public class parser extends java_cup.runtime.lr_parser {
 /** Cup generated class to encapsulate user supplied action code.*/
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
 class CUP$parser$actions {
+
+ 
+    TablaDeSimbolos tablaGlobal = new TablaDeSimbolos("Global"); //
+    TablaDeSimbolos tablaActual = tablaGlobal; //Al principio es la global
+    public void hola(){
+         System.out.println(tablaActual.toString());
+     }
+
   private final parser parser;
 
   /** Constructor */
@@ -1399,7 +1407,10 @@ class CUP$parser$actions {
           case 19: // arithmetic_operands ::= int_literal 
             {
               Object RESULT =null;
-
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = n+":int"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1408,7 +1419,10 @@ class CUP$parser$actions {
           case 20: // arithmetic_operands ::= float_literal 
             {
               Object RESULT =null;
-
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = n+":float"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1417,7 +1431,10 @@ class CUP$parser$actions {
           case 21: // arithmetic_operands ::= identifier 
             {
               Object RESULT =null;
-
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = n+":if"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1462,7 +1479,10 @@ class CUP$parser$actions {
           case 26: // arithmetic_operands ::= bool_literal 
             {
               Object RESULT =null;
-
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = n+":bool"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3139,7 +3159,7 @@ class CUP$parser$actions {
           case 212: // global_variables ::= global_variables declaration 
             {
               Object RESULT =null;
-
+		 hola(); //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada  
               CUP$parser$result = parser.getSymbolFactory().newSymbol("global_variables",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3177,6 +3197,7 @@ class CUP$parser$actions {
               Object RESULT =null;
 		 System.out.println("\n========== PROGRAMA COMPLETO VALIDADO ==========\n"); 
          parser.sePuedeoNo();
+         System.out.println("\nEsto está al final de la producción program");
          
               CUP$parser$result = parser.getSymbolFactory().newSymbol("program",41, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

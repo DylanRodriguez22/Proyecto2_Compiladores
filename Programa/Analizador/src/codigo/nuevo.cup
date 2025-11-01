@@ -1,9 +1,18 @@
 package codigo;
 import java_cup.runtime.*;
 
+action code {: 
+    TablaDeSimbolos tablaGlobal = new TablaDeSimbolos("Global"); //
+    TablaDeSimbolos tablaActual = tablaGlobal; //Al principio es la global
+
+    public void hola(){
+         System.out.println(tablaActual.toString());
+     }
+:}
+
 parser code {:
     public static int syntaxErrors = 0;
-
+    
     public void syntax_error(Symbol s) {
         syntaxErrors++;
         System.err.println("\n ERROR DE SINTAXIS:");
@@ -223,14 +232,14 @@ factor ::= left_parenthesis logical_expresion_and right_parenthesis
         |  arithmetic_operands
         ;
 
-arithmetic_operands ::= int_literal
-                     |  float_literal
-                     |  identifier
-                     |  unary_negative
+arithmetic_operands ::= int_literal:n {: RESULT = n+":int"; :}
+                     |  float_literal:n {: RESULT = n+":float"; :}
+                     |  identifier:n {: RESULT = n+":if"; :}
+                     |  unary_negative 
                      |  postfix_expression
                      |  array_access
                      |  function_call
-                     |  bool_literal
+                     |  bool_literal:n {: RESULT = n+":bool"; :}
                      |  not_operator logical_expresion_and
                      ;
 
@@ -666,7 +675,7 @@ statement ::= declaration
 
 // Variables globales
 global_variables ::= /* empty */
-                  |  global_variables declaration
+                  |  global_variables declaration {: hola(); //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada  :}
                   ;
 
 //Programa principal
@@ -684,4 +693,5 @@ functions ::= /* empty */
 program ::= global_variables  functions principal
          {: System.out.println("\n========== PROGRAMA COMPLETO VALIDADO ==========\n"); 
          parser.sePuedeoNo();
+         System.out.println("\nEsto está al final de la producción program");
          :};

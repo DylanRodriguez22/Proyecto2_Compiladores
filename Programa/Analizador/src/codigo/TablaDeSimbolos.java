@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class TablaDeSimbolos {
     private String nombre;
     private ArrayList<Simbolo> simbolos = new ArrayList<>();
+    private TablaDeSimbolos anterior;
     
     public TablaDeSimbolos(String pNombre){
         this.nombre = pNombre; 
@@ -19,6 +20,10 @@ public class TablaDeSimbolos {
     
     public void agregarSimbolo(Simbolo pSimbolo){
         simbolos.add(pSimbolo);
+    }
+    
+    public void setTablaAnterior(TablaDeSimbolos pTablaAnterior){
+        this.anterior = pTablaAnterior;
     }
     
 @Override 
