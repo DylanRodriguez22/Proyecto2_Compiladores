@@ -16,15 +16,27 @@ void principal є э ¿
     ? else -> ¿
         output z$
         let int elsea$
+        decide of є x > 5 э -> ¿
+        output x$
+         let int dentroDecideElse = x + y$
+        ?
+        end decide $
+        let int finElse$
     ?
     end     decide      $
     loop
         let int contador = 0$
+        decide of є x > 5 э -> ¿
+        output x$
+         let int dentroLoop = x + y$
+        ?
+        end decide $
         exit when є true == 10 э$
     end loop$
     
     let int z2 = x + y$
     for   i = 0$ step 1 to 10  do ¿
+        let int forA$
         output i$
     ?
     
