@@ -172,9 +172,12 @@ Digit = [0-9]
 Letter = [a-zA-Z]
 Underscore = _
 UniqueComment = \|[^\n]*
-MultiplLineComment = \¡([^!]|"!"+[^¡!])*\!  
+
+/* Al parecer ya funciona correctamente, seguir probado el comentario multilínea */
+MultiplLineComment = \¡([^!]|\n)*\!   
+
 /* Identificadores */
-Identifier = {Letter}({Letter}|{Digit}|{Underscore})*
+Identifier = {Underscore}? {Letter}({Letter}|{Digit}|{Underscore})*
 
 /* Enteros */
 IntegerZero = 0
@@ -191,7 +194,10 @@ FloatWithIntegerZeroDecimal = [1-9]{Digit}*\.0
 FloatNegativeWithInteger = "-"{FloatWithInteger}
 FloatNegativeWithIntegerZero = "-"{FloatWithIntegerZeroDecimal}
 FloatLiteral = {FloatZero}|{FloatPositiveDecimal}|{FloatNegativeDecimal}|{FloatWithInteger}|{FloatWithIntegerZeroDecimal}|{FloatNegativeWithInteger}|{FloatNegativeWithIntegerZero}
-CharLiteral = \'[^\']\'
+
+/* char y string */
+ScapeSecuences = (\\n|\\t|\\b|\\r|\\a|\\'|\\?|\\f|\\v)
+CharLiteral = \'([^\']|{ScapeSecuences})\'
 StringLiteral = \"([^\"\n\\]|\\n)*\"
 
 %%

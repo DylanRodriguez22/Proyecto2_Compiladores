@@ -1,11 +1,14 @@
 
  let string s1$
 
-
+¡ Comentario 
+asdasdsd    
+    multilinea 
+!
 float mi  є int dif, char otra   э ¿  |sintactico  
     
-    
-	let int otra$
+        let char miChar= ' '$
+	let int _otra$
 	let string str="Hola $~&|?$& э  mundo"$
 	for є let int i=20 $ step -2 downto 0 э do  | puede dar sintactico
 	 ¿ 
@@ -17,7 +20,7 @@ float mi  є int dif, char otra   э ¿  |sintactico
 
 
 		decide   of
-		є x24 >= var * 5.6 э  
+		є _x24 >= var * 5.6 э  
 		 ¿ 
 			output  "entra al if" $
 		 ?
