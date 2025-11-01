@@ -178,9 +178,14 @@ non terminal for_loop;
 non terminal loop_content;
 non terminal break_statement;
 non terminal decide_of;
+non terminal decide_of_left;
+non terminal decide_of_left_and_content;
 non terminal elif_list;
 non terminal elif_part;
+non terminal elif_part_left;
+non terminal else_part_left;
 non terminal else_part;
+
 
 
 
@@ -544,14 +549,30 @@ output_statement ::= output_keyword identifier delimiter
                   ;
 
 //Decide of. Ya están separadas ambas  keywords
-decide_of ::= decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block end_keyword decide_keyword delimiter
-              {: System.out.println("decide of normal"); :}
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block elif_list end_keyword decide_keyword delimiter
-           {: System.out.println("decide of con elif"); :}
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block else_part end_keyword decide_keyword delimiter
+decide_of_left ::= 
+                decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator
+                    {: 
+                        //Crear la tabla de símbolos
+                        TablaDeSimbolos t = crearTablaDeSimbolos("decide of"); //Crear la nueva tabla para el decide of
+                        apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                    :};
+
+decide_of_left_and_content ::= 
+                            decide_of_left left_block loop_content right_block 
+                                {: 
+                                    desapilarTablaDeSimbolos(); //Desapilo aquí que ya se habría analizado ese bloque
+                                :}
+                            ;
+                            
+
+decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
+              {: System.out.println("decide of normal");  :}
+           |  decide_of_left_and_content elif_list end_keyword decide_keyword delimiter
+           {: System.out.println("decide of con varias condiciones"); ;:}
+           |  decide_of_left_and_content else_part end_keyword decide_keyword delimiter
               {: System.out.println("decide of con else"); :}          
-           |  decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block elif_list else_part end_keyword decide_keyword delimiter
-              {: System.out.println("decide of con elif y else"); :}
+           |  decide_of_left_and_content elif_list else_part end_keyword decide_keyword delimiter
+              {: System.out.println("decide of con varias condiciones y else");  desapilarTablaDeSimbolos();:}
             | decide_keyword of_keyword left_parenthesis error right_parenthesis minus_operator greater_operator left_block loop_content right_block end_keyword decide_keyword delimiter
            {: System.err.println("Error en condicion de decide of"); :}
            ;
@@ -560,11 +581,29 @@ elif_list ::= elif_part
            |  elif_list elif_part
            ;
 
-elif_part ::= left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator left_block loop_content right_block
-           {: System.out.println("elif"); :};
+elif_part_left ::= left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator
+                    {:
+                        //Crear la tabla de símbolos
+                        TablaDeSimbolos t = crearTablaDeSimbolos("elif"); //Crear la nueva tabla para el decide of
+                        apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                    :}
+                ;
 
-else_part ::= else_keyword minus_operator greater_operator left_block loop_content right_block
-           {: System.out.println("else"); :}
+elif_part ::= elif_part_left left_block loop_content right_block 
+           {: System.out.println("elif"); 
+                desapilarTablaDeSimbolos();
+            :};
+            
+
+else_part_left ::= else_keyword minus_operator greater_operator
+                    {:
+                        //Crear la tabla de símbolos
+                        TablaDeSimbolos t = crearTablaDeSimbolos("else"); //Crear la nueva tabla para el decide of
+                        apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                    :}
+                    ;
+else_part ::= else_part_left left_block loop_content right_block
+           {: System.out.println("else"); desapilarTablaDeSimbolos();:}
 ;
 
 //Loop

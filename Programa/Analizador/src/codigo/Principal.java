@@ -11,7 +11,7 @@ package codigo;
 public class Principal {
     public static void main(String[] args)throws Exception{
         String basePath = System.getProperty("user.dir");
-        String rutaTxt = basePath + "/src/codigo/ejemplo código 2.sintactico.base 3.txt";
+        String rutaTxt = basePath + "/src/codigo/pruebaParser.txt";
        
         //JflexCup.generateFiles();
         JflexCup.probarParser(rutaTxt);
