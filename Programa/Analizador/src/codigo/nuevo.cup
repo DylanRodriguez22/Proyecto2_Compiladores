@@ -7,7 +7,37 @@ action code {:
 
     public void hola(){
          System.out.println(tablaActual.toString());
-     }
+    }
+    
+    //Se crea una nueva tabla de símbolos
+    public TablaDeSimbolos crearTablaDeSimbolos(String nombre){
+        return new TablaDeSimbolos(nombre);
+    }
+    
+    //Le coloca a la tabla que se pase como parametro la actual como anterior, y coloca la del parámetro de entrada como actual
+    public void apilarNuevaTablaDeSimbolos(TablaDeSimbolos pTablaDeSimbolos){
+        //La tabla actual la coloco como la anterior de la recibida en la entrada
+        pTablaDeSimbolos.setTablaAnterior(tablaActual);
+        
+        //Coloco la tabla de la entrada como la nueva
+        tablaActual = pTablaDeSimbolos;
+    }
+
+    //Coloca la tabla anterior a la actual como la nueva tabla actual
+    public void desapilarTablaDeSimbolos(){
+        tablaAnterior = tablaActual.getTablaAnterior();
+        if(tablaAnterior != null){
+            tablaActual = tablaAnterior; //Con esto ya no hay referencia a la primera tabla de la pila
+        }else{
+            System.out.println("Error: Se está intentando desapilar la tabla Global");
+        }
+    }
+
+    //Añade a la tabla actual el símbolo indicado
+    public void agregarSimbolo(String pTipo, String pSimbolo){
+        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla con el tipo "+ pTipo);
+        tablaActual.agregarSimbolo(new Simbolo(pSimbolo, pTipo));
+    }
 :}
 
 parser code {:
@@ -126,6 +156,7 @@ non terminal relational_expression;
 // Declaraciones y sentencias
 non terminal declaration_values;
 non terminal declaration;
+
 non terminal reassignment;
 non terminal array_declaration;
 non terminal assign_elements_array;
@@ -157,6 +188,7 @@ non terminal array_literals;
 
 // Funciones
 non terminal function;
+non terminal function_left;
 non terminal functions;
 non terminal params;
 non terminal param;
@@ -274,26 +306,28 @@ relational_expression ::= arithmetic_expression greater_operator arithmetic_expr
 //Declaraciones// Char y string es agregado para una prueba
 declaration_values ::= logical_expresion_and | CHAR_LITERAL | STRING_LITERAL;
 
-declaration ::= let_keyword int_keyword identifier delimiter
-             {: System.out.println("Declaracion: int sin valor"); :}
-             |  let_keyword float_keyword identifier delimiter
-             {: System.out.println("Declaracion: float sin valor"); :}
-             |  let_keyword bool_keyword identifier delimiter
-             {: System.out.println("Declaracion: bool sin valor"); :}
-             |  let_keyword char_keyword identifier delimiter
-             {: System.out.println("Declaracion: char sin valor"); :}
-             |  let_keyword string_keyword identifier delimiter
-             {: System.out.println("Declaracion: string sin valor"); :}
-             |  let_keyword int_keyword identifier assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: int con valor"); :}
-             |  let_keyword float_keyword identifier assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: float con valor"); :}
-             |  let_keyword bool_keyword identifier assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: bool con valor"); :}
-             |  let_keyword char_keyword identifier assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: char con valor"); :}
-             |  let_keyword string_keyword identifier assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: string con valor"); :}
+
+             
+declaration ::= let_keyword int_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: int sin valor con id "+ id); agregarSimbolo("int", id);:}
+             |  let_keyword float_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: float sin valor con id " + id); agregarSimbolo("float", id); :}
+             |  let_keyword bool_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: bool sin valor con id " + id); agregarSimbolo("bool", id); :}
+             |  let_keyword char_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: char sin valor con id " + id); agregarSimbolo("char", id); :}
+             |  let_keyword string_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: string sin valor con id "+ id); agregarSimbolo("string", id); :}
+             |  let_keyword int_keyword identifier:id assignment_operator declaration_values delimiter
+             {: System.out.println("Declaracion: int con valor con el id "+ id); agregarSimbolo("int", id);:}
+             |  let_keyword float_keyword identifier:id assignment_operator declaration_values delimiter
+             {: System.out.println("Declaracion: float con valor con el id "+ id); agregarSimbolo("float", id); :}
+             |  let_keyword bool_keyword identifier:id assignment_operator declaration_values delimiter
+             {: System.out.println("Declaracion: bool con valor con el id " + id); agregarSimbolo("bool", id); :}
+             |  let_keyword char_keyword identifier:id assignment_operator declaration_values delimiter
+             {: System.out.println("Declaracion: char con valor con el id " + id); agregarSimbolo("char", id); :}
+             |  let_keyword string_keyword identifier:id assignment_operator declaration_values delimiter
+             {: System.out.println("Declaracion: string con valor con el id " + id); agregarSimbolo("string", id); :}
              | error delimiter
              {:
                System.err.println("DECLARACION con error"); :}
@@ -561,46 +595,30 @@ for_loop ::= for_keyword reassignment step_keyword int_literal to_keyword int_li
         ;
 
 //Funciones
+
+//Esta parte es para poder tomar el identificador y ejecutar el código que va a crear la tabla de símbolos de esta parte
+function_left ::=  
+           // Solo para enteros 
+            int_keyword identifier:id
+                {: System.out.println("Crear tabla de símbolos para función int: " +id); :}
+            |  float_keyword identifier:id
+                {: System.out.println("Crear tabla de símbolos para función flotante: " +id); :}
+            |  bool_keyword identifier:id
+                {: System.out.println("Crear tabla de símbolos para función bool: " +id); :}
+            |  char_keyword identifier:id
+                {: System.out.println("Crear tabla de símbolos para función char: " +id); :}
+            |  string_keyword identifier:id
+                {: System.out.println("Crear tabla de símbolos para función string: " +id); :}
+            ;
+
 function ::= 
           // Solo para enteros 
-          int_keyword identifier left_parenthesis right_parenthesis block
-            {: System.out.println("funcion int sin parámetros"); :}
-          |  int_keyword identifier left_parenthesis params right_parenthesis block
-            {: System.out.println("funcion int con parámetros"); :}
-          |  int_keyword identifier left_parenthesis error right_parenthesis block
+          function_left left_parenthesis right_parenthesis block
+            {: System.out.println("funcion sin parámetros"); :}
+          |  function_left left_parenthesis params right_parenthesis block
+            {: System.out.println("funcion con parámetros"); :}
+          |  function_left left_parenthesis error right_parenthesis block
           {: System.err.println("ERROR en parámetros de función int"); :}
-          
-          // Solo para flotantes
-          |  float_keyword identifier left_parenthesis right_parenthesis block
-            {: System.out.println("funcion float sin parámetros"); :}
-          |  float_keyword identifier left_parenthesis params right_parenthesis block
-            {: System.out.println("funcion float con parámetros"); :}
-          |  float_keyword identifier left_parenthesis error right_parenthesis block
-          {: System.err.println("ERROR en parámetros de función float"); :}
-          
-          // Solo para booleanos
-          |  bool_keyword identifier left_parenthesis right_parenthesis block
-            {: System.out.println("funcion bool sin parámetros"); :}
-          |  bool_keyword identifier left_parenthesis params right_parenthesis block
-            {: System.out.println("funcion bool con parámetros"); :}
-          |  bool_keyword identifier left_parenthesis error right_parenthesis block
-          {: System.err.println("ERROR en parámetros de función bool"); :}
-          
-          // Solo para char 
-          |  char_keyword identifier left_parenthesis right_parenthesis block
-            {: System.out.println("funcion char sin parámetros"); :}
-          |  char_keyword identifier left_parenthesis params right_parenthesis block
-            {: System.out.println("funcion char con parámetros"); :}
-          |  char_keyword identifier left_parenthesis error right_parenthesis block
-          {: System.err.println("ERROR en parámetros de función char"); :}
-          
-          // Solo para string 
-          |  string_keyword identifier left_parenthesis right_parenthesis block
-            {: System.out.println("funcion string sin parámetros"); :}
-          |  string_keyword identifier left_parenthesis params right_parenthesis block
-            {: System.out.println("funcion string con parámetros"); :}
-          |  string_keyword identifier left_parenthesis error right_parenthesis block
-          {: System.err.println("ERROR en parámetros de función string"); :}
           ;
 
 

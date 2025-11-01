@@ -11,22 +11,16 @@ package codigo;
 public class Simbolo {
     private String simbolo;
     private String tipo;
-    private int fila;
-    private int columna;
     
-    public Simbolo(String pSimbolo, String pTipo, int pFila, int pColumna){
+    public Simbolo(String pSimbolo, String pTipo){
         this.simbolo = pSimbolo;
         this.tipo = pTipo;
-        this.fila = pFila;
-        this.columna = pColumna;
     }
     
 @Override
    public String toString(){
        return "Simbolo: " + simbolo + 
-           "\tTipo: " + tipo +
-           "\tLinea: " + fila +
-           "\tColumna: " + columna;
+           "\tTipo: " + tipo ;
            
    }
 }

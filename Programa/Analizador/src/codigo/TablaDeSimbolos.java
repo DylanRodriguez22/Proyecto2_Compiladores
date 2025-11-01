@@ -16,6 +16,7 @@ public class TablaDeSimbolos {
     
     public TablaDeSimbolos(String pNombre){
         this.nombre = pNombre; 
+        this.anterior = null;
     }
     
     public void agregarSimbolo(Simbolo pSimbolo){
@@ -24,6 +25,10 @@ public class TablaDeSimbolos {
     
     public void setTablaAnterior(TablaDeSimbolos pTablaAnterior){
         this.anterior = pTablaAnterior;
+    }
+        
+    public TablaDeSimbolos getTablaAnterior(){
+        return this.anterior;
     }
     
 @Override 
