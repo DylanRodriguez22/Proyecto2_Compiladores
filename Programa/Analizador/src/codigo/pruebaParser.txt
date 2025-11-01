@@ -1,7 +1,7 @@
 
 
 void principal є э ¿
-    let int y = 10 * True$
+    let int y = 1.2 * True$
     let int z = x + y$
     
     output x$

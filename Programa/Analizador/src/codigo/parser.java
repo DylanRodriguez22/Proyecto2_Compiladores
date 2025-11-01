@@ -1134,7 +1134,7 @@ class CUP$parser$actions {
  
     TablaDeSimbolos tablaGlobal = new TablaDeSimbolos("Global"); //
     TablaDeSimbolos tablaActual = tablaGlobal; //Al principio es la global
-
+    int erroresSemanticos = 0;
     public void hola(){
          System.out.println(tablaActual.toString());
     }
@@ -1181,9 +1181,45 @@ class CUP$parser$actions {
     public void reportarErrorNoExisteSimbolo(String pSimbolo){
         Simbolo simbolo = buscarSimbolo(pSimbolo);
         if(simbolo == null){
-             System.err.println("Error Semantico: El identificador " + pSimbolo + " no ha sido declarado previamente");
+            System.err.println("Error Semantico: El identificador " + pSimbolo + " no ha sido declarado previamente");
+            erroresSemanticos++;
         }
     }
+
+    public String verifiacionSemanticaAritmeticaBinaria(String tipo1, String tipo2, int linea1, int linea2, int columna1, int columna2){
+        boolean tipo1b = true;
+        boolean tipo2b = true;
+
+        if(!(tipo1.equals("int") || tipo1.equals("float"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando izquierdo de la multiplicacion en la linea %d columna %d debe ser entero o flotante.", 
+                linea1, columna1
+            ));
+            erroresSemanticos++;
+            tipo1b = false;
+        }
+
+        if(!(tipo2.equals("int") || tipo2.equals("float"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando derecho de la multiplicacion en la linea %d columna %d debe ser entero o flotante.",
+                linea2, columna2
+            ));
+            erroresSemanticos++;
+            tipo2b = false;
+        }
+
+        if(tipo1b && tipo2b && tipo1.equals(tipo2)){
+            return tipo1;
+        } else {
+            System.err.println(String.format(
+                "Error Semantico: Ambos operandos en la multiplicacion de la linea %d deben ser enteros o flotantes.",
+                linea1
+            ));
+            erroresSemanticos++;
+            return "null";
+        }
+    }
+    
 
 
    
@@ -1316,20 +1352,9 @@ class CUP$parser$actions {
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 
         System.out.println("Multiplicacion (*)"); 
-        String operadorMulti = "null";
-        //Verificar que el tipo de ambas expresiones sea igual
-        if(!(e1.toString().equals("int") || e1.toString().equals("float"))){
-            System.err.println("Error Semantico: El primer factor de la multiplicacion debe ser flotante o entero");
-        }
-        if(!(e2.toString().equals("int") || e2.toString().equals("float"))){
-            System.err.println("Error Semantico: El segundo factor de la multiplicacion debe ser flotante o entero");
-        }
-        if(!(e1.toString().equals(e2.toString()))){
-            System.err.println("Error Semantico: Los tipos de los operadores de la multiplicacion deben ser iguales");
-        }else{
-            operadorMulti = e1.toString();
-        }
-        RESULT = operadorMulti;
+        String verificacion = verifiacionSemanticaAritmeticaBinaria(e1.toString(), e2.toString(), e1left, e2left, e1right, e2right);
+       
+        RESULT = verificacion;
       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

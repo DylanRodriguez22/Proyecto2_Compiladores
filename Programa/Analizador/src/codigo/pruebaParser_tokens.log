@@ -10,10 +10,10 @@ LET                      	let            	4	5
 INT                      	int            	4	9
 IDENTIFIER               	y              	4	13
 ASSIGN                   	=              	4	15
-INT_LITERAL              	10             	4	17
-MULT_OPERATOR            	*              	4	20
-BOOL_LITERAL             	True           	4	22
-DELIMITER                	$              	4	26
+FLOAT_LITERAL            	1.2            	4	17
+MULT_OPERATOR            	*              	4	21
+BOOL_LITERAL             	True           	4	23
+DELIMITER                	$              	4	27
 LET                      	let            	5	5
 INT                      	int            	5	9
 IDENTIFIER               	z              	5	13
