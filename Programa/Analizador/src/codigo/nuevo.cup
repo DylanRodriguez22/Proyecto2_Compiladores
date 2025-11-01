@@ -25,9 +25,12 @@ action code {:
 
     //Coloca la tabla anterior a la actual como la nueva tabla actual
     public void desapilarTablaDeSimbolos(){
-        tablaAnterior = tablaActual.getTablaAnterior();
+        System.out.println("Voy a desapilar tabla: " + tablaActual.getNombre());
+        TablaDeSimbolos tablaAnterior = tablaActual.getTablaAnterior();
         if(tablaAnterior != null){
+            
             tablaActual = tablaAnterior; //Con esto ya no hay referencia a la primera tabla de la pila
+            System.out.println("La tabla actual es ahora: " + tablaActual.getNombre());
         }else{
             System.out.println("Error: Se está intentando desapilar la tabla Global");
         }
@@ -35,7 +38,7 @@ action code {:
 
     //Añade a la tabla actual el símbolo indicado
     public void agregarSimbolo(String pTipo, String pSimbolo){
-        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla con el tipo "+ pTipo);
+        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + "con el tipo "+ pTipo);
         tablaActual.agregarSimbolo(new Simbolo(pSimbolo, pTipo));
     }
 :}
@@ -200,6 +203,7 @@ non terminal args_tail;
 
 // Programa principal
 non terminal principal;
+non terminal principal_left;
 non terminal global_variables;
 non terminal program;
 
@@ -600,25 +604,47 @@ for_loop ::= for_keyword reassignment step_keyword int_literal to_keyword int_li
 function_left ::=  
            // Solo para enteros 
             int_keyword identifier:id
-                {: System.out.println("Crear tabla de símbolos para función int: " +id); :}
+                {: 
+                    System.out.println("Crear tabla de símbolos para función int: " +id); 
+                    TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
+                    apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                :}
             |  float_keyword identifier:id
-                {: System.out.println("Crear tabla de símbolos para función flotante: " +id); :}
+                {: System.out.println("Crear tabla de símbolos para función flotante: " +id); 
+                    TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
+                    apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                :}
             |  bool_keyword identifier:id
-                {: System.out.println("Crear tabla de símbolos para función bool: " +id); :}
+                {: System.out.println("Crear tabla de símbolos para función bool: " +id); 
+                    TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
+                    apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                :}
             |  char_keyword identifier:id
-                {: System.out.println("Crear tabla de símbolos para función char: " +id); :}
+                {: System.out.println("Crear tabla de símbolos para función char: " +id); 
+                    TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
+                    apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                :}
             |  string_keyword identifier:id
-                {: System.out.println("Crear tabla de símbolos para función string: " +id); :}
+                {: System.out.println("Crear tabla de símbolos para función string: " +id); 
+                    TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
+                    apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                :}
             ;
 
 function ::= 
           // Solo para enteros 
           function_left left_parenthesis right_parenthesis block
-            {: System.out.println("funcion sin parámetros"); :}
+            {: 
+                //Aquí desapilo
+                desapilarTablaDeSimbolos();
+                
+             :}
           |  function_left left_parenthesis params right_parenthesis block
-            {: System.out.println("funcion con parámetros"); :}
+            {: 
+                desapilarTablaDeSimbolos();
+             :}
           |  function_left left_parenthesis error right_parenthesis block
-          {: System.err.println("ERROR en parámetros de función int"); :}
+          {: System.err.println("ERROR en parámetros de función "); :}
           ;
 
 
@@ -697,8 +723,14 @@ global_variables ::= /* empty */
                   ;
 
 //Programa principal
-principal ::= void_keyword principal_keyword left_parenthesis right_parenthesis block
-           {: System.out.println("\n>> FUNCION PRINCIPAL reconocida"); :}
+principal_left ::= void_keyword principal_keyword left_parenthesis right_parenthesis 
+                    {: //Para poder crear la tabla de símbolos
+                        TablaDeSimbolos t = crearTablaDeSimbolos("Principal"); //Crear la nueva tabla
+                        apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                     :} 
+                     ;
+principal ::= principal_left block
+           {: System.out.println("\n>> FUNCION PRINCIPAL reconocida"); desapilarTablaDeSimbolos(); :}
            ;
 
 //Funciones agrupadas

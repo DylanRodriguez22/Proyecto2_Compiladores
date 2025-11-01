@@ -30,6 +30,10 @@ public class TablaDeSimbolos {
     public TablaDeSimbolos getTablaAnterior(){
         return this.anterior;
     }
+        
+    public String getNombre(){
+        return this.nombre;
+    }
     
 @Override 
     public String toString(){
