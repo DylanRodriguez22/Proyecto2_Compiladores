@@ -41,6 +41,8 @@ terminal String left_parenthesis;
 terminal String right_parenthesis;
 terminal String left_block;
 terminal String right_block;
+terminal String right_bracket;
+terminal String left_bracket;
 
 terminal String plus_operator;
 terminal String minus_operator;
@@ -371,79 +373,79 @@ reassignment ::= identifier assignment_operator declaration_values delimiter
 
 
 // Array
-array_declaration ::= let_keyword int_keyword identifier left_block int_literal right_block delimiter
+array_declaration ::= let_keyword int_keyword identifier left_bracket int_literal right_bracket delimiter
                 {: System.out.println("Declaracion: array int sin nada"); :}
                 | let_keyword int_keyword identifier error delimiter
                 {: System.err.println("Error en declaracion de array"); :}
-                | error int_keyword identifier left_block int_literal right_block delimiter
+                | error int_keyword identifier left_bracket int_literal right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
-                | let_keyword error identifier left_block int_literal right_block delimiter
+                | let_keyword error identifier left_bracket int_literal right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta tipo"); :}
-                | let_keyword int_keyword error left_block int_literal right_block delimiter
+                | let_keyword int_keyword error left_bracket int_literal right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta id"); :}
-                | let_keyword int_keyword identifier left_block error right_block delimiter
+                | let_keyword int_keyword identifier left_bracket error right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta tamaño"); :}
-                | let_keyword int_keyword identifier left_block int_literal error delimiter
-                {: System.err.println("Error en declaracion de array, falta ?"); :}
-                | let_keyword int_keyword identifier error int_literal right_block delimiter
-                {: System.err.println("Error en declaracion de array, falta ¿"); :}
-                | let_keyword int_keyword identifier left_block int_literal right_block error
+                | let_keyword int_keyword identifier left_bracket int_literal error delimiter
+                {: System.err.println("Error en declaracion de array, falta ]"); :}
+                | let_keyword int_keyword identifier error int_literal right_bracket delimiter
+                {: System.err.println("Error en declaracion de array, falta ["); :}
+                | let_keyword int_keyword identifier left_bracket int_literal right_bracket error
                 {: System.err.println("Error en declaracion de array, falta delimitador"); :}
 
 
 
 
-                |  let_keyword char_keyword identifier left_block int_literal right_block delimiter
+                |  let_keyword char_keyword identifier left_bracket int_literal right_bracket delimiter
                 {: System.out.println("Declaracion: array char sin nada"); :}
-                | error char_keyword identifier left_block int_literal right_block delimiter
+                | error char_keyword identifier left_bracket int_literal right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
-                | let_keyword char_keyword error left_block int_literal right_block delimiter
+                | let_keyword char_keyword error left_bracket int_literal right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta id"); :}
-                | let_keyword char_keyword identifier left_block error right_block delimiter
+                | let_keyword char_keyword identifier left_bracket error right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta tamaño"); :}
-                | let_keyword char_keyword identifier left_block int_literal error delimiter
-                {: System.err.println("Error en declaracion de array, falta ?"); :}
-                | let_keyword char_keyword identifier error int_literal right_block delimiter
-                {: System.err.println("Error en declaracion de array, falta ¿"); :}
-                | let_keyword char_keyword identifier left_block int_literal right_block error
+                | let_keyword char_keyword identifier left_bracket int_literal error delimiter
+                {: System.err.println("Error en declaracion de array, falta ]"); :}
+                | let_keyword char_keyword identifier error int_literal right_bracket delimiter
+                {: System.err.println("Error en declaracion de array, falta ["); :}
+                | let_keyword char_keyword identifier left_bracket int_literal right_bracket error
                 {: System.err.println("Error en declaracion de array, falta delimitador"); :}
                 | let_keyword char_keyword identifier error delimiter
                 {: System.err.println("Error en declaracion de array"); :}
 
-                |  let_keyword int_keyword identifier left_block int_literal right_block assignment_operator left_block array_literals right_block delimiter
+                |  let_keyword int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.out.println("Declaracion: array int con valores"); :}
-                | error int_keyword identifier left_block int_literal right_block assignment_operator left_block array_literals right_block delimiter
+                | error int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
-                | let_keyword error identifier left_block int_literal right_block assignment_operator left_block array_literals right_block delimiter
+                | let_keyword error identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta tipo"); :}
-                | let_keyword int_keyword error left_block int_literal right_block assignment_operator left_block array_literals right_block delimiter
+                | let_keyword int_keyword error left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta id"); :}
-                | let_keyword int_keyword identifier left_block error right_block assignment_operator left_block array_literals right_block delimiter
+                | let_keyword int_keyword identifier left_bracket error right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta tamaño"); :}
-                | let_keyword int_keyword identifier left_block int_literal error assignment_operator left_block array_literals right_block delimiter
-                {: System.err.println("Error en declaracion de array, falta ?"); :}
-                | let_keyword int_keyword identifier error int_literal right_block assignment_operator left_block array_literals right_block delimiter
-                {: System.err.println("Error en declaracion de array, falta ¿"); :}
-                | let_keyword int_keyword identifier left_block int_literal right_block assignment_operator left_block array_literals right_block error
+                | let_keyword int_keyword identifier left_bracket int_literal error assignment_operator left_block array_literals right_block delimiter
+                {: System.err.println("Error en declaracion de array, falta ]"); :}
+                | let_keyword int_keyword identifier error int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                {: System.err.println("Error en declaracion de array, falta ["); :}
+                | let_keyword int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block error
                 {: System.err.println("Error en declaracion de array, falta delimitador"); :}
     
-                | let_keyword int_keyword identifier left_block int_literal right_block assignment_operator left_block error right_block delimiter
+                | let_keyword int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block error right_block delimiter
                 {: System.err.println("Error en inicializacion de array"); :}
 
-                |  let_keyword char_keyword identifier left_block int_literal right_block assignment_operator left_block array_literals right_block delimiter
+                |  let_keyword char_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.out.println("Declaracion: arreglo char con valores"); :}
-                | error char_keyword identifier left_block int_literal right_block assignment_operator left_block array_literals right_block delimiter
+                | error char_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
-                | let_keyword char_keyword error left_block int_literal right_block assignment_operator left_block array_literals right_block delimiter
+                | let_keyword char_keyword error left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta id"); :}
-                | let_keyword char_keyword identifier left_block error right_block assignment_operator left_block array_literals right_block delimiter
+                | let_keyword char_keyword identifier left_bracket error right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta tamaño"); :}
-                | let_keyword char_keyword identifier left_block int_literal error assignment_operator left_block array_literals right_block delimiter
-                {: System.err.println("Error en declaracion de array, falta ?"); :}
-                | let_keyword char_keyword identifier error int_literal right_block assignment_operator left_block array_literals right_block delimiter
-                {: System.err.println("Error en declaracion de array, falta ¿"); :}
+                | let_keyword char_keyword identifier left_bracket int_literal error assignment_operator left_block array_literals right_block delimiter
+                {: System.err.println("Error en declaracion de array, falta ]"); :}
+                | let_keyword char_keyword identifier error int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                {: System.err.println("Error en declaracion de array, falta ["); :}
 
-                | let_keyword char_keyword identifier left_block int_literal right_block assignment_operator left_block error right_block delimiter
+                | let_keyword char_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block error right_block delimiter
                 {: System.err.println("Error en inicializacion de array"); :}
 
                 ;
@@ -456,15 +458,15 @@ array_literals ::= int_literal
                  |  array_literals comma_keyword identifier
                  ;
 
-assign_elements_array ::= identifier left_block arithmetic_expression right_block assignment_operator arithmetic_expression delimiter
+assign_elements_array ::= identifier left_bracket arithmetic_expression right_bracket assignment_operator arithmetic_expression delimiter
                 {: System.out.println("Asignacion a elemento de arreglo"); :}
 
-                |  identifier left_block arithmetic_expression right_block assignment_operator CHAR_LITERAL delimiter
+                |  identifier left_bracket arithmetic_expression right_bracket assignment_operator CHAR_LITERAL delimiter
                 {: System.out.println("Asignacion a elemento de arreglo"); :}
                 ;
 
 //Ya puede acceder a posiciones del arreglo con expresiones aritmeticas
-array_access ::= identifier left_block arithmetic_expression right_block; 
+array_access ::= identifier left_bracket arithmetic_expression right_bracket; 
 
 
 // input y output

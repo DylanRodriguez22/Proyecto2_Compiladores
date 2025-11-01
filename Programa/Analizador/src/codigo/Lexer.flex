@@ -241,6 +241,8 @@ StringLiteral = \"([^\"\n\\]|\\n)*\"
     "э"                 { return symbol(sym.right_parenthesis, yytext()); }
     "¿"                 { return symbol(sym.left_block, yytext()); }
     "?"                 { return symbol(sym.right_block, yytext()); }
+    "["                 { return symbol(sym.left_bracket, yytext()); }
+    "]"                 { return symbol(sym.right_bracket, yytext()); }
 
     /* Separadores */
     ","                 { return symbol(sym.comma_keyword, yytext()); }
