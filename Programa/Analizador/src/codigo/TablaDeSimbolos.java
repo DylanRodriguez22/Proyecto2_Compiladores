@@ -13,10 +13,17 @@ public class TablaDeSimbolos {
     private String nombre;
     private ArrayList<Simbolo> simbolos = new ArrayList<>();
     private TablaDeSimbolos anterior;
+    public String tipoFuncion = "";
     
     public TablaDeSimbolos(String pNombre){
         this.nombre = pNombre; 
         this.anterior = null;
+    }
+    
+    //Solo para las funciones
+    public TablaDeSimbolos(String pNombre, String pTipo){
+        this.nombre = pNombre; 
+        this.tipoFuncion = pTipo; 
     }
     
     public void agregarSimbolo(Simbolo pSimbolo){
@@ -67,6 +74,16 @@ public class TablaDeSimbolos {
     public String getNombre(){
         return this.nombre;
     }
+    
+    public int getCantidadDeSimbolos(){
+        return this.simbolos.size();
+    }
+    
+    public ArrayList<Simbolo> getSimbolos(){
+        return this.simbolos;
+    }
+    
+    
     
     //Verifica en la tabla de la instancia y en las anteriores si existe el identificador
     public Simbolo obtenerSimbolo(String pSimbolo){

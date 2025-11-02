@@ -1,8 +1,16 @@
+char miFunc є int a, char b э¿
+    let float x$
+?
+
+char miFunc2 є float a, char b э¿
+    let float x$
+?
 
 void principal є э ¿
+    let float x$
     let char arreglito [5] = ¿2,3,4,pruebita, puto?$
-    let char a = arreglito[1]$
-    let int x$
+    let char a = arreglito[1*2+3/4]$
+    
     x = -1$
     let char x$
     let int a = 1.2^2$

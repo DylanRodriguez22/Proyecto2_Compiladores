@@ -1134,8 +1134,11 @@ public class parser extends java_cup.runtime.lr_parser {
 class CUP$parser$actions {
 
  
+    TablaDeFunciones tablaDeFunciones = new TablaDeFunciones();
     TablaDeSimbolos tablaGlobal = new TablaDeSimbolos("Global"); //
     TablaDeSimbolos tablaActual = tablaGlobal; //Al principio es la global
+    String funcionActual = "";
+
     int erroresSemanticos = 0;
     public void hola(){
          System.out.println(tablaActual.toString());
@@ -1263,7 +1266,7 @@ class CUP$parser$actions {
     }
         
     //Verifica que el identificador exista, que sea un arreglo, que el tipo de la expresión aritmética que me indica la posición sea int y me retorna valor::tipo
-    public String accederElementoDeArreglo(String nombreArreglo, String posicionElemento, String tipoPosicionElemento, int Linea){
+    public String accederElementoDeArreglo(String nombreArreglo, String posicionElemento, String tipoPosicionElemento, int linea){
         Simbolo simbolo = buscarSimbolo(nombreArreglo);
         String retorno = "null::null";
         if(simbolo == null){
@@ -1273,7 +1276,7 @@ class CUP$parser$actions {
             //Verificar que sea un arreglo
             if(simbolo.getTipo().equals("arrayChar") | simbolo.getTipo().equals("arrayInt")){
                //Verificar que el tipo de la expresion que me indica la posición sea int 
-               if(!(tipoPosicionElemento.equals("int")){
+               if(!(tipoPosicionElemento.equals("int"))){
                     System.err.println("Error Semantico: La expresion que indica la posicion del elemento a tomar en el arreglo " + nombreArreglo + " debe ser de tipo int. Linea " + linea);
                     erroresSemanticos++;
                 }else{
@@ -1291,6 +1294,22 @@ class CUP$parser$actions {
         }
         return retorno;
     }
+
+    public void agregarFuncion(String pNombre, String pTipo, int linea){
+        boolean agregar = tablaDeFunciones.agregarFuncion(pNombre, pTipo);
+        funcionActual = pNombre;
+        if(!agregar){
+            System.err.println("Error Semantico: Ya existe una funcion llamada " + pNombre + " Linea: " + linea);
+            erroresSemanticos++;
+            funcionActual = "";
+        }
+    }
+
+    public void agregarParametro(Simbolo pSimbolo){
+        tablaDeFunciones.agregarSimboloAFuncion(funcionActual, pSimbolo);
+    }
+
+    
     
 
 
@@ -2838,9 +2857,10 @@ class CUP$parser$actions {
 		int opright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object op = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 //Verificar que exista el arreglo y que la expresión sea entero. Tipo arrayInt o arrayChar 
+                    System.out.println(op);
                     String[] posicionArreglo = op.toString().split("::");
-                    String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1));
-                    System.out.println("Tipo elemento array: " + elemento);
+                    String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1)); //valor::tipo
+                    RESULT = elemento; //Para guardarlo y proceder con la validación posterior
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_access",15, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3226,6 +3246,9 @@ class CUP$parser$actions {
                     System.out.println("Crear tabla de símbolos para función int: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+
+                    //Agregar a la tabla de funciones
+                    agregarFuncion(id, "int", (idleft + 1));
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("function_left",37, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3241,6 +3264,9 @@ class CUP$parser$actions {
 		 System.out.println("Crear tabla de símbolos para función flotante: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+
+                    //Agregar a la tabla de funciones
+                    agregarFuncion(id, "float", (idleft + 1));
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("function_left",37, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3256,6 +3282,9 @@ class CUP$parser$actions {
 		 System.out.println("Crear tabla de símbolos para función bool: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                    
+                    //Agregar a la tabla de funciones
+                    agregarFuncion(id, "bool", (idleft + 1));
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("function_left",37, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3271,6 +3300,9 @@ class CUP$parser$actions {
 		 System.out.println("Crear tabla de símbolos para función char: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+
+                    //Agregar a la tabla de funciones
+                    agregarFuncion(id, "char", (idleft + 1));
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("function_left",37, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3286,6 +3318,9 @@ class CUP$parser$actions {
 		 System.out.println("Crear tabla de símbolos para función string: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+
+                    //Agregar a la tabla de funciones
+                    agregarFuncion(id, "string", (idleft + 1));
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("function_left",37, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3358,7 +3393,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("int", id);
+		 agregarSimbolo("int", id); agregarParametro(new Simbolo("int", id));
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3370,7 +3405,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("float", id);
+		 agregarSimbolo("float", id); agregarParametro(new Simbolo("int", id));
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3382,7 +3417,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("bool", id);
+		 agregarSimbolo("bool", id); agregarParametro(new Simbolo("int", id));
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3394,7 +3429,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("char", id);
+		 agregarSimbolo("char", id); agregarParametro(new Simbolo("int", id)); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3406,7 +3441,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("int", id);
+		 agregarSimbolo("int", id); agregarParametro(new Simbolo("int", id));
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
