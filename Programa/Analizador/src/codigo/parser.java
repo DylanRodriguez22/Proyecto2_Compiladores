@@ -1469,7 +1469,13 @@ class CUP$parser$actions {
           case 15: // power ::= factor power_operator power 
             {
               Object RESULT =null;
-		 System.out.println("Potencia (^)"); 
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 System.out.println("Potencia (^)"); System.out.println(e1); System.out.println(e2);
               CUP$parser$result = parser.getSymbolFactory().newSymbol("power",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1481,7 +1487,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		  RESULT = e;
+		 RESULT = e;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("power",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

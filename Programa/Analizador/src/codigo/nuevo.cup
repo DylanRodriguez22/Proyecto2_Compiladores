@@ -355,9 +355,11 @@ term ::= term:e1 multiplication_operator power:e2
       |  power:e {:  RESULT = e;:}
       ;
 
-power ::= factor power_operator power
-       {: System.out.println("Potencia (^)"); :}
-       |  factor:e {:  RESULT = e;:}
+power ::= factor:e1 power_operator power:e2
+       {: System.out.println("Potencia (^)"); 
+            //Verificar como se combina esto
+        :}
+       |  factor:e {: RESULT = e;:}
        ;
 
 factor ::= left_parenthesis logical_expresion_and:e right_parenthesis
