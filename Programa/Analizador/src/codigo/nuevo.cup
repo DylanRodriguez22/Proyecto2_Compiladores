@@ -124,6 +124,7 @@ parser code {:
             System.out.println("La gramatica no puede ser generada");
             System.out.println("Numero de errores en el lexer: " + lexerErrors); 
             System.out.println("Numero de errores en el parser: " + syntaxErrors);
+            
         }
     }
 
@@ -287,13 +288,7 @@ start with program;
 
 
 //Expresiones aritméticas
-unary_negative ::= minus_operator int_literal {: System.out.println("Negativo entero"); :}
-                |  minus_operator float_literal {: System.out.println("Negativo flotante"); :}
-                ;
 
-postfix_expression ::= identifier increment_operator {: System.out.println("Incremento (++)"); :}
-                    |  identifier decrement_operator {: System.out.println("Decremento (--)"); :}
-                    ;
 
 arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                           {: System.out.println("Suma (+)"); 
@@ -301,8 +296,8 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                                 String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("suma", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-                            RESULT = "ResultadoSuma::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
-                            
+                            RESULT = partesE1[0] + "+" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+                            System.out.println(partesE1[0] + "+" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3]);
                           :}
                        | arithmetic_expression plus_operator error
                        {: System.err.println("Error:En la expresión aritmética después de +"); RESULT = "null::null::-1::-1";:}
@@ -312,7 +307,7 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                             String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("resta", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-                            RESULT = "ResultadoResta::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+                            RESULT = partesE1[0] + "-" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
                           :}
                        | arithmetic_expression minus_operator error
                        {: System.err.println("Error:En la expresión aritmética después de -");  RESULT = "null::null::-1::-1";:}
@@ -326,7 +321,7 @@ term ::= term:e1 multiplication_operator power:e2
         System.out.println("Multiplicacion (*)"); 
         String verificacion = verifiacionSemanticaAritmeticaBinaria("multiplicacion", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-        RESULT = "ResultadoMultiplicacion::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        RESULT = partesE1[0] + "*" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       :}
       |  term:e1 division_operator power:e2
       {: System.out.println("Division (/)"); 
@@ -334,7 +329,7 @@ term ::= term:e1 multiplication_operator power:e2
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verifiacionSemanticaAritmeticaBinaria("division", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-        RESULT = "ResultadoDivision::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        RESULT = partesE1[0] + "/" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       :}
       |  term:e1 int_division_operator power:e2
       {: System.out.println("Division entera (//)");
@@ -342,7 +337,7 @@ term ::= term:e1 multiplication_operator power:e2
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verifiacionSemanticaAritmeticaBinaria("division entera", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-        RESULT = "ResultadoDivisionEntera::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3]);
+        RESULT = partesE1[0] + "//" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3]);
       :}
       |  term:e1 modulo_operator power:e2
       {: System.out.println("Modulo (%)"); 
@@ -350,14 +345,19 @@ term ::= term:e1 multiplication_operator power:e2
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verifiacionSemanticaAritmeticaBinaria("modulo", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-        RESULT = "ResultadoModulo::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        RESULT = partesE1[0] + "%" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       :}
       |  power:e {:  RESULT = e;:}
       ;
 
 power ::= factor:e1 power_operator power:e2
        {: System.out.println("Potencia (^)"); 
-            //Verificar como se combina esto
+            //Voy a dejarlo de igual manera que ambos sean enteros o flotantes
+             String[] partesE1 = e1.toString().split("::");
+            String[] partesE2 = e2.toString().split("::");
+            String verificacion = verifiacionSemanticaAritmeticaBinaria("potencia", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+       
+            RESULT = partesE1[0] + "^" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
         :}
        |  factor:e {: RESULT = e;:}
        ;
@@ -367,8 +367,8 @@ factor ::= left_parenthesis logical_expresion_and:e right_parenthesis
         |  arithmetic_operands:e {: RESULT = e;:}
         ;
 
-arithmetic_operands ::= int_literal:n {: RESULT = n + "::int::" + nleft + "::" + nright;:}
-                     |  float_literal:n {: RESULT = n + "::float::" + nleft + "::" + nright; :}
+arithmetic_operands ::= int_literal:n {: RESULT = n + "::int::" + (nleft + 1) + "::" + nright;:}
+                     |  float_literal:n {: RESULT = n + "::float::" + (nleft +1) + "::" + nright; :}
                      |  identifier:n 
                     {: 
                         //Verificar que exista el identificador
@@ -376,20 +376,86 @@ arithmetic_operands ::= int_literal:n {: RESULT = n + "::int::" + nleft + "::" +
                         //Obtener el tipo
                         Simbolo simbolo = buscarSimbolo(n);
                         if(simbolo != null){
-                            RESULT =  simbolo.getSimbolo() + "::" + simbolo.getTipo() + "::"  + nleft + "::" + nright; //valor::tipo::linea::columna
+                            RESULT =  simbolo.getSimbolo() + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; //valor::tipo::linea::columna
                         }else{
-                            RESULT = "null::null::-1::-1";
+                            RESULT = "null::null::" + (nleft + 1) + "::" + nright;
                         }
                         
                        
                     :}
-                     |  unary_negative 
-                     |  postfix_expression
+                     |  unary_negative:n {: RESULT = n; :} 
+                     |  postfix_expression:n {: RESULT = n; :}
                      |  array_access
                      |  function_call
-                     |  bool_literal:n {: RESULT = n + "::bool::" + nleft + "::" + nright;:}
+                     |  bool_literal:n {: RESULT = n + "::bool::" + (nleft +1) + "::" + nright;:}
                      |  not_operator logical_expresion_and 
                      ;
+
+unary_negative ::= minus_operator int_literal:n 
+                {: System.out.println("Negativo entero"); 
+                    RESULT = "-"+ n  + "::int::" + (nleft +1) + "::" + nright;
+                :}
+                |  minus_operator float_literal 
+                    {: System.out.println("Negativo flotante"); 
+                        RESULT = "-"+ n  + "::float::" + (nleft +1) + "::" + nright;
+                    :}
+                ;
+
+postfix_expression ::= identifier:n increment_operator 
+                        {: System.out.println("Incremento (++)"); 
+                            //Verificar que el identificador sea entero o flotante
+                            //Verificar que exista el identificador
+                            reportarErrorNoExisteSimbolo(n);
+                            //Obtener el tipo
+                            Simbolo simbolo = buscarSimbolo(n);
+                            String tipo;
+                            if(simbolo != null){
+                                
+                                //Verificar que sea entero o flotante
+                                tipo = simbolo.getTipo();
+                                if(tipo.equals("int") || tipo.equals("float")){
+                                    RESULT =  simbolo.getSimbolo() + "+1" + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; 
+                                }else{
+                                    //Reportar el error
+                                   System.err.println(String.format(
+                                    "Error Semantico: El identificador para la operacion de incremento postfijo en la linea %s columna %s debe ser entero o flotante.", 
+                                    (nleft +1), nright
+                                    ));
+                                    erroresSemanticos++;
+                                    RESULT = "null::null::" + (nleft + 1) + "::" + nright;
+                                }
+                            }else{
+                                RESULT = "null::null::" + (nleft + 1) + "::" + nright;
+                            }
+                        :}
+                    |  identifier:n decrement_operator {: System.out.println("Decremento (--)"); 
+                        //Verificar que el identificador sea entero o flotante
+                            //Verificar que exista el identificador
+                            reportarErrorNoExisteSimbolo(n);
+                            //Obtener el tipo
+                            Simbolo simbolo = buscarSimbolo(n);
+                            String tipo;
+                            if(simbolo != null){
+                                
+                                //Verificar que sea entero o flotante
+                                tipo = simbolo.getTipo();
+                                if(tipo.equals("int") || tipo.equals("float")){
+                                    RESULT =  simbolo.getSimbolo() + "-1" + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; 
+                                }else{
+                                    //Reportar el error
+                                   System.err.println(String.format(
+                                    "Error Semantico: El identificador para la operacion de decremento postfijo en la linea %s columna %s debe ser entero o flotante.", 
+                                    (nleft +1), nright
+                                    ));
+                                    erroresSemanticos++;
+                                    RESULT = "null::null::" + (nleft + 1) + "::" + nright;
+                                }
+                            }else{
+                                RESULT = "null::null::" + (nleft + 1) + "::" + nright;
+                            }
+                    
+                        :}
+                    ;
 
 // Expresiones logicas and, or y negación
 
