@@ -1228,6 +1228,70 @@ class CUP$parser$actions {
         }
     }
     
+    //Esto es para cuando se quiere hacer arreglo[i+2] = 5*1$
+    public void agregarElementoArregloPosicionEspecifica(String nombreArreglo, int linea, String tipoPosicion, String tipoElementoAsignado, String posicionArreglo, String elementoAsignado){
+        //Verificar que el identificador exista,
+        Simbolo simbolo = buscarSimbolo(nombreArreglo);
+        if(simbolo == null){
+            System.err.println("Error Semantico: El identificador " + nombreArreglo + " no ha sido declarado previamente. Linea " + linea);
+            erroresSemanticos++;
+        }else{
+            //Verificar que el identificador sea un arreglo
+            if(simbolo.getTipo().equals("arrayChar") | simbolo.getTipo().equals("arrayInt")){
+                //Verificar que el tipo de la expresión que me indica la posición sea entero
+                if(!(tipoPosicion.equals("int")){
+                    System.err.println("Error Semantico: La expresion que indica la posicion donde se asignara el elemento en el arreglo " + nombreArreglo + " debe ser de tipo int. Linea " + linea);
+                    erroresSemanticos++;
+                }else{
+                    //Verificar que el tipo del arreglo sea el mismo del elemento que se quiere asignar
+                    if(simbolo.getTipo().toLowerCase().contains(tipoElementoAsignado)) {
+                        //Aquí ya debería de hacer el movimiento y meter el elemento en el arreglo
+                        System.out.println("Se agrega elemento a arreglo");
+                    }else{
+                        System.err.println("Error Semantico: El tipo de la expresion que se quiere agregar al arreglo " + nombreArreglo + " no coincide con el del arreglo. Linea " + linea);
+                        erroresSemanticos++;
+                        }
+                }  
+            }
+            else{
+                System.err.println("Error Semantico: El tipo del identificador " + nombreArreglo + " no es un arreglo. Linea " + linea);
+                erroresSemanticos++;
+            }
+        }
+
+        
+    }
+        
+    //Verifica que el identificador exista, que sea un arreglo, que el tipo de la expresión aritmética que me indica la posición sea int y me retorna valor::tipo
+    public String accederElementoDeArreglo(String nombreArreglo, String posicionElemento, String tipoPosicionElemento, int Linea){
+        Simbolo simbolo = buscarSimbolo(nombreArreglo);
+        String retorno = "null::null";
+        if(simbolo == null){
+            System.err.println("Error Semantico: El identificador " + nombreArreglo + " no ha sido declarado previamente. Linea " + linea);
+            erroresSemanticos++;
+        }else{
+            //Verificar que sea un arreglo
+            if(simbolo.getTipo().equals("arrayChar") | simbolo.getTipo().equals("arrayInt")){
+               //Verificar que el tipo de la expresion que me indica la posición sea int 
+               if(!(tipoPosicionElemento.equals("int")){
+                    System.err.println("Error Semantico: La expresion que indica la posicion del elemento a tomar en el arreglo " + nombreArreglo + " debe ser de tipo int. Linea " + linea);
+                    erroresSemanticos++;
+                }else{
+                        if(simbolo.getTipo().equals("arrayChar")){
+                            retorno = "desconocido::char"; //Hay que resolver esto para poder retornar el valor
+                        }else{
+                             retorno = "desconocido::int";
+                        }
+                    }
+            }
+            else{
+                System.err.println("Error Semantico: El tipo del identificador " + nombreArreglo + " no es un arreglo. Linea " + linea);
+                erroresSemanticos++;
+            }
+        }
+        return retorno;
+    }
+    
 
 
    
@@ -2236,7 +2300,7 @@ class CUP$parser$actions {
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		 System.out.println("Declaracion: array int sin nada"); 
                     //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
-                    ArrayList<Simbolo> simbolos = new ArrayList<>;
+                    ArrayList<Simbolo> simbolos = new ArrayList<>();
                     agregarSimboloArray("arrayInt", id, i, simbolos);
                     
                 
@@ -2328,7 +2392,7 @@ class CUP$parser$actions {
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		 System.out.println("Declaracion: array char sin nada"); 
                     //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
-                    ArrayList<Simbolo> simbolos = new ArrayList<>;
+                    ArrayList<Simbolo> simbolos = new ArrayList<>();
                     agregarSimboloArray("arrayChar", id, i, simbolos);
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2550,7 +2614,7 @@ class CUP$parser$actions {
                     for(Simbolo simbolo : simbolosArreglo){
                          System.out.println(simbolo.toString());
                     }
-                    agregarSimboloArray("arrayInt", id, i, simbolosArreglo);
+                    agregarSimboloArray("arrayChar", id, i, simbolosArreglo);
                     
                     
                 
@@ -2723,7 +2787,20 @@ class CUP$parser$actions {
           case 121: // assign_elements_array ::= identifier left_bracket arithmetic_expression right_bracket assignment_operator arithmetic_expression delimiter 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-6)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
+		Object op = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
+		int elementleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int elementright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object element = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 System.out.println("Asignacion a elemento de arreglo"); 
+                    String[] posicionArreglo = op.toString().split("::");
+                    String[] elementoAsignado = element.toString().split("::");
+                    agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], elementoAsignado[1], posicionArreglo[0], elementoAsignado[0]);
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("assign_elements_array",14, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2732,7 +2809,20 @@ class CUP$parser$actions {
           case 122: // assign_elements_array ::= identifier left_bracket arithmetic_expression right_bracket assignment_operator CHAR_LITERAL delimiter 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-6)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
+		Object op = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
+		int elementleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int elementright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String element = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 System.out.println("Asignacion a elemento de arreglo"); 
+                    String[] posicionArreglo = op.toString().split("::");
+                    agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], "char", posicionArreglo[0], element.toString());
+                        
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("assign_elements_array",14, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2741,8 +2831,16 @@ class CUP$parser$actions {
           case 123: // array_access ::= identifier left_bracket arithmetic_expression right_bracket 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object op = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 //Verificar que exista el arreglo y que la expresión sea entero. Tipo arrayInt o arrayChar 
-                    
+                    String[] posicionArreglo = op.toString().split("::");
+                    String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1));
+                    System.out.println("Tipo elemento array: " + elemento);
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_access",15, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
