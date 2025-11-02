@@ -1,6 +1,8 @@
 package codigo;
 import java_cup.runtime.*;
 import java.lang.String;
+import java.util.ArrayList;
+
 action code {: 
     TablaDeSimbolos tablaGlobal = new TablaDeSimbolos("Global"); //
     TablaDeSimbolos tablaActual = tablaGlobal; //Al principio es la global
@@ -36,10 +38,16 @@ action code {:
         }
     }
 
-    //Añade a la tabla actual el símbolo indicado
+    //Añade a la tabla actual el símbolo indicado. VERIFICAR SI EL SÍMBOLO YA ESTÁ EN LA TABLA ACTUAL.
     public void agregarSimbolo(String pTipo, String pSimbolo){
-        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + "con el tipo "+ pTipo);
+        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + " con el tipo "+ pTipo);
         tablaActual.agregarSimbolo(new Simbolo(pSimbolo, pTipo));
+    }
+
+    //Añade a la tabla actual el símbolo indicado. VERIFICAR SI EL SÍMBOLO YA ESTÁ EN LA TABLA ACTUAL.
+    public void agregarSimboloArray(String pTipo, String pSimbolo, String pTamanio, ArrayList<Simbolo> pElementosArreglo){
+        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + " con el tipo "+ pTipo);
+        tablaActual.agregarSimbolo(new SimboloArreglo(pSimbolo, pTipo, pTamanio, pElementosArreglo));
     }
     
     //Busca en la jerarquía de tablas el símbolo de la entrada y lo retorno si existiera
@@ -353,7 +361,7 @@ term ::= term:e1 multiplication_operator power:e2
 power ::= factor:e1 power_operator power:e2
        {: System.out.println("Potencia (^)"); 
             //Voy a dejarlo de igual manera que ambos sean enteros o flotantes
-             String[] partesE1 = e1.toString().split("::");
+            String[] partesE1 = e1.toString().split("::");
             String[] partesE2 = e2.toString().split("::");
             String verificacion = verifiacionSemanticaAritmeticaBinaria("potencia", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
@@ -379,6 +387,7 @@ arithmetic_operands ::= int_literal:n {: RESULT = n + "::int::" + (nleft + 1) + 
                             RESULT =  simbolo.getSimbolo() + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; //valor::tipo::linea::columna
                         }else{
                             RESULT = "null::null::" + (nleft + 1) + "::" + nright;
+                            erroresSemanticos++;
                         }
                         
                        
@@ -597,8 +606,13 @@ reassignment ::= identifier assignment_operator declaration_values delimiter
 
 
 // Array
-array_declaration ::= let_keyword int_keyword identifier left_bracket int_literal right_bracket delimiter
-                {: System.out.println("Declaracion: array int sin nada"); :}
+array_declaration ::= let_keyword int_keyword identifier:id left_bracket int_literal:i right_bracket delimiter
+                {: System.out.println("Declaracion: array int sin nada"); 
+                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                    ArrayList<Simbolo> simbolos = new ArrayList<>;
+                    agregarSimboloArray("arrayInt", id, i, simbolos);
+                    
+                :}
                 | let_keyword int_keyword identifier error delimiter
                 {: System.err.println("Error en declaracion de array"); :}
                 | error int_keyword identifier left_bracket int_literal right_bracket delimiter
@@ -619,8 +633,12 @@ array_declaration ::= let_keyword int_keyword identifier left_bracket int_litera
 
 
 
-                |  let_keyword char_keyword identifier left_bracket int_literal right_bracket delimiter
-                {: System.out.println("Declaracion: array char sin nada"); :}
+                |  let_keyword char_keyword identifier:id left_bracket int_literal:i right_bracket delimiter
+                {: System.out.println("Declaracion: array char sin nada"); 
+                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                    ArrayList<Simbolo> simbolos = new ArrayList<>;
+                    agregarSimboloArray("arrayChar", id, i, simbolos);
+                :}
                 | error char_keyword identifier left_bracket int_literal right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
                 | let_keyword char_keyword error left_bracket int_literal right_bracket delimiter
@@ -636,8 +654,34 @@ array_declaration ::= let_keyword int_keyword identifier left_bracket int_litera
                 | let_keyword char_keyword identifier error delimiter
                 {: System.err.println("Error en declaracion de array"); :}
 
-                |  let_keyword int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
-                {: System.out.println("Declaracion: array int con valores"); :}
+                |  let_keyword int_keyword identifier:id left_bracket int_literal:i right_bracket assignment_operator left_block array_literals:rec right_block delimiter
+                {: 
+                    System.out.println("Declaracion: array int con valores"); 
+                    //Descomponer los valores en símbolos
+                    String[] elementosArray = rec.toString().split("::");
+                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
+                    for (String elemento : elementosArray){
+                        //Split con :: para obtener el simbolo y el tipo
+                        String[] simboloTipo = elemento.toString().split(";;");
+                        
+                        //Verificar que el tipo sea del mismo que el arreglo
+                        if(simboloTipo[1].equals("int")){
+                            simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
+                        }else{
+                            System.err.println("Error Semantico: El tipo del elemento " + simboloTipo[0] + " debe ser int para poder incluirlo en el arreglo " + id + " de la linea " + idleft +".");
+                            erroresSemanticos++;
+                        }
+                        
+                    }
+                    
+                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                    for(Simbolo simbolo : simbolosArreglo){
+                         System.out.println(simbolo.toString());
+                    }
+                    agregarSimboloArray("arrayInt", id, i, simbolosArreglo);
+                    
+                    
+                :}
                 | error int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
                 | let_keyword error identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
@@ -656,8 +700,34 @@ array_declaration ::= let_keyword int_keyword identifier left_bracket int_litera
                 | let_keyword int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block error right_block delimiter
                 {: System.err.println("Error en inicializacion de array"); :}
 
-                |  let_keyword char_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
-                {: System.out.println("Declaracion: arreglo char con valores"); :}
+                |  let_keyword char_keyword identifier:id left_bracket int_literal:i right_bracket assignment_operator left_block array_literals:rec right_block delimiter
+                {: 
+                    System.out.println("Declaracion: array char con valores"); 
+                    //Descomponer los valores en símbolos
+                    String[] elementosArray = rec.toString().split("::");
+                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
+                    for (String elemento : elementosArray){
+                        //Split con :: para obtener el simbolo y el tipo
+                        String[] simboloTipo = elemento.toString().split(";;");
+                        
+                        //Verificar que el tipo sea del mismo que el arreglo
+                        if(simboloTipo[1].equals("char")){
+                            simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
+                        }else{
+                            System.err.println("Error Semantico: El tipo del elemento " + simboloTipo[0] + " debe ser char para poder incluirlo en el arreglo " + id + " de la linea " + idleft +".");
+                            erroresSemanticos++;
+                        }
+                        
+                    }
+                    
+                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                    for(Simbolo simbolo : simbolosArreglo){
+                         System.out.println(simbolo.toString());
+                    }
+                    agregarSimboloArray("arrayInt", id, i, simbolosArreglo);
+                    
+                    
+                :}
                 | error char_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
                 | let_keyword char_keyword error left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
@@ -674,12 +744,43 @@ array_declaration ::= let_keyword int_keyword identifier left_bracket int_litera
 
                 ;
 
-array_literals ::= int_literal
-                 |  CHAR_LITERAL
-                 |  identifier
-                 |  array_literals comma_keyword int_literal
-                 |  array_literals comma_keyword CHAR_LITERAL
-                 |  array_literals comma_keyword identifier
+array_literals ::= int_literal:e {: RESULT = e + ";;int"; :} //valor;;tipo
+                 |  CHAR_LITERAL:e {: RESULT = e + ";;char"; :}
+                 |  identifier:n 
+                    {: 
+                        //Verificar que exista el identificador
+                        reportarErrorNoExisteSimbolo(n);
+                        //Obtener el tipo
+                        Simbolo simbolo = buscarSimbolo(n);
+                        if(simbolo != null){
+                            RESULT = e + ";;" +simbolo.getTipo();
+                        }else{
+                            RESULT = e+";;null";
+                            erroresSemanticos++;
+                        }
+                     :}
+                 |  array_literals:rec comma_keyword int_literal:e //valor;;tipo::valor;;tipo... Se separa primero por :: para obtener todos los valores con su tipo y luego por ;; para obtener el tipo
+                    {:
+                        RESULT = rec + "::" + e + ";;int";
+                    :}
+                 |  array_literals:rec comma_keyword CHAR_LITERAL:e
+                    {:
+                        RESULT = rec + "::" + e + ";;char";
+                    :}
+                 |  array_literals:rec comma_keyword identifier:n
+
+                 {: 
+                        //Verificar que exista el identificador
+                        reportarErrorNoExisteSimbolo(n);
+                        //Obtener el tipo
+                        Simbolo simbolo = buscarSimbolo(n);
+                        if(simbolo != null){
+                            RESULT = rec + "::" + n + ";;"+ simbolo.getTipo();
+                        }else{
+                            RESULT = rec + "::" + n+";;null";
+                            erroresSemanticos++;
+                        }
+                     :}
                  ;
 
 assign_elements_array ::= identifier left_bracket arithmetic_expression right_bracket assignment_operator arithmetic_expression delimiter
@@ -690,7 +791,11 @@ assign_elements_array ::= identifier left_bracket arithmetic_expression right_br
                 ;
 
 //Ya puede acceder a posiciones del arreglo con expresiones aritmeticas
-array_access ::= identifier left_bracket arithmetic_expression right_bracket; 
+array_access ::= identifier left_bracket arithmetic_expression right_bracket
+                {: //Verificar que exista el arreglo y que la expresión sea entero. Tipo arrayInt o arrayChar 
+                    
+                :}
+                ;
 
 
 // input y output

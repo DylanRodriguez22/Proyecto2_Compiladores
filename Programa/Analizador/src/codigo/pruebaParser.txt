@@ -1,12 +1,11 @@
 
-int miFunc є int param1, char param2 э ¿
-    let char a$
-    return param1$
-    
-?
 void principal є э ¿
+    let float puto$
+    let char pruebita$
+    let char arreglito [5] = ¿2,3,4,pruebita, puto?$
     let int x$
     x = -1$
+    let char x$
     let int a = 1.2^2$
     let int y = 1 * 1.2$
     let int div = 2.2/2.2$

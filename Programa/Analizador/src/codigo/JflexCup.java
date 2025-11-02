@@ -92,10 +92,10 @@ public class JflexCup {
                 return;
             }
 
-            System.out.println("\n CONTENIDO DEL ARCHIVO:");
-            System.out.println("-".repeat(45));
-            mostrarArchivo(archivoEntrada);
-            System.out.println("-".repeat(45));
+            //System.out.println("\n CONTENIDO DEL ARCHIVO:");
+            //System.out.println("-".repeat(45));
+            //mostrarArchivo(archivoEntrada);
+            //System.out.println("-".repeat(45));
             
             FileInputStream fis = new FileInputStream(archivoEntrada);
             InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8);

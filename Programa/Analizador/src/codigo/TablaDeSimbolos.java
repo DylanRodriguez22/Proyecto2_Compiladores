@@ -20,7 +20,40 @@ public class TablaDeSimbolos {
     }
     
     public void agregarSimbolo(Simbolo pSimbolo){
-        simbolos.add(pSimbolo);
+        //Si el símbolo ya existe no se agrega, se reemplaza
+        boolean agregar = true;
+        for(int i = 0; i < simbolos.size(); i++){
+            if(simbolos.get(i).getSimbolo().equals(pSimbolo.getSimbolo()) ){
+                //El símbolo ya existe, se reemplaza
+                simbolos.add(i, pSimbolo);
+                agregar = false;
+                break;
+            }
+        }
+        //Si no se encuentra en la tabla, se agrega al final
+        if(agregar){
+            simbolos.add(pSimbolo);
+        }
+        
+    }
+    
+    public void agregarSimbolo(SimboloArreglo pSimbolo){
+        //Si el símbolo ya existe no se agrega, se reemplaza
+        boolean agregar = true;
+        for(int i = 0; i < simbolos.size(); i++){
+            if(simbolos.get(i).getSimbolo().equals(pSimbolo.getSimbolo()) ){
+                //El símbolo ya existe, se reemplaza
+                //System.out.println("Se reemplaza el símbolo " + simbolos.get(i).getSimbolo() + " con el tipo " +  simbolos.get(i).getTipo() + " por el del tipo " + pSimbolo.getTipo());
+                simbolos.add(i, pSimbolo);
+                agregar = false;
+                break;
+            }
+        }
+        //Si no se encuentra en la tabla, se agrega al final
+        if(agregar){
+            simbolos.add(pSimbolo);
+        }
+        
     }
     
     public void setTablaAnterior(TablaDeSimbolos pTablaAnterior){

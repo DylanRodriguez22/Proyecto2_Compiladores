@@ -7,6 +7,7 @@ package codigo;
 
 import java_cup.runtime.*;
 import java.lang.String;
+import java.util.ArrayList;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -1167,10 +1168,16 @@ class CUP$parser$actions {
         }
     }
 
-    //Añade a la tabla actual el símbolo indicado
+    //Añade a la tabla actual el símbolo indicado. VERIFICAR SI EL SÍMBOLO YA ESTÁ EN LA TABLA ACTUAL.
     public void agregarSimbolo(String pTipo, String pSimbolo){
-        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + "con el tipo "+ pTipo);
+        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + " con el tipo "+ pTipo);
         tablaActual.agregarSimbolo(new Simbolo(pSimbolo, pTipo));
+    }
+
+    //Añade a la tabla actual el símbolo indicado. VERIFICAR SI EL SÍMBOLO YA ESTÁ EN LA TABLA ACTUAL.
+    public void agregarSimboloArray(String pTipo, String pSimbolo, String pTamanio, ArrayList<Simbolo> pElementosArreglo){
+        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + " con el tipo "+ pTipo);
+        tablaActual.agregarSimbolo(new SimboloArreglo(pSimbolo, pTipo, pTamanio, pElementosArreglo));
     }
     
     //Busca en la jerarquía de tablas el símbolo de la entrada y lo retorno si existiera
@@ -1442,7 +1449,7 @@ class CUP$parser$actions {
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Potencia (^)"); 
             //Voy a dejarlo de igual manera que ambos sean enteros o flotantes
-             String[] partesE1 = e1.toString().split("::");
+            String[] partesE1 = e1.toString().split("::");
             String[] partesE2 = e2.toString().split("::");
             String verificacion = verifiacionSemanticaAritmeticaBinaria("potencia", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
@@ -1528,6 +1535,7 @@ class CUP$parser$actions {
                             RESULT =  simbolo.getSimbolo() + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; //valor::tipo::linea::columna
                         }else{
                             RESULT = "null::null::" + (nleft + 1) + "::" + nright;
+                            erroresSemanticos++;
                         }
                         
                        
@@ -2220,7 +2228,18 @@ class CUP$parser$actions {
           case 82: // array_declaration ::= let_keyword int_keyword identifier left_bracket int_literal right_bracket delimiter 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
+		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		 System.out.println("Declaracion: array int sin nada"); 
+                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                    ArrayList<Simbolo> simbolos = new ArrayList<>;
+                    agregarSimboloArray("arrayInt", id, i, simbolos);
+                    
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2301,7 +2320,17 @@ class CUP$parser$actions {
           case 91: // array_declaration ::= let_keyword char_keyword identifier left_bracket int_literal right_bracket delimiter 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
+		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		 System.out.println("Declaracion: array char sin nada"); 
+                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                    ArrayList<Simbolo> simbolos = new ArrayList<>;
+                    agregarSimboloArray("arrayChar", id, i, simbolos);
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2373,7 +2402,42 @@ class CUP$parser$actions {
           case 99: // array_declaration ::= let_keyword int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Declaracion: array int con valores"); 
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-8)).value;
+		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).right;
+		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-6)).value;
+		int recleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int recright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		 
+                    System.out.println("Declaracion: array int con valores"); 
+                    //Descomponer los valores en símbolos
+                    String[] elementosArray = rec.toString().split("::");
+                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
+                    for (String elemento : elementosArray){
+                        //Split con :: para obtener el simbolo y el tipo
+                        String[] simboloTipo = elemento.toString().split(";;");
+                        
+                        //Verificar que el tipo sea del mismo que el arreglo
+                        if(simboloTipo[1].equals("int")){
+                            simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
+                        }else{
+                            System.err.println("Error Semantico: El tipo del elemento " + simboloTipo[0] + " debe ser int para poder incluirlo en el arreglo " + id + " de la linea " + idleft +".");
+                            erroresSemanticos++;
+                        }
+                        
+                    }
+                    
+                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                    for(Simbolo simbolo : simbolosArreglo){
+                         System.out.println(simbolo.toString());
+                    }
+                    agregarSimboloArray("arrayInt", id, i, simbolosArreglo);
+                    
+                    
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-10)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2454,7 +2518,42 @@ class CUP$parser$actions {
           case 108: // array_declaration ::= let_keyword char_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Declaracion: arreglo char con valores"); 
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-8)).value;
+		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).right;
+		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-6)).value;
+		int recleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int recright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		 
+                    System.out.println("Declaracion: array char con valores"); 
+                    //Descomponer los valores en símbolos
+                    String[] elementosArray = rec.toString().split("::");
+                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
+                    for (String elemento : elementosArray){
+                        //Split con :: para obtener el simbolo y el tipo
+                        String[] simboloTipo = elemento.toString().split(";;");
+                        
+                        //Verificar que el tipo sea del mismo que el arreglo
+                        if(simboloTipo[1].equals("char")){
+                            simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
+                        }else{
+                            System.err.println("Error Semantico: El tipo del elemento " + simboloTipo[0] + " debe ser char para poder incluirlo en el arreglo " + id + " de la linea " + idleft +".");
+                            erroresSemanticos++;
+                        }
+                        
+                    }
+                    
+                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                    for(Simbolo simbolo : simbolosArreglo){
+                         System.out.println(simbolo.toString());
+                    }
+                    agregarSimboloArray("arrayInt", id, i, simbolosArreglo);
+                    
+                    
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-10)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2517,7 +2616,10 @@ class CUP$parser$actions {
           case 115: // array_literals ::= int_literal 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e + ";;int"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2526,7 +2628,10 @@ class CUP$parser$actions {
           case 116: // array_literals ::= CHAR_LITERAL 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e + ";;char"; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2535,7 +2640,21 @@ class CUP$parser$actions {
           case 117: // array_literals ::= identifier 
             {
               Object RESULT =null;
-
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 
+                        //Verificar que exista el identificador
+                        reportarErrorNoExisteSimbolo(n);
+                        //Obtener el tipo
+                        Simbolo simbolo = buscarSimbolo(n);
+                        if(simbolo != null){
+                            RESULT = e + ";;" +simbolo.getTipo();
+                        }else{
+                            RESULT = e+";;null";
+                            erroresSemanticos++;
+                        }
+                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2544,7 +2663,15 @@ class CUP$parser$actions {
           case 118: // array_literals ::= array_literals comma_keyword int_literal 
             {
               Object RESULT =null;
-
+		int recleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int recright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+                        RESULT = rec + "::" + e + ";;int";
+                    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2553,7 +2680,15 @@ class CUP$parser$actions {
           case 119: // array_literals ::= array_literals comma_keyword CHAR_LITERAL 
             {
               Object RESULT =null;
-
+		int recleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int recright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+                        RESULT = rec + "::" + e + ";;char";
+                    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2562,7 +2697,24 @@ class CUP$parser$actions {
           case 120: // array_literals ::= array_literals comma_keyword identifier 
             {
               Object RESULT =null;
-
+		int recleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int recright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 
+                        //Verificar que exista el identificador
+                        reportarErrorNoExisteSimbolo(n);
+                        //Obtener el tipo
+                        Simbolo simbolo = buscarSimbolo(n);
+                        if(simbolo != null){
+                            RESULT = rec + "::" + n + ";;"+ simbolo.getTipo();
+                        }else{
+                            RESULT = rec + "::" + n+";;null";
+                            erroresSemanticos++;
+                        }
+                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2589,7 +2741,9 @@ class CUP$parser$actions {
           case 123: // array_access ::= identifier left_bracket arithmetic_expression right_bracket 
             {
               Object RESULT =null;
-
+		 //Verificar que exista el arreglo y que la expresión sea entero. Tipo arrayInt o arrayChar 
+                    
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_access",15, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
