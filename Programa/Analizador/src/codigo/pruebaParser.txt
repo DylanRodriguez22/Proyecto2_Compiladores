@@ -2,13 +2,13 @@ char miFunc є int a, char b э¿
     let float x$
 ?
 
-bool miFunc2 є float a, char b э¿
+int miFunc2 є float a, char b э¿
     let float x$
 ?
 
 void principal є э ¿
     let int arr[5]$
-    let int a = miFunc4 є 1.2, 'b' э +1 * arr[5]$
+    let int a = miFunc2 є 1.2, 'b' э +1 * arr[5]$
     let float x$
     let char arreglito [5] = ¿2,3,4,pruebita, puto?$
     let char a = arreglito[1*2+3/4]$

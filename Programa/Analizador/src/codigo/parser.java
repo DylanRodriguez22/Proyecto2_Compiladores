@@ -1392,6 +1392,18 @@ class CUP$parser$actions {
         return retorno;
     }
 
+    public boolean validacionAsignacion(String identificador, String tipoIdentificador, String tipoExpresion, String linea, String columna){
+        if(!(tipoIdentificador.equals(tipoExpresion))){
+            System.err.println(String.format(
+                "Error Semantico: El identificador %s en la linea %s columna %s es de tipo %s y se le esta intentando asignar una expresion de tipo %s.", 
+                identificador, linea, columna, tipoIdentificador, tipoExpresion 
+            ));
+            erroresSemanticos++;
+            return false;
+        }
+        return true; //Pasa la validacion
+    }
+
   private final parser parser;
 
   /** Constructor */
@@ -2077,7 +2089,10 @@ class CUP$parser$actions {
           case 39: // declaration_values ::= logical_expresion_and 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration_values",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2086,7 +2101,10 @@ class CUP$parser$actions {
           case 40: // declaration_values ::= CHAR_LITERAL 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration_values",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2095,7 +2113,10 @@ class CUP$parser$actions {
           case 41: // declaration_values ::= STRING_LITERAL 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration_values",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2167,7 +2188,18 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		 System.out.println("Declaracion: int con valor con el id "+ id); agregarSimbolo("int", id);
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+                System.out.println("Declaracion: int con valor con el id "+ id); 
+                //Verificar si el tipo de la expresión coincide con el del identificador
+                 String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "int", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("int", id);
+                }
+                
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2179,7 +2211,17 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		 System.out.println("Declaracion: float con valor con el id "+ id); agregarSimbolo("float", id); 
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 System.out.println("Declaracion: float con valor con el id "+ id); 
+
+                //Verificar si el tipo de la expresión coincide con el del identificador
+                 String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "float", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("float", id);
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2191,7 +2233,16 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		 System.out.println("Declaracion: bool con valor con el id " + id); agregarSimbolo("bool", id); 
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 System.out.println("Declaracion: bool con valor con el id " + id); 
+                 //Verificar si el tipo de la expresión coincide con el del identificador
+                 String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "bool", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("bool", id);
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2203,7 +2254,15 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		 System.out.println("Declaracion: char con valor con el id " + id); agregarSimbolo("char", id); 
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 System.out.println("Declaracion: char con valor con el id " + id); 
+                String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "char", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("char", id);
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2215,7 +2274,12 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		 System.out.println("Declaracion: string con valor con el id " + id); agregarSimbolo("string", id); 
+		 System.out.println("Declaracion: string con valor con el id " + id);
+                String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "string", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("string", id);
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

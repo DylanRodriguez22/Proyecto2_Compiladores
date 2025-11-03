@@ -271,6 +271,18 @@ action code {:
         }
         return retorno;
     }
+
+    public boolean validacionAsignacion(String identificador, String tipoIdentificador, String tipoExpresion, String linea, String columna){
+        if(!(tipoIdentificador.equals(tipoExpresion))){
+            System.err.println(String.format(
+                "Error Semantico: El identificador %s en la linea %s columna %s es de tipo %s y se le esta intentando asignar una expresion de tipo %s.", 
+                identificador, linea, columna, tipoIdentificador, tipoExpresion 
+            ));
+            erroresSemanticos++;
+            return false;
+        }
+        return true; //Pasa la validacion
+    }
 :}
 
 parser code {:
@@ -708,8 +720,8 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
 	    | arithmetic_expression:e {: System.out.println("Expresión aritmética"); RESULT = e; :}
             ;
             
-//Declaraciones// Char y string es agregado para una prueba
-declaration_values ::= logical_expresion_and | CHAR_LITERAL | STRING_LITERAL;
+//Declaraciones. Se salvan los valores tanto el de la expresión lógica que viene de todo un proceso de reducción para el tipo y los literales
+declaration_values ::= logical_expresion_and:e {: RESULT = e; :} | CHAR_LITERAL:e {: RESULT = e; :} | STRING_LITERAL:e {: RESULT = e; :};
 
 
              
@@ -723,16 +735,48 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
              {: System.out.println("Declaracion: char sin valor con id " + id); agregarSimbolo("char", id); :}
              |  let_keyword string_keyword identifier:id delimiter
              {: System.out.println("Declaracion: string sin valor con id "+ id); agregarSimbolo("string", id); :}
-             |  let_keyword int_keyword identifier:id assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: int con valor con el id "+ id); agregarSimbolo("int", id);:}
-             |  let_keyword float_keyword identifier:id assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: float con valor con el id "+ id); agregarSimbolo("float", id); :}
-             |  let_keyword bool_keyword identifier:id assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: bool con valor con el id " + id); agregarSimbolo("bool", id); :}
-             |  let_keyword char_keyword identifier:id assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: char con valor con el id " + id); agregarSimbolo("char", id); :}
+
+             |  let_keyword int_keyword identifier:id assignment_operator declaration_values:e delimiter
+             {: 
+                System.out.println("Declaracion: int con valor con el id "+ id); 
+                //Verificar si el tipo de la expresión coincide con el del identificador
+                 String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "int", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("int", id);
+                }
+                
+            :}
+             |  let_keyword float_keyword identifier:id assignment_operator declaration_values:e delimiter
+             {: System.out.println("Declaracion: float con valor con el id "+ id); 
+
+                //Verificar si el tipo de la expresión coincide con el del identificador
+                 String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "float", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("float", id);
+                }
+            :}
+             |  let_keyword bool_keyword identifier:id assignment_operator declaration_values:e delimiter
+             {: System.out.println("Declaracion: bool con valor con el id " + id); 
+                 //Verificar si el tipo de la expresión coincide con el del identificador
+                 String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "bool", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("bool", id);
+                }
+            :}
+             |  let_keyword char_keyword identifier:id assignment_operator declaration_values:e delimiter
+             {: System.out.println("Declaracion: char con valor con el id " + id); 
+                String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "char", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("char", id);
+                }
+            :}
              |  let_keyword string_keyword identifier:id assignment_operator declaration_values delimiter
-             {: System.out.println("Declaracion: string con valor con el id " + id); agregarSimbolo("string", id); :}
+             {: System.out.println("Declaracion: string con valor con el id " + id);
+                String[] partesOperador = e.toString().split("::");
+                if(validacionAsignacion(id, "string", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
+                    agregarSimbolo("string", id);
+                }
+            :}
              | error delimiter
              {:
                System.err.println("DECLARACION con error"); :}
