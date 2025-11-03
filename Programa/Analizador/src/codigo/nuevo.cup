@@ -829,8 +829,8 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
             {: System.err.println("No declaro el id error"); :}
 
             
-            | let_keyword int_keyword identifier error 
-            {: System.err.println("Error falta el delimitador"); :} 
+            //| let_keyword int_keyword identifier error 
+            //{: System.err.println("Error falta el delimitador"); :} 
             | let_keyword float_keyword identifier error
             {: System.err.println("Error falta el delimitador"); :}
             | let_keyword bool_keyword identifier error
@@ -903,61 +903,92 @@ reassignment ::= identifier:id assignment_operator declaration_values:e delimite
 
 
 // Array
-array_declaration ::= let_keyword int_keyword identifier:id left_bracket int_literal:i right_bracket delimiter
+array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithmetic_expression:op right_bracket delimiter
                 {: System.out.println("Declaracion: array int sin nada"); 
-                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
-                    ArrayList<Simbolo> simbolos = new ArrayList<>();
-                    agregarSimboloArray("arrayInt", id, i, simbolos);
+                    //Verificar que sea una operacion de enteros
+                    String[] partesOperador = op.toString().split("::");
+                    if(!(partesOperador[1].equals("int"))){
+                        System.err.println(String.format(
+                        "Error Semantico: La expresion aritmetica para indicar el tamanio del arrego debe ser de tipo int. Linea %s.", 
+                        (idleft +1)
+                        ));
+                        erroresSemanticos++;
+                    }else{
+                        //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                        ArrayList<Simbolo> simbolos = new ArrayList<>();
+                        agregarSimboloArray("arrayInt", id, partesOperador[0], simbolos);
+                    }
+
                     
                 :}
                 | let_keyword int_keyword identifier error delimiter
                 {: System.err.println("Error en declaracion de array"); :}
-                | error int_keyword identifier left_bracket int_literal right_bracket delimiter
+                | error int_keyword identifier left_bracket arithmetic_expression right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
-                | let_keyword error identifier left_bracket int_literal right_bracket delimiter
+                | let_keyword error identifier left_bracket arithmetic_expression right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta tipo"); :}
-                | let_keyword int_keyword error left_bracket int_literal right_bracket delimiter
+                | let_keyword int_keyword error left_bracket arithmetic_expression right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta id"); :}
                 | let_keyword int_keyword identifier left_bracket error right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta tamaño"); :}
-                | let_keyword int_keyword identifier left_bracket int_literal error delimiter
+                | let_keyword int_keyword identifier left_bracket arithmetic_expression error delimiter
                 {: System.err.println("Error en declaracion de array, falta ]"); :}
-                | let_keyword int_keyword identifier error int_literal right_bracket delimiter
+                | let_keyword int_keyword identifier error arithmetic_expression right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta ["); :}
-                | let_keyword int_keyword identifier left_bracket int_literal right_bracket error
+                | let_keyword int_keyword identifier left_bracket arithmetic_expression right_bracket error
                 {: System.err.println("Error en declaracion de array, falta delimitador"); :}
 
 
 
 
-                |  let_keyword char_keyword identifier:id left_bracket int_literal:i right_bracket delimiter
+                |  let_keyword char_keyword identifier:id left_bracket arithmetic_expression:op right_bracket delimiter
                 {: System.out.println("Declaracion: array char sin nada"); 
-                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
-                    ArrayList<Simbolo> simbolos = new ArrayList<>();
-                    agregarSimboloArray("arrayChar", id, i, simbolos);
+                    //Verificar que sea una operacion de enteros
+                    String[] partesOperador = op.toString().split("::");
+                    if(!(partesOperador[1].equals("int"))){
+                        System.err.println(String.format(
+                        "Error Semantico: La expresion aritmetica para indicar el tamanio del arrego debe ser de tipo int. Linea %s.", 
+                        (idleft +1)
+                        ));
+                        erroresSemanticos++;
+                    }else{
+                        //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                        ArrayList<Simbolo> simbolos = new ArrayList<>();
+                        agregarSimboloArray("arrayChar", id, i, simbolos);
+                    }
                 :}
-                | error char_keyword identifier left_bracket int_literal right_bracket delimiter
+                | error char_keyword identifier left_bracket arithmetic_expression right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
-                | let_keyword char_keyword error left_bracket int_literal right_bracket delimiter
+                | let_keyword char_keyword error left_bracket arithmetic_expression right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta id"); :}
                 | let_keyword char_keyword identifier left_bracket error right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta tamaño"); :}
-                | let_keyword char_keyword identifier left_bracket int_literal error delimiter
+                | let_keyword char_keyword identifier left_bracket arithmetic_expression error delimiter
                 {: System.err.println("Error en declaracion de array, falta ]"); :}
-                | let_keyword char_keyword identifier error int_literal right_bracket delimiter
+                | let_keyword char_keyword identifier error arithmetic_expression right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta ["); :}
-                | let_keyword char_keyword identifier left_bracket int_literal right_bracket error
+                | let_keyword char_keyword identifier left_bracket arithmetic_expression right_bracket error
                 {: System.err.println("Error en declaracion de array, falta delimitador"); :}
                 | let_keyword char_keyword identifier error delimiter
                 {: System.err.println("Error en declaracion de array"); :}
 
-                |  let_keyword int_keyword identifier:id left_bracket int_literal:i right_bracket assignment_operator left_block array_literals:rec right_block delimiter
+                |  let_keyword int_keyword identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator left_block array_literals:rec right_block delimiter
                 {: 
                     System.out.println("Declaracion: array int con valores"); 
                     //Descomponer los valores en símbolos
                     String[] elementosArray = rec.toString().split("::");
                     ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
-                    for (String elemento : elementosArray){
+
+                    //Descomponer la operación aritmética del tamaño para revisar el tipo
+                    String[] partesOperador = op.toString().split("::");
+                    if(!(partesOperador[1].equals("int"))){
+                        System.err.println(String.format(
+                        "Error Semantico: La expresion aritmetica para indicar el tamanio del arrego debe ser de tipo int. Linea %s.", 
+                        (idleft +1)
+                        ));
+                        erroresSemanticos++;
+                    }else{
+                        for (String elemento : elementosArray){
                         //Split con :: para obtener el simbolo y el tipo
                         String[] simboloTipo = elemento.toString().split(";;");
                         
@@ -969,41 +1000,53 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket int_lit
                             erroresSemanticos++;
                         }
                         
+                        }
+
+                        //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                        for(Simbolo simbolo : simbolosArreglo){
+                             System.out.println(simbolo.toString());
+                        }
+                        agregarSimboloArray("arrayInt", id, partesOperador[0], simbolosArreglo);
                     }
                     
-                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
-                    for(Simbolo simbolo : simbolosArreglo){
-                         System.out.println(simbolo.toString());
-                    }
-                    agregarSimboloArray("arrayInt", id, i, simbolosArreglo);
                     
                     
                 :}
-                | error int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                | error int_keyword identifier left_bracket arithmetic_expression right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
-                | let_keyword error identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                | let_keyword error identifier left_bracket arithmetic_expression right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta tipo"); :}
-                | let_keyword int_keyword error left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                | let_keyword int_keyword error left_bracket arithmetic_expression right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta id"); :}
                 | let_keyword int_keyword identifier left_bracket error right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta tamaño"); :}
-                | let_keyword int_keyword identifier left_bracket int_literal error assignment_operator left_block array_literals right_block delimiter
+                | let_keyword int_keyword identifier left_bracket arithmetic_expression error assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta ]"); :}
-                | let_keyword int_keyword identifier error int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                | let_keyword int_keyword identifier error arithmetic_expression right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta ["); :}
-                | let_keyword int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block error
+                | let_keyword int_keyword identifier left_bracket arithmetic_expression right_bracket assignment_operator left_block array_literals right_block error
                 {: System.err.println("Error en declaracion de array, falta delimitador"); :}
     
-                | let_keyword int_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block error right_block delimiter
+                | let_keyword int_keyword identifier left_bracket arithmetic_expression right_bracket assignment_operator left_block error right_block delimiter
                 {: System.err.println("Error en inicializacion de array"); :}
 
-                |  let_keyword char_keyword identifier:id left_bracket int_literal:i right_bracket assignment_operator left_block array_literals:rec right_block delimiter
+                |  let_keyword char_keyword identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator left_block array_literals:rec right_block delimiter
                 {: 
                     System.out.println("Declaracion: array char con valores"); 
                     //Descomponer los valores en símbolos
                     String[] elementosArray = rec.toString().split("::");
                     ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
-                    for (String elemento : elementosArray){
+
+                    //Descomponer la operación aritmética del tamaño para revisar el tipo
+                    String[] partesOperador = op.toString().split("::");
+                    if(!(partesOperador[1].equals("int"))){
+                        System.err.println(String.format(
+                        "Error Semantico: La expresion aritmetica para indicar el tamanio del arrego debe ser de tipo int. Linea %s.", 
+                        (idleft +1)
+                        ));
+                        erroresSemanticos++;
+                    }else{
+                        for (String elemento : elementosArray){
                         //Split con :: para obtener el simbolo y el tipo
                         String[] simboloTipo = elemento.toString().split(";;");
                         
@@ -1015,28 +1058,31 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket int_lit
                             erroresSemanticos++;
                         }
                         
+                        }
+
+                        //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
+                        for(Simbolo simbolo : simbolosArreglo){
+                             System.out.println(simbolo.toString());
+                        }
+                        agregarSimboloArray("arrayChar", id, partesOperador[0], simbolosArreglo);
                     }
+
                     
-                    //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
-                    for(Simbolo simbolo : simbolosArreglo){
-                         System.out.println(simbolo.toString());
-                    }
-                    agregarSimboloArray("arrayChar", id, i, simbolosArreglo);
                     
                     
                 :}
-                | error char_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                | error char_keyword identifier left_bracket arithmetic_expression right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
-                | let_keyword char_keyword error left_bracket int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                | let_keyword char_keyword error left_bracket arithmetic_expression right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta id"); :}
                 | let_keyword char_keyword identifier left_bracket error right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta tamaño"); :}
-                | let_keyword char_keyword identifier left_bracket int_literal error assignment_operator left_block array_literals right_block delimiter
+                | let_keyword char_keyword identifier left_bracket arithmetic_expression error assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta ]"); :}
-                | let_keyword char_keyword identifier error int_literal right_bracket assignment_operator left_block array_literals right_block delimiter
+                | let_keyword char_keyword identifier error arithmetic_expression right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta ["); :}
 
-                | let_keyword char_keyword identifier left_bracket int_literal right_bracket assignment_operator left_block error right_block delimiter
+                | let_keyword char_keyword identifier left_bracket arithmetic_expression:op right_bracket assignment_operator left_block error right_block delimiter
                 {: System.err.println("Error en inicializacion de array"); :}
 
                 ;

@@ -8,8 +8,8 @@ void miFunc1 є float a, char b э¿
 ?
 
 void principal є э ¿
-    
-    let int arr[5]$
+    let char bryant$
+    let int arr[5 * bryant] = ¿1,2?$
     let int a = miFunc2 є 1.2, 'b' э +1 * arr[5]$
     let float x$
     let char arreglito [5] = ¿2,3,4,pruebita, puto?$
