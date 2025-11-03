@@ -106,6 +106,31 @@ public class TablaDeFunciones {
         return false; //Si llega aquí es que no existe la función
     }
     
+    public int cantidadDeParametros(String nombreFuncion){
+        int retorno = -1;
+        for(TablaDeSimbolos funcion : funciones){
+            if (nombreFuncion.equalsIgnoreCase(funcion.getNombre())) {
+                //Iterar los parámetros
+                retorno  = funcion.getCantidadDeSimbolos();
+                break;
+            }
+        }
+        return retorno;
+    }
+    
+    public String obtenerTipoFuncion(String nombreFuncion){
+        String retorno = "null";
+        for(TablaDeSimbolos funcion : funciones){
+            if (nombreFuncion.equalsIgnoreCase(funcion.getNombre())) {
+                //Iterar los parámetros
+                retorno  = funcion.tipoFuncion;
+                break;
+            }
+        }
+        
+        return retorno;
+    }
+    
     
             
             

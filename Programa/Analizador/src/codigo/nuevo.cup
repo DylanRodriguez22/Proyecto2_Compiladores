@@ -1106,11 +1106,11 @@ params_tail ::= /* empty */
              |  comma_keyword param params_tail
              ;
 
-param ::= int_keyword identifier:id {: agregarSimbolo("int", id); agregarParametro(new Simbolo("int", id));:}
-       |  float_keyword identifier:id {: agregarSimbolo("float", id); agregarParametro(new Simbolo("float", id));:}
-       |  bool_keyword identifier:id {: agregarSimbolo("bool", id); agregarParametro(new Simbolo("bool", id));:}
-       |  char_keyword identifier:id {: agregarSimbolo("char", id); agregarParametro(new Simbolo("char", id)); :}
-       |  string_keyword identifier:id {: agregarSimbolo("string", id); agregarParametro(new Simbolo("string", id));:}
+param ::= int_keyword identifier:id {: agregarSimbolo("int", id); agregarParametro(new Simbolo(id, "int"));:}
+       |  float_keyword identifier:id {: agregarSimbolo("float", id); agregarParametro(new Simbolo(id, "float"));:}
+       |  bool_keyword identifier:id {: agregarSimbolo("bool", id); agregarParametro(new Simbolo(id, "bool"));:}
+       |  char_keyword identifier:id {: agregarSimbolo("char", id); agregarParametro(new Simbolo(id, "char")); :}
+       |  string_keyword identifier:id {: agregarSimbolo("string", id); agregarParametro(new Simbolo(id, "string"));:}
        ;
 
 return_statement ::= return_keyword delimiter
@@ -1119,41 +1119,103 @@ return_statement ::= return_keyword delimiter
                   {: System.out.println("return expresion logica"); :}
                   ;
 
-function_call ::= identifier left_parenthesis right_parenthesis
+function_call ::= identifier:id left_parenthesis right_parenthesis
                {: System.out.println("Llamada a funcion sin argumentos"); :}
-               |  identifier left_parenthesis args right_parenthesis
-               {: System.out.println("Llamada a funcion con argumentos"); :}
+               |  identifier:id left_parenthesis args:ar right_parenthesis
+               {: System.out.println("Llamada a funcion con argumentos"); 
+                    //Verificaciones. En ar se tiene algo así por ejemplo a::null;;b::null;;1::int;;1.2::float donde es valor::tipo;;valor::tipo...
+                    boolean existeLaFuncion = tablaDeFunciones.existeLaFuncion(id);
+                    String retorno = id + "::null";
+                    if(existeLaFuncion){
+                        //Verificar que la cantidad de parámetros sea la misma
+                        String[] parametros = ar.toString().split(";;");
+                        boolean cantidadParametros = tablaDeFunciones.coincideLaCantidadDeParametros(id, parametros.length);
+                        if(cantidadParametros){
+                            //Verificar que el orden de los tipos sea el correcto
+                            ArrayList<String> tipos = new ArrayList<>();
+
+                            for (String elemento : parametros) {
+                                String[] partes = elemento.split("::"); 
+                                tipos.add(partes[1]);               
+                            }
+
+                            boolean coincidenLosParametros = tablaDeFunciones.coincidenLosTiposDeLosParametros(id, tipos);
+                            if(coincidenLosParametros){
+                                //Se pone el tipo de la función, ya pasó las verificaciones
+                                retorno = id + "::" + tablaDeFunciones.obtenerTipoFuncion(id);
+                            }else{
+                                System.err.println("Error Semantico: No coinciden los tipos de los parametros indicados en la funcion " + id + " Se esperaba: " + tablaDeFunciones.obtenerListaDeTiposDeParametros(id)+ " .Linea " + (idleft + 1)); 
+                                erroresSemanticos++;
+                            }
+                        }else{
+                            System.err.println("Error Semantico: La cantidad de parametros indicada en el llamado a la funcion " + id + " no es correcta. Se esperaban " + tablaDeFunciones.cantidadDeParametros(id)+ " .Linea " + (idleft + 1)); 
+                            erroresSemanticos++;
+                            
+                        }
+                    }else{
+                         System.err.println("Error Semantico: No se ha declarado una funcion con el nombre " + id + " .Linea " + (idleft + 1)); 
+                         erroresSemanticos++;
+                    }
+                    RESULT = retorno; //Se coloca el valor de retorno en el RESULT para posteriores validaciones   id de la funcion::tipo
+                    
+                :}
                ;
 
-args ::= int_literal:e args_tail  {: RESULT = e + ";;int"; :} //valor;;tipo
-      |  float_literal:e args_tail {: RESULT = e + ";;float"; :} 
-      |  identifier:e args_tail 
+args ::= int_literal:e  {: RESULT = e + "::int"; :} //valor::tipo
+      |  float_literal:e {: RESULT = e + "::float"; :} 
+      |  identifier:n 
         {: 
             //Verificar que exista el identificador
             reportarErrorNoExisteSimbolo(n);
             //Obtener el tipo
             Simbolo simbolo = buscarSimbolo(n);
             if(simbolo != null){
-                RESULT = e + ";;" +simbolo.getTipo();
+                RESULT = n + "::" +simbolo.getTipo();
             }else{
-                RESULT = e+";;null";
+                RESULT = n+"::null";
                 erroresSemanticos++;
             }
         :}
       
-      |  array_access args_tail
-      |  STRING_LITERAL:e args_tail {: RESULT = e + ";;string"; :} 
-      |  CHAR_LITERAL:e args_tail {: RESULT = e + ";;char"; :} 
+      |  array_access:e {: RESULT = e :} //aquí viene de otras producciones el valor del elemento al que se acceda 
+      |  STRING_LITERAL:e args_tail {: RESULT = e + "::string"; :} 
+      |  CHAR_LITERAL:e args_tail {: RESULT = e + "::char"; :} 
+      |  args:ar comma_keyword int_literal:e
+        {:
+            RESULT = ar + ";;" + e + "::int";  
+        :}
+      |  args:ar comma_keyword float_literal:e
+        {:
+            RESULT = ar + ";;" + e + "::float";  
+        :}
+      |  args:ar comma_keyword identifier:n
+
+        {: 
+            //Verificar que exista el identificador
+            reportarErrorNoExisteSimbolo(n);
+            //Obtener el tipo
+            Simbolo simbolo = buscarSimbolo(n);
+            if(simbolo != null){
+                RESULT = ar+ ";;"+ n + "::" +simbolo.getTipo();
+            }else{
+                RESULT = ar + ";;" + n+"::null";
+                erroresSemanticos++;
+            }
+        :}
+      |  args:ar comma_keyword array_access:e
+        {:
+            RESULT = ar + ";;" + e;  
+        :}
+      |  args:ar comma_keyword STRING_LITERAL:e
+        {:
+            RESULT = ar + ";;" + e + "::string";  
+        :}
+      |  args:ar comma_keyword  CHAR_LITERAL:e
+        {:
+            RESULT = ar + ";;" + e + "::char";  
+        :}
       ;
 
-args_tail ::= /* empty */
-           |  comma_keyword int_literal args_tail
-           |  comma_keyword float_literal args_tail
-           |  comma_keyword identifier args_tail
-           |  comma_keyword array_access args_tail
-           | comma_keyword  STRING_LITERAL args_tail
-           | comma_keyword CHAR_LITERAL args_tail
-           ;
 
 //Bloques de código y statemets
 block ::= left_block statements right_block

@@ -7,6 +7,7 @@ char miFunc2 є float a, char b э¿
 ?
 
 void principal є э ¿
+    let int a = miFunc4 є 1.2, 'b' э$
     let float x$
     let char arreglito [5] = ¿2,3,4,pruebita, puto?$
     let char a = arreglito[1*2+3/4]$
