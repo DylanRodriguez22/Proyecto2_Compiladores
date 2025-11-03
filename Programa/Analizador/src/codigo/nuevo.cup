@@ -283,6 +283,29 @@ action code {:
         }
         return true; //Pasa la validacion
     }
+
+    public boolean validacionReasignacion(String identificador, String tipoExpresion, String linea, String columna){
+        
+        Simbolo simbolo =  tablaActual.obtenerSimbolo(identificador);
+        if(simbolo != null){
+            if(!(simbolo.getTipo().equals(tipoExpresion))){
+            System.err.println(String.format(
+                "Error Semantico: El identificador %s en la linea %s columna %s es de tipo %s y se le esta intentando asignar una expresion de tipo %s.", 
+                identificador, linea, columna, simbolo.getTipo(), tipoExpresion 
+            ));
+            erroresSemanticos++;
+            return false;
+            }else{
+                 return true; //Pasa la validacion
+            }
+       
+        }else{
+            System.err.println("Error Semantico: El identificador " + identificador + " no ha sido declarado previamente. Linea "+ linea);
+            erroresSemanticos++;
+            return false;
+        }
+        
+    }
 :}
 
 parser code {:
@@ -852,8 +875,12 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
 
 
 //Reasignación
-reassignment ::= identifier assignment_operator declaration_values delimiter
-            {: System.out.println("Reasignación"); :}
+reassignment ::= identifier:id assignment_operator declaration_values:e delimiter
+            {: System.out.println("Reasignación"); 
+                //De momento es solo el print. Ya para el código 3 direcciones si podría influir si se reasigna o no
+                String[] partesOperador = e.toString().split("::");
+                validacionReasignacion(id,  partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright));
+            :}
             | identifier assignment_operator error delimiter
             {: System.err.println("Reasignación con error, declare un valor"); :}
             | error assignment_operator declaration_values delimiter

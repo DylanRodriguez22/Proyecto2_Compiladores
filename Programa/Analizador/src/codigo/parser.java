@@ -1404,6 +1404,29 @@ class CUP$parser$actions {
         return true; //Pasa la validacion
     }
 
+    public boolean validacionReasignacion(String identificador, String tipoExpresion, String linea, String columna){
+        
+        Simbolo simbolo =  tablaActual.obtenerSimbolo(identificador);
+        if(simbolo != null){
+            if(!(simbolo.getTipo().equals(tipoExpresion))){
+            System.err.println(String.format(
+                "Error Semantico: El identificador %s en la linea %s columna %s es de tipo %s y se le esta intentando asignar una expresion de tipo %s.", 
+                identificador, linea, columna, simbolo.getTipo(), tipoExpresion 
+            ));
+            erroresSemanticos++;
+            return false;
+            }else{
+                 return true; //Pasa la validacion
+            }
+       
+        }else{
+            System.err.println("Error Semantico: El identificador " + identificador + " no ha sido declarado previamente. Linea "+ linea);
+            erroresSemanticos++;
+            return false;
+        }
+        
+    }
+
   private final parser parser;
 
   /** Constructor */
@@ -2523,7 +2546,17 @@ class CUP$parser$actions {
           case 78: // reassignment ::= identifier assignment_operator declaration_values delimiter 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 System.out.println("Reasignación"); 
+                //De momento es solo el print. Ya para el código 3 direcciones si podría influir si se reasigna o no
+                String[] partesOperador = e.toString().split("::");
+                validacionReasignacion(id,  partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright));
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("reassignment",12, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
