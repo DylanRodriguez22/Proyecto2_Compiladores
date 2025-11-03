@@ -2,11 +2,13 @@ char miFunc є int a, char b э¿
     let float x$
 ?
 
-int miFunc2 є float a, char b э¿
+void miFunc1 є float a, char b э¿
     let float x$
+    return 1.2$
 ?
 
 void principal є э ¿
+    
     let int arr[5]$
     let int a = miFunc2 є 1.2, 'b' э +1 * arr[5]$
     let float x$
@@ -24,10 +26,10 @@ void principal є э ¿
     output x$
     output z$
     let char charcito$
-    decide of є x*2+1 >= x ~ miFunc2є 1.2, charcito э > arr[1] э -> ¿
+    decide of є 1 э -> ¿
         output x$
          let int dentroDecide = x + y$
-    ?  є x == 5 э -> ¿
+    ?  є a э -> ¿
         output y$
         let int elif$
     ? else -> ¿
@@ -49,13 +51,14 @@ void principal є э ¿
          let int dentroLoop = x + y$
         ?
         end decide $
-        exit when є true == 10 э$
+        exit when є True э$
     end loop$
     
     let int z2 = x + y$
     for   i = 0$ step 1 to 10  do ¿
         let int forA$
         output i$
+        return$
     ?
     
    volatil = xє3, 3.5э$

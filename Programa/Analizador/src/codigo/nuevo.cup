@@ -290,8 +290,8 @@ action code {:
         if(simbolo != null){
             if(!(simbolo.getTipo().equals(tipoExpresion))){
             System.err.println(String.format(
-                "Error Semantico: El identificador %s en la linea %s columna %s es de tipo %s y se le esta intentando asignar una expresion de tipo %s.", 
-                identificador, linea, columna, simbolo.getTipo(), tipoExpresion 
+                "Error Semantico: El identificador previamente declarado %s es de tipo %s y se le esta intentando asignar una expresion de tipo %s en la linea %s columna %s.", 
+                identificador, simbolo.getTipo(), tipoExpresion, linea, columna
             ));
             erroresSemanticos++;
             return false;
@@ -306,6 +306,8 @@ action code {:
         }
         
     }
+
+    
 :}
 
 parser code {:
@@ -594,15 +596,25 @@ arithmetic_operands ::= int_literal:n {: RESULT = n + "::int::" + (nleft + 1) + 
                             RESULT = "null::null::" + (nleft + 1) + "::" + nright;
                             erroresSemanticos++;
                         }
-                        
-                       
                     :}
                      |  unary_negative:n {: RESULT = n; :} 
                      |  postfix_expression:n {: RESULT = n; :}
                      |  array_access:n {: RESULT = n; System.out.println("Operando acceso array: " + n);:}
                      |  function_call:n {: RESULT = n; System.out.println("Operando funcion: " + n); :}
                      |  bool_literal:n {: RESULT = n + "::bool::" + (nleft +1) + "::" + nright;:}
-                     |  not_operator logical_expresion_and 
+                     |  not_operator:i logical_expresion_and:e 
+                        {:
+                            //Revisar que la expresión sea booleana
+                            String[] partesExpresion = e.toString().split("::");
+                            if(!(partesExpresion[1].equals("bool"))){
+                                //Error 
+                                System.err.println("Error Semantico: La expresion " + partesExpresion[0] + " debe ser de tipo booleano para poder aplicarle la negacion. Linea "+ (ileft +1));
+                                erroresSemanticos++;
+                                RESULT = "Σ"+ partesExpresion[0] + "::null::" + (ileft +1) + "::" + iright;
+                            }else{
+                                RESULT = "Σ"+ partesExpresion[0] + "::bool::" + (ileft +1) + "::" + iright;
+                            }
+                        :} 
                      ;
 
 unary_negative ::= minus_operator int_literal:n 
@@ -1124,8 +1136,18 @@ output_statement ::= output_keyword identifier delimiter
 
 //Decide of. Ya están separadas ambas  keywords
 decide_of_left ::= 
-                decide_keyword of_keyword left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator
-                    {: 
+                decide_keyword of_keyword:i left_parenthesis logical_expresion_and:e right_parenthesis minus_operator greater_operator
+                    {:  
+                        //Verificar que la expresión lógica sea booleana
+                        String[] expresion = e.toString().split("::");
+                        if(!(expresion[1].equals("bool"))){
+                            System.err.println(String.format(
+                            "Error Semantico: La expresion %s es de tipo %s. Debe ser de tipo bool para poder se utilizada como condicion en la estructura Decide Of. Linea %s.", 
+                            expresion[0], expresion[1], ileft+1
+                        ));
+                        erroresSemanticos++;
+                        }
+
                         //Crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("decide of"); //Crear la nueva tabla para el decide of
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
@@ -1155,8 +1177,17 @@ elif_list ::= elif_part
            |  elif_list elif_part
            ;
 
-elif_part_left ::= left_parenthesis logical_expresion_and right_parenthesis minus_operator greater_operator
+elif_part_left ::= left_parenthesis:i logical_expresion_and:e right_parenthesis minus_operator greater_operator
                     {:
+                        //Verificar que la expresión lógica sea booleana
+                        String[] expresion = e.toString().split("::");
+                        if(!(expresion[1].equals("bool"))){
+                            System.err.println(String.format(
+                            "Error Semantico: La expresion %s es de tipo %s. Debe ser de tipo bool para poder se utilizada como condicion en la estructura Decide Of. Linea %s.", 
+                            expresion[0], expresion[1], ileft+1
+                        ));
+                        erroresSemanticos++;
+                        }
                         //Crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("elif"); //Crear la nueva tabla para el decide of
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
@@ -1170,7 +1201,8 @@ elif_part ::= elif_part_left left_block loop_content right_block
             
 
 else_part_left ::= else_keyword minus_operator greater_operator
-                    {:
+                    {:  
+                        
                         //Crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("else"); //Crear la nueva tabla para el decide of
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
@@ -1187,8 +1219,20 @@ loop_left ::= loop_keyword
                 TablaDeSimbolos t = crearTablaDeSimbolos("loop"); 
                 apilarNuevaTablaDeSimbolos(t); 
             :};
-loop ::= loop_left loop_content exit_keyword when_keyword logical_expresion_and delimiter end_keyword loop_keyword delimiter
-      {: System.out.println("Loop");  desapilarTablaDeSimbolos();:}
+loop ::= loop_left loop_content exit_keyword when_keyword logical_expresion_and:e delimiter end_keyword loop_keyword delimiter
+      {: System.out.println("Loop");  
+        //Verificar que la expresión lógica sea booleana
+        String[] expresion = e.toString().split("::");
+        if(!(expresion[1].equals("bool"))){
+            System.err.println(String.format(
+            "Error Semantico: La expresion %s es de tipo %s. Debe ser de tipo bool para poder se utilizada como condicion en la estructura loop. Linea %s.", 
+            expresion[0], expresion[1], eleft+1
+            ));
+            erroresSemanticos++;
+         }
+
+         desapilarTablaDeSimbolos();
+        :}
       | loop_left error exit_keyword when_keyword loop_keyword delimiter
       {: System.err.println("Error en contenido de loop");  desapilarTablaDeSimbolos();:};
 
@@ -1281,6 +1325,14 @@ function_left ::=
                     //Agregar a la tabla de funciones
                     agregarFuncion(id, "string", (idleft + 1));
                 :}
+            |  void_keyword identifier:id
+                {: System.out.println("Crear tabla de símbolos para función void: " +id); 
+                    TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
+                    apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+
+                    //Agregar a la tabla de funciones
+                    agregarFuncion(id, "void", (idleft + 1));
+                :}
             ;
 
 function ::= 
@@ -1315,10 +1367,28 @@ param ::= int_keyword identifier:id {: agregarSimbolo("int", id); agregarParamet
        |  string_keyword identifier:id {: agregarSimbolo("string", id); agregarParametro(new Simbolo(id, "string"));:}
        ;
 
-return_statement ::= return_keyword delimiter
-                  {: System.out.println("return vacio"); :}
-                  |  return_keyword logical_expresion_and delimiter
-                  {: System.out.println("return expresion logica"); :}
+return_statement ::= return_keyword:r delimiter
+                  {: System.out.println("return vacio"); 
+                    //Verificar que el retorno void coincida con una función void.
+                    String tipoFuncion = tablaDeFunciones.obtenerTipoFuncion(funcionActual);
+                    if(!(tipoFuncion.equals("void"))){
+                        //Se reporta el error semántico. Se pretende retornar algo en una función void
+                        System.err.println("Error Semantico: La funcion " + funcionActual + " es de tipo " + tipoFuncion+ ". El retorno debe de incluir un valor de este tipo. Linea " + (rleft + 1)); 
+                         erroresSemanticos++;
+                    }
+                    
+                  :}
+                  |  return_keyword:r logical_expresion_and:e delimiter
+                  {: System.out.println("return expresion logica"); 
+                    //Verificar que el retorno coincida.
+                    String tipoFuncion = tablaDeFunciones.obtenerTipoFuncion(funcionActual);
+                    String[] expresion = e.toString().split("::");
+                    if(!(tipoFuncion.equals(expresion[1]))){
+                        //Se reporta el error semántico. El retorno es diferente al tipo de la función
+                        System.err.println("Error Semantico: La funcion " + funcionActual + " es de tipo " + tipoFuncion+ ". El retorno debe de incluir un valor de este tipo. Linea " + (rleft + 1)); 
+                         erroresSemanticos++;
+                    }
+                  :}
                   ;
 
 function_call ::= identifier:id left_parenthesis right_parenthesis
@@ -1450,10 +1520,12 @@ global_variables ::= /* empty */
                   ;
 
 //Programa principal
-principal_left ::= void_keyword principal_keyword left_parenthesis right_parenthesis 
+principal_left ::= void_keyword:id principal_keyword left_parenthesis right_parenthesis 
                     {: //Para poder crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("Principal"); //Crear la nueva tabla
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                        //Agregar a la tabla de funciones
+                        agregarFuncion("principal", "void", (idleft + 1));
                      :} 
                      ;
 principal ::= principal_left block
