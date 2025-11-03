@@ -537,6 +537,7 @@ term ::= term:e1 multiplication_operator power:e2
         String verificacion = verifiacionSemanticaAritmeticaBinaria("multiplicacion", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
         RESULT = partesE1[0] + "*" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        
       :}
       |  term:e1 division_operator power:e2
       {: System.out.println("Division (/)"); 
