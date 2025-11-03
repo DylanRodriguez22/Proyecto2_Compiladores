@@ -1256,9 +1256,9 @@ class CUP$parser$actions {
     }
         
     //Verifica que el identificador exista, que sea un arreglo, que el tipo de la expresión aritmética que me indica la posición sea int y me retorna valor::tipo
-    public String accederElementoDeArreglo(String nombreArreglo, String posicionElemento, String tipoPosicionElemento, int linea){
+    public String accederElementoDeArreglo(String nombreArreglo, String posicionElemento, String tipoPosicionElemento, int linea, int columna){
         Simbolo simbolo = buscarSimbolo(nombreArreglo);
-        String retorno = "null::null";
+        String retorno = "null::null::" + linea + "::"+columna;
         if(simbolo == null){
             System.err.println("Error Semantico: El identificador " + nombreArreglo + " no ha sido declarado previamente. Linea " + linea);
             erroresSemanticos++;
@@ -1271,9 +1271,9 @@ class CUP$parser$actions {
                     erroresSemanticos++;
                 }else{
                         if(simbolo.getTipo().equals("arrayChar")){
-                            retorno = "desconocido::char"; //Hay que resolver esto para poder retornar el valor
+                            retorno = "desconocido::char::" + linea + "::" + columna; //Hay que resolver esto para poder retornar el valor
                         }else{
-                             retorno = "desconocido::int";
+                             retorno = "desconocido::int::" + linea + "::" + columna;
                         }
                     }
             }
@@ -1299,11 +1299,98 @@ class CUP$parser$actions {
         tablaDeFunciones.agregarSimboloAFuncion(funcionActual, pSimbolo);
     }
 
-    
-    
+    public String validacionRelacionalNoBoleanos(String operacionTexto , String operacionSimbolo, String operador1 , String operador2 ,String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
+        String retorno = operador1 + operacionSimbolo + operador2 + "::null::" + linea1 + "::" + columna1;
+        //Verificar que ambos sean enteros o flotantes
+        boolean verificacionOperador1 = true;
+        boolean verificacionOperador2 = true;
 
+        if(!(tipo1.equals("int") || tipo1.equals("float"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando izquierdo de la operacion %s en la linea %s columna %s debe ser entero o flotante.", 
+                operacionTexto, linea1, columna1
+            ));
+            erroresSemanticos++;
+            verificacionOperador1 = false;
+        }
 
-   
+        if(!(tipo2.equals("int") || tipo2.equals("float"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando derecho de la operacion %s en la linea %s columna %s debe ser entero o flotante.", 
+                operacionTexto, linea2, columna2
+            ));
+            erroresSemanticos++;
+            verificacionOperador2 = false;
+        }
+
+        //Si pasan las verificaciones se resuelve la expresión
+        if(verificacionOperador1 && verificacionOperador2){
+            retorno = operador1 + operacionSimbolo + operador2 + "::bool::" + linea1 + "::" + columna1; 
+        }
+        return retorno;
+    }
+
+    public String validacionRelacionalConBoleanos(String operacionTexto , String operacionSimbolo, String operador1 , String operador2 ,String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
+        String retorno = operador1 + operacionSimbolo + operador2 + "::null::" + linea1 + "::" + columna1;
+        //Verificar que ambos sean enteros o flotantes
+        boolean verificacionOperador1 = true;
+        boolean verificacionOperador2 = true;
+
+        if(!(tipo1.equals("int") || tipo1.equals("float")|| tipo1.equals("bool"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando izquierdo de la operacion %s en la linea %s columna %s debe ser entero, flotante o booleano.", 
+                operacionTexto, linea1, columna1
+            ));
+            erroresSemanticos++;
+            verificacionOperador1 = false;
+        }
+
+        if(!(tipo2.equals("int") || tipo2.equals("float")|| tipo2.equals("bool"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando derecho de la operacion %s en la linea %s columna %s debe ser entero, flotante o booleano.", 
+                operacionTexto, linea2, columna2
+            ));
+            erroresSemanticos++;
+            verificacionOperador2 = false;
+        }
+
+        //Si pasan las verificaciones se resuelve la expresión
+        if(verificacionOperador1 && verificacionOperador2){
+            retorno = operador1 + operacionSimbolo + operador2 + "::bool::" + linea1 + "::" + columna1; 
+        }
+        return retorno;
+    }
+
+    public String validacionLogicaSoloBoleanos(String operacionTexto , String operacionSimbolo, String operador1 , String operador2 ,String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
+        String retorno = operador1 + operacionSimbolo + operador2 + "::null::" + linea1 + "::" + columna1;
+        //Verificar que ambos sean enteros o flotantes
+        boolean verificacionOperador1 = true;
+        boolean verificacionOperador2 = true;
+
+        if(!(tipo1.equals("bool"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando izquierdo de la operacion %s en la linea %s columna %s debe ser booleano.", 
+                operacionTexto, linea1, columna1
+            ));
+            erroresSemanticos++;
+            verificacionOperador1 = false;
+        }
+
+        if(!(tipo2.equals("bool"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando derecho de la operacion %s en la linea %s columna %s debe ser booleano.", 
+                operacionTexto, linea2, columna2
+            ));
+            erroresSemanticos++;
+            verificacionOperador2 = false;
+        }
+
+        //Si pasan las verificaciones se resuelve la expresión
+        if(verificacionOperador1 && verificacionOperador2){
+            retorno = operador1 + operacionSimbolo + operador2 + "::bool::" + linea1 + "::" + columna1; 
+        }
+        return retorno;
+    }
 
   private final parser parser;
 
@@ -1645,7 +1732,10 @@ class CUP$parser$actions {
           case 20: // arithmetic_operands ::= array_access 
             {
               Object RESULT =null;
-
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object n = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = n; System.out.println("Operando acceso array: " + n);
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1654,7 +1744,10 @@ class CUP$parser$actions {
           case 21: // arithmetic_operands ::= function_call 
             {
               Object RESULT =null;
-
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object n = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = n; System.out.println("Operando funcion: " + n); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1784,7 +1877,18 @@ class CUP$parser$actions {
           case 28: // logical_expresion_and ::= logical_expresion_and and_operator logical_expresion_or 
             {
               Object RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Operador logico AND (@)"); 
+                String[] partesE1 = e1.toString().split("::");
+                String[] partesE2 = e2.toString().split("::");
+                String validacion = validacionLogicaSoloBoleanos("AND", "@", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+                RESULT = validacion;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_and",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1793,7 +1897,10 @@ class CUP$parser$actions {
           case 29: // logical_expresion_and ::= logical_expresion_or 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e; //Creo que aquí debería solo puede ser booleano
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_and",8, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1802,7 +1909,18 @@ class CUP$parser$actions {
           case 30: // logical_expresion_or ::= logical_expresion_or or_operator relational_expression 
             {
               Object RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Operador logico OR (~)"); 
+                String[] partesE1 = e1.toString().split("::");
+                String[] partesE2 = e2.toString().split("::");
+                String validacion = validacionLogicaSoloBoleanos("OR", "~", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+                RESULT = validacion;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_or",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1811,7 +1929,10 @@ class CUP$parser$actions {
           case 31: // logical_expresion_or ::= relational_expression 
             {
               Object RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = e; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_or",7, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1820,7 +1941,18 @@ class CUP$parser$actions {
           case 32: // relational_expression ::= arithmetic_expression greater_operator arithmetic_expression 
             {
               Object RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Mayor que (>) reconocido"); 
+                String[] partesE1 = e1.toString().split("::");
+                String[] partesE2 = e2.toString().split("::");
+                String validacion = validacionRelacionalNoBoleanos("mayor que", ">", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+                RESULT = validacion;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1829,7 +1961,19 @@ class CUP$parser$actions {
           case 33: // relational_expression ::= arithmetic_expression less_operator arithmetic_expression 
             {
               Object RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Menor que (<) reconocido"); 
+                String[] partesE1 = e1.toString().split("::");
+                String[] partesE2 = e2.toString().split("::");
+                String validacion = validacionRelacionalNoBoleanos("menor que", "<", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+                RESULT = validacion;
+
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1838,7 +1982,19 @@ class CUP$parser$actions {
           case 34: // relational_expression ::= arithmetic_expression greater_equal_operator arithmetic_expression 
             {
               Object RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Mayor o igual que (>=) reconocido"); 
+                String[] partesE1 = e1.toString().split("::");
+                String[] partesE2 = e2.toString().split("::");
+                String validacion = validacionRelacionalNoBoleanos("mayor o igual que", ">=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+                RESULT = validacion;
+                
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1847,7 +2003,19 @@ class CUP$parser$actions {
           case 35: // relational_expression ::= arithmetic_expression less_equal_operator arithmetic_expression 
             {
               Object RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Menor o igual que (<=) reconocido"); 
+                String[] partesE1 = e1.toString().split("::");
+                String[] partesE2 = e2.toString().split("::");
+                String validacion = validacionRelacionalNoBoleanos("menor o igual que", "<=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+                RESULT = validacion;
+    
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1856,7 +2024,19 @@ class CUP$parser$actions {
           case 36: // relational_expression ::= arithmetic_expression equal_operator arithmetic_expression 
             {
               Object RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Igual que (==) reconocido"); 
+                String[] partesE1 = e1.toString().split("::");
+                String[] partesE2 = e2.toString().split("::");
+                String validacion = validacionRelacionalConBoleanos("igual que", "==", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+                RESULT = validacion;
+      
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1865,7 +2045,18 @@ class CUP$parser$actions {
           case 37: // relational_expression ::= arithmetic_expression not_equal_operator arithmetic_expression 
             {
               Object RESULT =null;
+		int e1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int e1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object e1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Diferente que (!=) reconocido"); 
+                String[] partesE1 = e1.toString().split("::");
+                String[] partesE2 = e2.toString().split("::");
+                String validacion = validacionRelacionalConBoleanos("diferente que", "!=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+                RESULT = validacion;
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1874,7 +2065,10 @@ class CUP$parser$actions {
           case 38: // relational_expression ::= arithmetic_expression 
             {
               Object RESULT =null;
-		 System.out.println("Expresión aritmética"); 
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 System.out.println("Expresión aritmética"); RESULT = e; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2849,7 +3043,7 @@ class CUP$parser$actions {
 		 //Verificar que exista el arreglo y que la expresión sea entero. Tipo arrayInt o arrayChar 
                     System.out.println(op);
                     String[] posicionArreglo = op.toString().split("::");
-                    String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1)); //valor::tipo
+                    String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1), idright); //valor::tipo::fila::columna
                     RESULT = elemento; //Para guardarlo y proceder con la validación posterior
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_access",15, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -3479,7 +3673,7 @@ class CUP$parser$actions {
 		 System.out.println("Llamada a funcion con argumentos"); 
                     //Verificaciones. En ar se tiene algo así por ejemplo a::null;;b::null;;1::int;;1.2::float donde es valor::tipo;;valor::tipo...
                     boolean existeLaFuncion = tablaDeFunciones.existeLaFuncion(id);
-                    String retorno = id + "::null";
+                    String retorno = id + "::null::" + (idleft + 1) + "::" + idright;
                     if(existeLaFuncion){
                         //Verificar que la cantidad de parámetros sea la misma
                         String[] parametros = ar.toString().split(";;");
@@ -3496,7 +3690,7 @@ class CUP$parser$actions {
                             boolean coincidenLosParametros = tablaDeFunciones.coincidenLosTiposDeLosParametros(id, tipos);
                             if(coincidenLosParametros){
                                 //Se pone el tipo de la función, ya pasó las verificaciones
-                                retorno = id + "::" + tablaDeFunciones.obtenerTipoFuncion(id);
+                                retorno = id + "::" + tablaDeFunciones.obtenerTipoFuncion(id) + "::"+ (idleft + 1) + "::" + idright;
                             }else{
                                 System.err.println("Error Semantico: No coinciden los tipos de los parametros indicados en la funcion " + id + " Se esperaba: " + tablaDeFunciones.obtenerListaDeTiposDeParametros(id)+ " .Linea " + (idleft + 1)); 
                                 erroresSemanticos++;
@@ -3510,8 +3704,8 @@ class CUP$parser$actions {
                          System.err.println("Error Semantico: No se ha declarado una funcion con el nombre " + id + " .Linea " + (idleft + 1)); 
                          erroresSemanticos++;
                     }
-                    RESULT = retorno; //Se coloca el valor de retorno en el RESULT para posteriores validaciones
-                    System.out.println("Tipo de la funcion: " + retorno);
+                    RESULT = retorno; //Se coloca el valor de retorno en el RESULT para posteriores validaciones   id de la funcion::tipo
+                    
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("function_call",43, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
