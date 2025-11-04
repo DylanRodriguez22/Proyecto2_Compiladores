@@ -1575,6 +1575,7 @@ class CUP$parser$actions {
         String verificacion = verifiacionSemanticaAritmeticaBinaria("multiplicacion", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
         RESULT = partesE1[0] + "*" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        
       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
