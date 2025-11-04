@@ -307,39 +307,7 @@ action code {:
         
     }
 
-// Funciones que se necesitan para el código de tres direcciones
 
-    int contadorTemporalINT = 1;
-    int contadorTemporalFLOAT = 1;
-    StringBuffer C3D = new StringBuffer();
-
-    public String registroTemporalI()
-    {
-        String temp = "t" + contadorTemporalINT;
-        contadorTemporalINT++;
-        return temp;
-    }
-
-    public String registroTemporalF(){
-        String temp = "f" + contadorTemporalFLOAT;
-        contadorTemporalFLOAT++;
-        return temp;
-    }
-
-    public DatoT crearDatoT(String tipo, String lexema, String direccion){
-        return new DatoT(tipo, lexema, direccion); 
-    }
-
-    public String empiezaFunc(String nombreFuncion){
-        return nombreFuncion + ":\n";
-    }
-
-    public String terminaFunc(String nombreFuncion){
-        return nombreFuncion + "_end:\n";
-    }
-
-
-//////////////////////////////////////////////////////////
 
 
     
@@ -377,6 +345,40 @@ parser code {:
             
         }
     }
+
+// Funciones que se necesitan para el código de tres direcciones
+
+    int contadorTemporalINT = 1;
+    int contadorTemporalFLOAT = 1;
+    StringBuffer C3D = new StringBuffer();
+
+    public String registroTemporalI()
+    {
+        String temp = "t" + contadorTemporalINT;
+        contadorTemporalINT++;
+        return temp;
+    }
+
+    public String registroTemporalF(){
+        String temp = "f" + contadorTemporalFLOAT;
+        contadorTemporalFLOAT++;
+        return temp;
+    }
+
+    public DatoT crearDatoT(String tipo, String lexema, String direccion){
+        return new DatoT(tipo, lexema, direccion); 
+    }
+
+    public String empiezaFunc(String nombreFuncion){
+        return nombreFuncion + ":\n";
+    }
+
+    public String terminaFunc(String nombreFuncion){
+        return nombreFuncion + "_end:\n";
+    }
+
+
+//////////////////////////////////////////////////////////
 
 
 :};
