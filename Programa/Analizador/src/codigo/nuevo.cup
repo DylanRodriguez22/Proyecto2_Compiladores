@@ -377,6 +377,13 @@ parser code {:
         return nombreFuncion + "_end:\n";
     }
 
+    public String mostrarVariable(String tipo, String nombre){
+        return "data_ " + tipo + " " + nombre + ";\n";
+    }
+
+    public String crearParam(String tipo, String valor){
+        return "param " + tipo + " " + valor + ";\n"; 
+    }
 
 //////////////////////////////////////////////////////////
 
