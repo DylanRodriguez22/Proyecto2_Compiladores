@@ -572,6 +572,7 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                             C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
                             C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
                             C3D.append("\n" + temp + " = " + tp2 + " + " +  tp3 + ";\n");
+                            //falta agregarlo en RESULT
                             RESULT = partesE1[0] + "+" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
                             System.out.println(partesE1[0] + "+" + partesE2[0] + "::" + temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3] + "::" + temp);
                           :}
@@ -583,6 +584,14 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                             String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("resta", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
+                            String tp2 = registroTemporalI();
+                            String tp3 = registroTemporalI();
+                            String temp = registroTemporalI();
+
+                            C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
+                            C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
+                            C3D.append("\n" + temp + " = " + tp2 + " - " +  tp3 + ";\n");
+                            // FALTA AGREGARLO EN RESULT
                             RESULT = partesE1[0] + "-" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
                           :}
                        | arithmetic_expression minus_operator error
@@ -597,6 +606,14 @@ term ::= term:e1 multiplication_operator power:e2
         System.out.println("Multiplicacion (*)"); 
         String verificacion = verifiacionSemanticaAritmeticaBinaria("multiplicacion", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
+        String tp2 = registroTemporalI();
+        String tp3 = registroTemporalI();
+        String temp = registroTemporalI();
+
+        C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
+        C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
+        C3D.append("\n" + temp + " = " + tp2 + " * " +  tp3 + ";\n");   
+
         RESULT = partesE1[0] + "*" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
         
       :}

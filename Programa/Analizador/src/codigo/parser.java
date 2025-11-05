@@ -1561,6 +1561,7 @@ class CUP$parser$actions {
                             C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
                             C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
                             C3D.append("\n" + temp + " = " + tp2 + " + " +  tp3 + ";\n");
+                            //falta agregarlo en RESULT
                             RESULT = partesE1[0] + "+" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
                             System.out.println(partesE1[0] + "+" + partesE2[0] + "::" + temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3] + "::" + temp);
                           
@@ -1592,6 +1593,14 @@ class CUP$parser$actions {
                             String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("resta", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
+                            String tp2 = registroTemporalI();
+                            String tp3 = registroTemporalI();
+                            String temp = registroTemporalI();
+
+                            C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
+                            C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
+                            C3D.append("\n" + temp + " = " + tp2 + " - " +  tp3 + ";\n");
+                            // FALTA AGREGARLO EN RESULT
                             RESULT = partesE1[0] + "-" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
                           
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_expression",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1635,6 +1644,14 @@ class CUP$parser$actions {
         System.out.println("Multiplicacion (*)"); 
         String verificacion = verifiacionSemanticaAritmeticaBinaria("multiplicacion", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
+        String tp2 = registroTemporalI();
+        String tp3 = registroTemporalI();
+        String temp = registroTemporalI();
+
+        C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
+        C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
+        C3D.append("\n" + temp + " = " + tp2 + " * " +  tp3 + ";\n");   
+
         RESULT = partesE1[0] + "*" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
         
       
