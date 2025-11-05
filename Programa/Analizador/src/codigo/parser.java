@@ -1139,6 +1139,57 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
 
+// Funciones que se necesitan para el código de tres direcciones
+
+    int contadorTemporalINT = 1;
+    int contadorTemporalINTG = 1; // Este va a ser solo como para direcciones
+    int contadorTemporalFLOAT = 1;
+    int contadorTemporalFLOATG = 1; // Este va a ser solo para direcciones de float 
+
+    StringBuffer C3D = new StringBuffer();
+
+    public String registroTemporalI()
+    {
+        String temp = "t" + contadorTemporalINT;
+        contadorTemporalINT++;
+        return temp;
+    }
+
+    public String registroTemporalF(){
+        String temp = "f" + contadorTemporalFLOAT;
+        contadorTemporalFLOAT++;
+        return temp;
+    }
+
+    public DatoT crearDatoT(String tipo, String lexema, String direccion){
+        return new DatoT(tipo, lexema, direccion); 
+    }
+
+    public String empiezaFunc(String nombreFuncion){
+        return nombreFuncion + ":\n";
+    }
+
+    public String terminaFunc(String nombreFuncion){
+        return nombreFuncion + "_end:\n";
+    }
+
+    public String mostrarVariable(String tipo, String nombre){
+        return "data_ " + tipo + " " + nombre + ";\n";
+    }
+
+    public String crearParam(String tipo, String valor){
+        return "param " + tipo + " " + valor + ";\n"; 
+    }
+
+    public void mostrarCodigo3Direcciones(){
+        System.out.println("Código de tres direcciones generado:");
+        System.out.println(C3D.toString());
+    }
+
+//////////////////////////////////////////////////////////
+
+
+
 
 /** Cup generated class to encapsulate user supplied action code.*/
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
@@ -1448,6 +1499,9 @@ class CUP$parser$actions {
         
     }
 
+
+
+
     
 
   private final parser parser;
@@ -1496,12 +1550,19 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Suma (+)"); 
-                               String[] partesE1 = e1.toString().split("::");
+                               String[] partesE1 = e1.toString().split("::"); // Esto separa la info tipo lexema::tipo::variable::alcance o eso creo
                                 String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("suma", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-       
+
+                            String tp2 = registroTemporalI();
+                            String tp3 = registroTemporalI();
+                            String temp = registroTemporalI();
+
+                            C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
+                            C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
+                            C3D.append("\n" + temp + " = " + tp2 + " + " +  tp3 + ";\n");
                             RESULT = partesE1[0] + "+" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
-                            System.out.println(partesE1[0] + "+" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3]);
+                            System.out.println(partesE1[0] + "+" + partesE2[0] + "::" + temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3] + "::" + temp);
                           
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_expression",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4376,6 +4437,8 @@ class CUP$parser$actions {
               Object RESULT =null;
 		 System.out.println("\n========== PROGRAMA COMPLETO VALIDADO ==========\n"); 
          parser.sePuedeoNo();
+         System.out.println("\nFUNCIONA EL 3 DIRECCIONES?\n");
+         mostrarCodigo3Direcciones();
          System.out.println("\nEsto está al final de la producción program");
          
               CUP$parser$result = parser.getSymbolFactory().newSymbol("program",49, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
