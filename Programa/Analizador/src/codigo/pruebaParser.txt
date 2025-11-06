@@ -2,6 +2,12 @@ void principal є э¿
    let bool x = 5>3$
    let string saludo = "hola mundo"$
    let bool s = 5 > 3  @ 3 < 2 @ 3>=3$
-   let bool z = 4 <= 3 @ 2 == 2 @ 3 != 1$
+   let bool pruebita =  4 < 2 ~ 3 <=3$
+   let int prueba = 4$
+   let int papu$
+    let float a$
+    let char bb$
+    let string mundo$
+    let bool bandera$
      
 ?

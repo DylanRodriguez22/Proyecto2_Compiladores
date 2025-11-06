@@ -1194,15 +1194,16 @@ declaration_values ::= logical_expresion_and:e {: RESULT = e; :} | CHAR_LITERAL:
 
              
 declaration ::= let_keyword int_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: int sin valor con id "+ id); agregarSimbolo("int", id);:}
+             {: System.out.println("Declaracion: int sin valor con id "+ id); agregarSimbolo("int", id); C3D.append("\n" + "data_int " + id + ":\n");:}
+             
              |  let_keyword float_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: float sin valor con id " + id); agregarSimbolo("float", id); :}
+             {: System.out.println("Declaracion: float sin valor con id " + id); agregarSimbolo("float", id); C3D.append("\n" + "data_float " + id + ":\n");:}
              |  let_keyword bool_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: bool sin valor con id " + id); agregarSimbolo("bool", id); :}
+             {: System.out.println("Declaracion: bool sin valor con id " + id); agregarSimbolo("bool", id); C3D.append("\n" + "data_bool " + id + ":\n");:}
              |  let_keyword char_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: char sin valor con id " + id); agregarSimbolo("char", id); :}
+             {: System.out.println("Declaracion: char sin valor con id " + id); agregarSimbolo("char", id); C3D.append("\n" + "data_char " + id + ":\n");:}
              |  let_keyword string_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: string sin valor con id "+ id); agregarSimbolo("string", id); :}
+             {: System.out.println("Declaracion: string sin valor con id "+ id); agregarSimbolo("string", id); C3D.append("\n" + "data_string " + id + ":\n");:}
 
              |  let_keyword int_keyword identifier:id assignment_operator declaration_values:e delimiter
              {: 
