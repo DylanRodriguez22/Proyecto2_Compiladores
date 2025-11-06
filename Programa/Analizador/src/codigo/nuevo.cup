@@ -847,16 +847,26 @@ arithmetic_operands ::= int_literal:n {: RESULT = n + "::int::" + (nleft + 1) + 
                         :} 
                      ;
 
+
+                     ///PROBAR CUANDO HAYAN ASIGNACIONES
 unary_negative ::= minus_operator int_literal:n 
                 {: System.out.println("Negativo entero"); 
-                    RESULT = "-"+ n  + "::int::" + (nleft +1) + "::" + nright;
+                String temp = registroTemporalI();
+
+                    
+                    C3D.append("\n" + temp + " = " + " - " + n + ";\n");
+
+                    RESULT = temp + "::int::" + (nleft +1) + "::" + nright;
                 :}
-                |  minus_operator float_literal 
+                |  minus_operator float_literal:n
                     {: System.out.println("Negativo flotante"); 
-                        RESULT = "-"+ n  + "::float::" + (nleft +1) + "::" + nright;
+                    String temp = registroTemporalF();
+                    C3D.append("\n" + temp + " = " + " - " + n + ";\n");
+                        RESULT = temp  + "::float::" + (nleft +1) + "::" + nright;
                     :}
                 ;
 
+                //FALTA ASIGNACIONES
 postfix_expression ::= identifier:n increment_operator 
                         {: System.out.println("Incremento (++)"); 
                             //Verificar que el identificador sea entero o flotante
@@ -870,7 +880,15 @@ postfix_expression ::= identifier:n increment_operator
                                 //Verificar que sea entero o flotante
                                 tipo = simbolo.getTipo();
                                 if(tipo.equals("int") || tipo.equals("float")){
-                                    RESULT =  simbolo.getSimbolo() + "+1" + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; 
+
+                                    if (tipo.equals("float")){
+                                        temp = registroTemporalF();
+                                    } else {
+                                        temp = registroTemporalI();
+                                    }
+                                    C3D.append("\n" + temp + " = " + simbolo.getSimbolo() + " + 1;\n");
+
+                                    RESULT =  temp + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; 
                                 }else{
                                     //Reportar el error
                                    System.err.println(String.format(
@@ -986,7 +1004,7 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
             ;
             
 //Declaraciones. Se salvan los valores tanto el de la expresión lógica que viene de todo un proceso de reducción para el tipo y los literales
-declaration_values ::= logical_expresion_and:e {: RESULT = e; :} | CHAR_LITERAL:e {: RESULT = e; :} | STRING_LITERAL:e {: RESULT = e; :};
+declaration_values ::= logical_expresion_and:e {: RESULT = e; :} | CHAR_LITERAL:e {: RESULT = e + "::char::" + (eleft + 1) + "::" + eright; :} | STRING_LITERAL:e {: RESULT = e; :};
 
 
              
@@ -1003,12 +1021,18 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
 
              |  let_keyword int_keyword identifier:id assignment_operator declaration_values:e delimiter
              {: 
+                /// Preguntarle al profe sobre esto 
                 System.out.println("Declaracion: int con valor con el id "+ id); 
                 //Verificar si el tipo de la expresión coincide con el del identificador
                  String[] partesOperador = e.toString().split("::");
                 if(validacionAsignacion(id, "int", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("int", id);
                 }
+                
+                // Seria tipo me dan un let int x =3$
+                // Entonces yo envio un data_int x
+                //String temp = registroTemporalI();
+                C3D.append("\n" + "data_int " + id + ":\n");
                 
             :}
              |  let_keyword float_keyword identifier:id assignment_operator declaration_values:e delimiter
@@ -1019,6 +1043,7 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 if(validacionAsignacion(id, "float", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("float", id);
                 }
+                C3D.append("\n" + "data_float " + id + ":\n");
             :}
              |  let_keyword bool_keyword identifier:id assignment_operator declaration_values:e delimiter
              {: System.out.println("Declaracion: bool con valor con el id " + id); 
@@ -1027,13 +1052,20 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 if(validacionAsignacion(id, "bool", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("bool", id);
                 }
+                C3D.append("\n" + "data_bool " + id + ":\n");
             :}
              |  let_keyword char_keyword identifier:id assignment_operator declaration_values:e delimiter
              {: System.out.println("Declaracion: char con valor con el id " + id); 
                 String[] partesOperador = e.toString().split("::");
+                String guarda = partesOperador[0];
                 if(validacionAsignacion(id, "char", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("char", id);
                 }
+                System.out.println("Valor a guardar en char: " + guarda);
+                String temp = registroTemporalI();
+                C3D.append("\n" + "data_char " + id + ":\n");
+                C3D.append("\n" + temp + " = " + guarda + ";\n");
+                //C3D.append("\n" + temp + " = " + partesOperador[2] + "\n");
             :}
              |  let_keyword string_keyword identifier:id assignment_operator declaration_values delimiter
              {: System.out.println("Declaracion: string con valor con el id " + id);
@@ -1041,6 +1073,7 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 if(validacionAsignacion(id, "string", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("string", id);
                 }
+                C3D.append("\n" + "data_string " + id + ":\n");
             :}
              | error delimiter
              {:

@@ -2084,7 +2084,12 @@ class CUP$parser$actions {
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Negativo entero"); 
-                    RESULT = "-"+ n  + "::int::" + (nleft +1) + "::" + nright;
+                String temp = registroTemporalI();
+
+                    
+                    C3D.append("\n" + temp + " = " + " - " + n + ";\n");
+
+                    RESULT = temp + "::int::" + (nleft +1) + "::" + nright;
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("unary_negative",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2094,8 +2099,13 @@ class CUP$parser$actions {
           case 25: // unary_negative ::= minus_operator float_literal 
             {
               Object RESULT =null;
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Negativo flotante"); 
-                        RESULT = "-"+ n  + "::float::" + (nleft +1) + "::" + nright;
+                    String temp = registroTemporalF();
+                    C3D.append("\n" + temp + " = " + " - " + n + ";\n");
+                        RESULT = temp  + "::float::" + (nleft +1) + "::" + nright;
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("unary_negative",0, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2120,7 +2130,15 @@ class CUP$parser$actions {
                                 //Verificar que sea entero o flotante
                                 tipo = simbolo.getTipo();
                                 if(tipo.equals("int") || tipo.equals("float")){
-                                    RESULT =  simbolo.getSimbolo() + "+1" + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; 
+
+                                    if (tipo.equals("float")){
+                                        temp = registroTemporalF();
+                                    } else {
+                                        temp = registroTemporalI();
+                                    }
+                                    C3D.append("\n" + temp + " = " + simbolo.getSimbolo() + " + 1;\n");
+
+                                    RESULT =  temp + "::" + simbolo.getTipo() + "::"  + (nleft +1) + "::" + nright; 
                                 }else{
                                     //Reportar el error
                                    System.err.println(String.format(
@@ -2395,7 +2413,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = e; 
+		 RESULT = e + "::char::" + (eleft + 1) + "::" + eright; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration_values",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2483,12 +2501,18 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 
+                /// Preguntarle al profe sobre esto 
                 System.out.println("Declaracion: int con valor con el id "+ id); 
                 //Verificar si el tipo de la expresión coincide con el del identificador
                  String[] partesOperador = e.toString().split("::");
                 if(validacionAsignacion(id, "int", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("int", id);
                 }
+                
+                // Seria tipo me dan un let int x =3$
+                // Entonces yo envio un data_int x
+                //String temp = registroTemporalI();
+                C3D.append("\n" + "data_int " + id + ":\n");
                 
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2512,6 +2536,7 @@ class CUP$parser$actions {
                 if(validacionAsignacion(id, "float", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("float", id);
                 }
+                C3D.append("\n" + "data_float " + id + ":\n");
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2533,6 +2558,7 @@ class CUP$parser$actions {
                 if(validacionAsignacion(id, "bool", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("bool", id);
                 }
+                C3D.append("\n" + "data_bool " + id + ":\n");
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2550,9 +2576,15 @@ class CUP$parser$actions {
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 System.out.println("Declaracion: char con valor con el id " + id); 
                 String[] partesOperador = e.toString().split("::");
+                String guarda = partesOperador[0];
                 if(validacionAsignacion(id, "char", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("char", id);
                 }
+                System.out.println("Valor a guardar en char: " + guarda);
+                String temp = registroTemporalI();
+                C3D.append("\n" + "data_char " + id + ":\n");
+                C3D.append("\n" + temp + " = " + guarda + ";\n");
+                //C3D.append("\n" + temp + " = " + partesOperador[2] + "\n");
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2570,6 +2602,7 @@ class CUP$parser$actions {
                 if(validacionAsignacion(id, "string", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("string", id);
                 }
+                C3D.append("\n" + "data_string " + id + ":\n");
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
