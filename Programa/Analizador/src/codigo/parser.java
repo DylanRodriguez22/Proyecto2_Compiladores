@@ -1695,15 +1695,27 @@ class CUP$parser$actions {
         System.out.println("Multiplicacion (*)"); 
         String verificacion = verifiacionSemanticaAritmeticaBinaria("multiplicacion", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-        String tp2 = registroTemporalI();
-        String tp3 = registroTemporalI();
+        String mulIzq = partesE1[0]; // parte izquierda de la multiplicacion
+        String mulDer = partesE2[0]; // parte derecha de la multiplicacion
+        if(continuouNo(mulIzq) == false){ 
+            System.out.println("resultado " + mulIzq + " no es temporal, se pasa a temporal");
+            String tempIzq = registroTemporalI();
+            C3D.append("\n" + tempIzq + " = " + mulIzq + ";\n");
+            mulIzq = tempIzq; // actualizar la variable
+        }
+        
+        // Verificar el operando DERECHO
+        if(continuouNo(mulDer) == false){ 
+            System.out.println("resultado " + mulDer + " no es temporal, se pasa a temporal");
+            String tempDer = registroTemporalI();
+            C3D.append("\n" + tempDer + " = " + mulDer + ";\n");
+            mulDer = tempDer; // actualizar la variable
+        }
+
         String temp = registroTemporalI();
+        C3D.append("\n" + temp + " = " + mulIzq + " * " + mulDer + ";\n"); 
 
-        C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
-        C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
-        C3D.append("\n" + temp + " = " + tp2 + " * " +  tp3 + ";\n");   
-
-        RESULT = partesE1[0] + "*" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
         
       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1724,8 +1736,32 @@ class CUP$parser$actions {
         String[] partesE1 = e1.toString().split("::");
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verifiacionSemanticaAritmeticaBinaria("division", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+
+
+        String divsimpleIzq = partesE1[0]; // parte izquierda de la multiplicacion
+        String divsimpleDer = partesE2[0]; // parte derecha de la multiplicacion
+        if(continuouNo(divsimpleIzq) == false){ 
+            System.out.println("resultado " + divsimpleIzq + " no es temporal, se pasa a temporal");
+            String tempIzq = registroTemporalI();
+            C3D.append("\n" + tempIzq + " = " + divsimpleIzq + ";\n");
+            divsimpleIzq = tempIzq; // actualizar la variable
+        }
+        
+        // Verificar el operando DERECHO
+        if(continuouNo(divsimpleDer) == false){ 
+            System.out.println("resultado " + divsimpleDer + " no es temporal, se pasa a temporal");
+            String tempDer = registroTemporalI();
+            C3D.append("\n" + tempDer + " = " + divsimpleDer + ";\n");
+            divsimpleDer = tempDer; // actualizar la variable
+        }
+
+        String temp = registroTemporalI();
+        C3D.append("\n" + temp + " = " + divsimpleIzq + " / " + divsimpleDer + ";\n");
+
+
+
        
-        RESULT = partesE1[0] + "/" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1746,7 +1782,28 @@ class CUP$parser$actions {
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verifiacionSemanticaAritmeticaBinaria("division entera", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-        RESULT = partesE1[0] + "//" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3]);
+
+        String diventeraIzq = partesE1[0]; // parte izquierda de la multiplicacion
+        String diventeraDer = partesE2[0]; // parte derecha de la multiplicacion
+        if(continuouNo(diventeraIzq) == false){ 
+            System.out.println("resultado " + diventeraIzq + " no es temporal, se pasa a temporal");
+            String tempIzq = registroTemporalI();
+            C3D.append("\n" + tempIzq + " = " + diventeraIzq + ";\n");
+            diventeraIzq = tempIzq; // actualizar la variable
+        }
+        
+        // Verificar el operando DERECHO
+        if(continuouNo(diventeraDer) == false){ 
+            System.out.println("resultado " + diventeraDer + " no es temporal, se pasa a temporal");
+            String tempDer = registroTemporalI();
+            C3D.append("\n" + tempDer + " = " + diventeraDer + ";\n");
+            diventeraDer = tempDer; // actualizar la variable
+        }
+        String temp = registroTemporalI();
+        C3D.append("\n" + temp + " = " + diventeraIzq + " // " + diventeraDer + ";\n");
+
+
+        RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
