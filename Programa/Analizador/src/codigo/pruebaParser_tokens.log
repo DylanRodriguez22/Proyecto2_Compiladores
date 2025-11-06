@@ -20,7 +20,23 @@ IDENTIFIER               	saludo         	3	15
 ASSIGN                   	=              	3	22
 STRING_LITERAL           	"hola mundo"   	3	24
 DELIMITER                	$              	3	36
-RIGHT_BLOCK              	?              	5	1
+LET                      	let            	4	4
+BOOL                     	bool           	4	8
+IDENTIFIER               	s              	4	13
+ASSIGN                   	=              	4	15
+INT_LITERAL              	5              	4	17
+GREATER                  	>              	4	19
+INT_LITERAL              	3              	4	21
+AND                      	@              	4	24
+INT_LITERAL              	3              	4	26
+LESS                     	<              	4	28
+INT_LITERAL              	2              	4	30
+AND                      	@              	4	32
+INT_LITERAL              	3              	4	34
+GREATER_EQUAL            	>=             	4	35
+INT_LITERAL              	3              	4	37
+DELIMITER                	$              	4	38
+RIGHT_BLOCK              	?              	6	1
 ----------------------------------------------------------
 === FIN DEL ANÁLISIS ===
 ✓ Sin errores léxicos

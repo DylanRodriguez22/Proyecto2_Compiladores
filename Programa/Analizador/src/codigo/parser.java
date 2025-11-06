@@ -1194,7 +1194,7 @@ public class parser extends java_cup.runtime.lr_parser {
             System.out.println("Es un temporal");
             return true; 
         }
-
+    
 
         
         System.out.println("Valor en continuouNo: " + valor);
@@ -1206,6 +1206,18 @@ public class parser extends java_cup.runtime.lr_parser {
         }
         return false;
     }
+    public boolean continuoLogico(String valor){
+        if(valor.matches("[0-9]>=|<=|==|!=|>|<[0-9]+")){
+            return true; // o sea es algo como 5 > 3
+        }
+        // Si no entonces es un temporal como t1 > t2
+        else {
+            return false
+        }
+    }
+
+
+
 
 //////////////////////////////////////////////////////////
 
@@ -2207,8 +2219,34 @@ class CUP$parser$actions {
 		 System.out.println("Operador logico AND (@)"); 
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
+                String parteIzq2 = partesE1[4];
+                String parteDer2 = partesE2[4];
+                System.out.println("Parte der en AND: " + parteDer2);
+                System.out.println("Parte izq en AND: " + parteIzq2);
                 String validacion = validacionLogicaSoloBoleanos("AND", "@", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq2) == false){ 
+                    System.out.println("resultado " + parteIzq2 + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq2 + ";\n");
+                    parteIzq2 = tempIzq; 
+                }
+
+
+                if(continuouNo(parteDer2) == false){ 
+                    System.out.println("resultado " + parteDer2 + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer2 + ";\n");
+                    parteDer2 = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq2 + " @ " + parteDer2 + ";\n");            
+
+
+                RESULT = validacion + "::" + temp;
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_and",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2221,7 +2259,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = e; //Creo que aquí debería solo puede ser booleano
+		 RESULT = e; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_and",8, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2240,7 +2278,31 @@ class CUP$parser$actions {
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionLogicaSoloBoleanos("OR", "~", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                 String parteIzq2 = partesE1[4];
+                String parteDer2 = partesE2[4];
+                
+                if(continuouNo(parteIzq2) == false){ 
+                    System.out.println("resultado " + parteIzq2 + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq2 + ";\n");
+                    parteIzq2 = tempIzq; 
+                }
+
+
+                if(continuouNo(parteDer2) == false){ 
+                    System.out.println("resultado " + parteDer2 + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer2 + ";\n");
+                    parteDer2 = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq2 + " ~ " + parteDer2 + ";\n");            
+
+
+                RESULT = validacion + "::" + temp;
+
+
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_or",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2272,7 +2334,29 @@ class CUP$parser$actions {
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("mayor que", ">", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " > " + parteDer + ";\n"); 
+                
+
+
+                RESULT = validacion + "::" + temp;
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2292,7 +2376,29 @@ class CUP$parser$actions {
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("menor que", "<", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " < " + parteDer + ";\n"); 
+                
+
+
+                RESULT = validacion + "::" + temp;
 
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2313,7 +2419,29 @@ class CUP$parser$actions {
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("mayor o igual que", ">=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " >= " + parteDer + ";\n"); 
+                
+
+
+                RESULT = validacion + "::" + temp;
                 
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

@@ -1,5 +1,6 @@
 void principal є э¿
    let bool x = 5>3$
    let string saludo = "hola mundo"$
+   let bool s = 5 > 3  @ 3 < 2 @ 3>=3$
     
 ?
