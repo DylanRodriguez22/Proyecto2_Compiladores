@@ -1110,7 +1110,26 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("menor o igual que", "<=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " <= " + parteDer + ";\n"); 
+                RESULT = validacion + "::" + temp;
     
             :}
             |  arithmetic_expression:e1 equal_operator arithmetic_expression:e2
@@ -1118,7 +1137,26 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalConBoleanos("igual que", "==", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " == " + parteDer + ";\n"); 
+                RESULT = validacion + "::" + temp;
       
             :}
             |  arithmetic_expression:e1 not_equal_operator arithmetic_expression:e2
@@ -1126,7 +1164,26 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalConBoleanos("diferente que", "!=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " != " + parteDer + ";\n"); 
+                RESULT = validacion + "::" + temp;
             :}
 	    | arithmetic_expression:e {: System.out.println("Expresión aritmética"); RESULT = e; :}
             ;

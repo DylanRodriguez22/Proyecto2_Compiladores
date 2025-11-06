@@ -2462,7 +2462,26 @@ class CUP$parser$actions {
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("menor o igual que", "<=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " <= " + parteDer + ";\n"); 
+                RESULT = validacion + "::" + temp;
     
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2483,7 +2502,26 @@ class CUP$parser$actions {
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalConBoleanos("igual que", "==", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " == " + parteDer + ";\n"); 
+                RESULT = validacion + "::" + temp;
       
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2504,7 +2542,26 @@ class CUP$parser$actions {
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalConBoleanos("diferente que", "!=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
-                RESULT = validacion;
+                String parteIzq = partesE1[0];
+                String parteDer = partesE2[0];
+
+                if(continuouNo(parteIzq) == false){ 
+                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                    String tempIzq = registroTemporalI();
+                    C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
+                    parteIzq = tempIzq; // ya casi lo pruebo
+                }
+
+                if(continuouNo(parteDer) == false){ 
+                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                    String tempDer = registroTemporalI();
+                    C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
+                    parteDer = tempDer; 
+                }
+
+                String temp = registroTemporalI();
+                C3D.append("\n" + temp + " = " + parteIzq + " != " + parteDer + ";\n"); 
+                RESULT = validacion + "::" + temp;
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
