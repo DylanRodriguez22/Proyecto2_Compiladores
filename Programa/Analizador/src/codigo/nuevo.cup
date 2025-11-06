@@ -687,8 +687,8 @@ term ::= term:e1 multiplication_operator power:e2
         String verificacion = verifiacionSemanticaAritmeticaBinaria("division", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
 
 
-        String divsimpleIzq = partesE1[0]; // parte izquierda de la multiplicacion
-        String divsimpleDer = partesE2[0]; // parte derecha de la multiplicacion
+        String divsimpleIzq = partesE1[0]; // parte izquierda de la division
+        String divsimpleDer = partesE2[0]; // parte derecha de la division
         if(continuouNo(divsimpleIzq) == false){ 
             System.out.println("resultado " + divsimpleIzq + " no es temporal, se pasa a temporal");
             String tempIzq = registroTemporalI();
@@ -719,8 +719,8 @@ term ::= term:e1 multiplication_operator power:e2
         String verificacion = verifiacionSemanticaAritmeticaBinaria("division entera", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
 
-        String diventeraIzq = partesE1[0]; // parte izquierda de la multiplicacion
-        String diventeraDer = partesE2[0]; // parte derecha de la multiplicacion
+        String diventeraIzq = partesE1[0]; // parte izquierda de la division entera
+        String diventeraDer = partesE2[0]; // parte derecha de la division entera
         if(continuouNo(diventeraIzq) == false){ 
             System.out.println("resultado " + diventeraIzq + " no es temporal, se pasa a temporal");
             String tempIzq = registroTemporalI();
@@ -747,7 +747,29 @@ term ::= term:e1 multiplication_operator power:e2
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verifiacionSemanticaAritmeticaBinaria("modulo", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-        RESULT = partesE1[0] + "%" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        String moduloIzq = partesE1[0]; // parte izquierda del modulo entera
+        String moduloDer = partesE2[0]; // parte derecha del moduloentera
+        if(continuouNo(moduloIzq) == false){ 
+            System.out.println("resultado " + moduloIzq + " no es temporal, se pasa a temporal");
+            String tempIzq = registroTemporalI();
+            C3D.append("\n" + tempIzq + " = " + moduloIzq + ";\n");
+            moduloIzq = tempIzq; // actualizar la variable
+        }
+        
+        // Verificar el operando DERECHO
+        if(continuouNo(moduloDer) == false){ 
+            System.out.println("resultado " + moduloDer + " no es temporal, se pasa a temporal");
+            String tempDer = registroTemporalI();
+            C3D.append("\n" + tempDer + " = " + moduloDer + ";\n");
+            moduloDer = tempDer; // actualizar la variable
+        }
+        String temp = registroTemporalI();
+        C3D.append("\n" + temp + " = " + moduloIzq + " % " + moduloDer + ";\n");
+
+
+
+
+        RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       :}
       |  power:e {:  RESULT = e;:}
       ;
@@ -758,8 +780,29 @@ power ::= factor:e1 power_operator power:e2
             String[] partesE1 = e1.toString().split("::");
             String[] partesE2 = e2.toString().split("::");
             String verificacion = verifiacionSemanticaAritmeticaBinaria("potencia", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+
+
+        String elevadoIzq = partesE1[0]; // parte izquierda de la potencia
+        String elevadoDer = partesE2[0]; // parte derecha de la potencia
+        if(continuouNo(elevadoIzq) == false){ 
+            System.out.println("resultado " + elevadoIzq + " no es temporal, se pasa a temporal");
+            String tempIzq = registroTemporalI();
+            C3D.append("\n" + tempIzq + " = " + elevadoIzq + ";\n");
+            elevadoIzq = tempIzq; // actualizar la variable
+        }
+        
+        // Verificar el operando DERECHO
+        if(continuouNo(elevadoDer) == false){ 
+            System.out.println("resultado " + elevadoDer + " no es temporal, se pasa a temporal");
+            String tempDer = registroTemporalI();
+            C3D.append("\n" + tempDer + " = " + elevadoDer + ";\n");
+            elevadoDer = tempDer; // actualizar la variable
+        }
+
+        String temp = registroTemporalI();
+        C3D.append("\n" + temp + " = " + elevadoIzq + " ^ " + elevadoDer + ";\n");
        
-            RESULT = partesE1[0] + "^" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+            RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
         :}
        |  factor:e {: RESULT = e;:}
        ;

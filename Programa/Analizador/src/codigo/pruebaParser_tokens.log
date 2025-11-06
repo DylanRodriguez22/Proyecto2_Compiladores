@@ -10,20 +10,22 @@ LET                      	let            	2	4
 INT                      	int            	2	8
 IDENTIFIER               	z              	2	12
 ASSIGN                   	=              	2	14
-INT_LITERAL              	3              	2	16
-PLUS_OPERATOR            	+              	2	18
-INT_LITERAL              	4              	2	20
-DIV_OPERATOR             	/              	2	21
+INT_LITERAL              	3              	2	15
+PLUS_OPERATOR            	+              	2	17
+INT_LITERAL              	4              	2	19
+PLUS_OPERATOR            	+              	2	21
 INT_LITERAL              	2              	2	23
-PLUS_OPERATOR            	+              	2	25
+MOD_OPERATOR             	%              	2	25
 INT_LITERAL              	2              	2	27
-MINUS_OPERATOR           	-              	2	29
-INT_LITERAL              	1              	2	31
-MULT_OPERATOR            	*              	2	33
+POWER_OPERATOR           	^              	2	29
+INT_LITERAL              	2              	2	31
+MINUS_OPERATOR           	-              	2	33
 INT_LITERAL              	1              	2	35
-INT_DIV_OPERATOR         	//             	2	37
-INT_LITERAL              	1              	2	40
-DELIMITER                	$              	2	41
+MULT_OPERATOR            	*              	2	37
+INT_LITERAL              	1              	2	39
+INT_DIV_OPERATOR         	//             	2	41
+INT_LITERAL              	1              	2	44
+DELIMITER                	$              	2	45
 RIGHT_BLOCK              	?              	3	1
 ----------------------------------------------------------
 === FIN DEL ANÁLISIS ===
