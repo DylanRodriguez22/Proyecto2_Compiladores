@@ -1004,7 +1004,7 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
             ;
             
 //Declaraciones. Se salvan los valores tanto el de la expresión lógica que viene de todo un proceso de reducción para el tipo y los literales
-declaration_values ::= logical_expresion_and:e {: RESULT = e; :} | CHAR_LITERAL:e {: RESULT = e + "::char::" + (eleft + 1) + "::" + eright; :} | STRING_LITERAL:e {: RESULT = e; :};
+declaration_values ::= logical_expresion_and:e {: RESULT = e; :} | CHAR_LITERAL:e {: RESULT = e + "::char::" + (eleft + 1) + "::" + eright; :} | STRING_LITERAL:e {: RESULT = e + "::string::" + (eleft + 1) + "::" + eright; :};
 
 
              
@@ -1067,13 +1067,15 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 C3D.append("\n" + temp + " = " + guarda + ";\n");
                 //C3D.append("\n" + temp + " = " + partesOperador[2] + "\n");
             :}
-             |  let_keyword string_keyword identifier:id assignment_operator declaration_values delimiter
+             |  let_keyword string_keyword identifier:id assignment_operator declaration_values:e delimiter
              {: System.out.println("Declaracion: string con valor con el id " + id);
                 String[] partesOperador = e.toString().split("::");
                 if(validacionAsignacion(id, "string", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("string", id);
                 }
+                String temp = registroTemporalI();
                 C3D.append("\n" + "data_string " + id + ":\n");
+                C3D.append("\n" + temp + " = " + partesOperador[0] + ";\n");
             :}
              | error delimiter
              {:

@@ -2425,7 +2425,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = e; 
+		 RESULT = e + "::string::" + (eleft + 1) + "::" + eright; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration_values",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2597,12 +2597,17 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 System.out.println("Declaracion: string con valor con el id " + id);
                 String[] partesOperador = e.toString().split("::");
                 if(validacionAsignacion(id, "string", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("string", id);
                 }
+                String temp = registroTemporalI();
                 C3D.append("\n" + "data_string " + id + ":\n");
+                C3D.append("\n" + temp + " = " + partesOperador[0] + ";\n");
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
