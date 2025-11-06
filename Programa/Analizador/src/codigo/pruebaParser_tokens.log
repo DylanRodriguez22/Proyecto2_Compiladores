@@ -15,7 +15,9 @@ PLUS_OPERATOR            	+              	2	20
 INT_LITERAL              	5              	2	22
 PLUS_OPERATOR            	+              	2	24
 INT_LITERAL              	3              	2	26
-DELIMITER                	$              	2	27
+PLUS_OPERATOR            	+              	2	28
+INT_LITERAL              	2              	2	30
+DELIMITER                	$              	2	31
 LET                      	let            	3	4
 INT                      	int            	3	8
 IDENTIFIER               	y              	3	12

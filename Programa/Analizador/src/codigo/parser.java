@@ -1186,6 +1186,27 @@ public class parser extends java_cup.runtime.lr_parser {
         System.out.println(C3D.toString());
     }
 
+    int[] array = {1,2,3,4,5,7,8,9};
+
+
+    public boolean continuouNo(String valor){
+        if (valor.matches("t[0-9]+")){
+            System.out.println("Es un temporal");
+            return true; 
+        }
+
+
+        
+        System.out.println("Valor en continuouNo: " + valor);
+        for (int i : array) {
+            if (valor.equals(String.valueOf(i))) {
+
+                return false;
+            }
+        }
+        return false;
+    }
+
 //////////////////////////////////////////////////////////
 
 
@@ -1550,19 +1571,34 @@ class CUP$parser$actions {
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 System.out.println("Suma (+)"); 
-                               String[] partesE1 = e1.toString().split("::"); // Esto separa la info tipo lexema::tipo::variable::alcance o eso creo
-                                String[] partesE2 = e2.toString().split("::");
+                               String[] partesE1 = e1.toString().split("::"); 
+                               String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("suma", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
 
-                            String tp2 = registroTemporalI();
-                            String tp3 = registroTemporalI();
-                            String temp = registroTemporalI();
+                            String sumaiz = partesE1[0]; // parte izquierda de la suma
+                            String sumader = partesE2[0]; // parte derecha de la suma
+                            
+                            // Verificar el operando IZQUIERDO
+                            if(continuouNo(sumaiz) == false){ 
+                                System.out.println("resultado " + sumaiz + " no es temporal, se pasa a temporal");
+                                String tempIzq = registroTemporalI();
+                                C3D.append("\n" + tempIzq + " = " + sumaiz + ";\n");
+                                sumaiz = tempIzq; // actualizar la variable
+                            }
+                            
+                            // Verificar el operando DERECHO
+                            if(continuouNo(sumader) == false){ 
+                                System.out.println("resultado " + sumader + " no es temporal, se pasa a temporal");
+                                String tempDer = registroTemporalI();
+                                C3D.append("\n" + tempDer + " = " + sumader + ";\n");
+                                sumader = tempDer; // actualizar la variable
+                            }
 
-                            C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
-                            C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
-                            C3D.append("\n" + temp + " = " + tp2 + " + " +  tp3 + ";\n");
+                            String temp = registroTemporalI();
+                            C3D.append("\n" + temp + " = " + sumaiz + " + " + sumader + ";\n");
+
                             //falta agregarlo en RESULT
-                            RESULT = partesE1[0] + "+" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+                            RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
                             System.out.println(partesE1[0] + "+" + partesE2[0] + "::" + temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3] + "::" + temp);
                           
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_expression",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1593,15 +1629,30 @@ class CUP$parser$actions {
                             String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("resta", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
-                            String tp2 = registroTemporalI();
-                            String tp3 = registroTemporalI();
-                            String temp = registroTemporalI();
 
-                            C3D.append("\n" + tp2 + " = " + partesE1[0] + ";\n");
-                            C3D.append("\n" + tp3 + " = " + partesE2[0] + ";\n");
-                            C3D.append("\n" + temp + " = " + tp2 + " - " +  tp3 + ";\n");
+                            String restaIzq = partesE1[0]; // parte izquierda de la resta
+                            String restaDer = partesE2[0]; // parte derecha de la resta
+                            if(continuouNo(restaIzq) == false){ 
+                                System.out.println("resultado " + restaIzq + " no es temporal, se pasa a temporal");
+                                String tempIzq = registroTemporalI();
+                                C3D.append("\n" + tempIzq + " = " + restaIzq + ";\n");
+                                restaIzq = tempIzq; // actualizar la variable
+                            }
+                            
+                            // Verificar el operando DERECHO
+                            if(continuouNo(restaDer) == false){ 
+                                System.out.println("resultado " + restaDer + " no es temporal, se pasa a temporal");
+                                String tempDer = registroTemporalI();
+                                C3D.append("\n" + tempDer + " = " + restaDer + ";\n");
+                                restaDer = tempDer; // actualizar la variable
+                            }
+
+                            String temp = registroTemporalI();
+                            C3D.append("\n" + temp + " = " + restaIzq + " - " + restaDer + ";\n");
+
+
                             // FALTA AGREGARLO EN RESULT
-                            RESULT = partesE1[0] + "-" + partesE2[0] + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+                            RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
                           
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_expression",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
