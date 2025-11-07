@@ -1186,6 +1186,15 @@ public class parser extends java_cup.runtime.lr_parser {
         System.out.println(C3D.toString());
     }
 
+    public boolean esLiteral(String valor){
+        if(!valor.matches("t[0-9]+")){
+            return true; // seria literal
+        }
+        else {
+            return false; // sino
+        }
+    }
+
     int[] array = {1,2,3,4,5,7,8,9};
 
 
@@ -1215,6 +1224,7 @@ public class parser extends java_cup.runtime.lr_parser {
             return false
         }
     }
+    
 
 
 
@@ -2693,12 +2703,21 @@ class CUP$parser$actions {
                 if(validacionAsignacion(id, "int", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("int", id);
                 }
-                
+                String parteUnica = partesOperador[0];
+                System.out.println("Valor a guardar en int: " + parteUnica);
                 // Seria tipo me dan un let int x =3$
                 // Entonces yo envio un data_int x
-                //String temp = registroTemporalI();
+                String temp = registroTemporalI();
+
+                if(!esLiteral(parteUnica) && continuouNo(parteUnica) == false){ 
+                    String tempunica = registroTemporalI();
+                    C3D.append("\n" + tempunica + " = " + parteUnica + ";\n");
+                    parteUnica = tempunica;
+                }
+
                 C3D.append("\n" + "data_int " + id + ":\n");
-                
+                C3D.append("\n" + id + " = " + parteUnica + ";\n");
+                RESULT = id;
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
