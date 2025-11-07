@@ -2854,16 +2854,16 @@ class CUP$parser$actions {
                 }
                 String parteUnica;
                 if (partesOperador.length > 4) {
-                    // Ya hay un temporal generado en índice 4
+                    // es una op anidada entonces se empieza a tomar desde ahí
                     parteUnica = partesOperador[4];
                 } else {
-                    // Es un literal directo
+                    // sino entonces sigue siendo un numero 
                     parteUnica = partesOperador[0];
                 }
                 
                 System.out.println("Valor a guardar en bool: " + parteUnica);
 
-                // Solo crear temporal si NO es ya un temporal
+                // Solo creamos un temporal sino es un temporal 
                 if (!continuouNo(parteUnica)) {
                     String tempExtra = registroTemporalI();
                     C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
@@ -3205,6 +3205,30 @@ class CUP$parser$actions {
                 //De momento es solo el print. Ya para el código 3 direcciones si podría influir si se reasigna o no
                 String[] partesOperador = e.toString().split("::");
                 validacionReasignacion(id,  partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright));
+
+
+                String parteUnica;
+                if (partesOperador.length > 4) {
+                    // es una op anidada entonces se empieza a tomar desde ahí
+                    parteUnica = partesOperador[4];
+                } else {
+                    // sino entonces sigue siendo un numero 
+                    parteUnica = partesOperador[0];
+                }
+                System.out.println("Valor a reasignar: " + parteUnica); // esto es para debug
+
+                // Solo creamos un temporal sino es un temporal 
+                if (!continuouNo(parteUnica)) {
+                    String tempExtra = registroTemporalI();
+                    C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
+                    parteUnica = tempExtra;
+                }
+
+                C3D.append("\n" + id + " = " + parteUnica + ";\n");
+
+                RESULT = id;
+
+
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("reassignment",12, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

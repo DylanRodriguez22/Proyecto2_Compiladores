@@ -10,5 +10,11 @@ void principal є э¿
     let char bb = 'a'$
     let string mundo = "Doctor mundo" $
     let bool bandera$
+    pruebita = True @ False$ 
+    mundo = "Buenos dias papu"$
+    bb = 'b'$
+    x = 5 + 5 - 2$
+    a = 5.0$
+    
      
 ?
