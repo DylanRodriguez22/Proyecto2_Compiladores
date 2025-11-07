@@ -2,7 +2,7 @@ package codigo;
 import java_cup.runtime.*;
 import java.lang.String;
 import java.util.ArrayList;
-
+import java.util.List;
 action code {: 
     TablaDeFunciones tablaDeFunciones = new TablaDeFunciones();
     TablaDeSimbolos tablaGlobal = new TablaDeSimbolos("Global"); //
@@ -648,7 +648,7 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                             String sumaiz = partesE1[0]; // parte izquierda de la suma
                             String sumader = partesE2[0]; // parte derecha de la suma
                             
-                            // Verificar el operando IZQUIERDO
+                            // revisamos si la parte izq es temporal 
                             if(continuouNo(sumaiz) == false){ 
                                 System.out.println("resultado " + sumaiz + " no es temporal, se pasa a temporal");
                                 String tempIzq = registroTemporalI();
@@ -656,7 +656,7 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                                 sumaiz = tempIzq; // actualizar la variable
                             }
                             
-                            // Verificar el operando DERECHO
+                            // revisamos si la parte derecha es temporal 
                             if(continuouNo(sumader) == false){ 
                                 System.out.println("resultado " + sumader + " no es temporal, se pasa a temporal");
                                 String tempDer = registroTemporalI();
@@ -689,7 +689,7 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                                 restaIzq = tempIzq; // actualizar la variable
                             }
                             
-                            // Verificar el operando DERECHO
+                            // revisamos si la parte derecha es temporal
                             if(continuouNo(restaDer) == false){ 
                                 System.out.println("resultado " + restaDer + " no es temporal, se pasa a temporal");
                                 String tempDer = registroTemporalI();
@@ -725,7 +725,7 @@ term ::= term:e1 multiplication_operator power:e2
             mulIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(mulDer) == false){ 
             System.out.println("resultado " + mulDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -755,7 +755,7 @@ term ::= term:e1 multiplication_operator power:e2
             divsimpleIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(divsimpleDer) == false){ 
             System.out.println("resultado " + divsimpleDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -787,7 +787,7 @@ term ::= term:e1 multiplication_operator power:e2
             diventeraIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(diventeraDer) == false){ 
             System.out.println("resultado " + diventeraDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -815,7 +815,7 @@ term ::= term:e1 multiplication_operator power:e2
             moduloIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(moduloDer) == false){ 
             System.out.println("resultado " + moduloDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -850,7 +850,7 @@ power ::= factor:e1 power_operator power:e2
             elevadoIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(elevadoDer) == false){ 
             System.out.println("resultado " + elevadoDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -1545,6 +1545,7 @@ reassignment ::= identifier:id assignment_operator declaration_values:e delimite
 
 
 // Array
+// Esto es como let int arr[5]
 array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithmetic_expression:op right_bracket delimiter
                 {: System.out.println("Declaracion: array int sin nada"); 
                     //Verificar que sea una operacion de enteros
@@ -1560,8 +1561,30 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
                         ArrayList<Simbolo> simbolos = new ArrayList<>();
                         agregarSimboloArray("arrayInt", id, partesOperador[0], simbolos);
                     }
-
                     
+                    String parteUnica;
+                    if (partesOperador.length > 4) {
+                        // es una op anidada entonces se empieza a tomar desde ahí
+                        parteUnica = partesOperador[4];
+                    } else {
+                        // sino entonces sigue siendo un numero 
+                        parteUnica = partesOperador[0];
+                    }
+                    
+                    System.out.println("Valor a guardar en arr: " + parteUnica);
+
+                    // Solo creamos un temporal sino es un temporal 
+                    if (!continuouNo(parteUnica)) {
+                        String tempExtra = registroTemporalI();
+                        C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
+                        parteUnica = tempExtra;
+                    }
+
+                    C3D.append("\n" + "data_intArr " + id + ":\n");
+                    C3D.append("\n" + id + " = " + parteUnica + ";\n");
+
+                    RESULT = id;
+ 
                 :}
                 | let_keyword int_keyword identifier error delimiter
                 {: System.err.println("Error en declaracion de array"); :}
@@ -1596,8 +1619,32 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
                     }else{
                         //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
                         ArrayList<Simbolo> simbolos = new ArrayList<>();
-                        agregarSimboloArray("arrayChar", id, i, simbolos);
+                        agregarSimboloArray("arrayChar", id, partesOperador[0], simbolos);
                     }
+                    String parteUnica;
+                    if (partesOperador.length > 4) {
+                        // es una op anidada entonces se empieza a tomar desde ahí
+                        parteUnica = partesOperador[4];
+                    } else {
+                        // sino entonces sigue siendo un numero 
+                        parteUnica = partesOperador[0];
+                    }
+                    
+                    System.out.println("Valor a guardar en arr cchar: " + parteUnica);
+
+                    // Solo creamos un temporal sino es un temporal 
+                    if (!continuouNo(parteUnica)) {
+                        String tempExtra = registroTemporalI();
+                        C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
+                        parteUnica = tempExtra;
+                    }
+
+                    C3D.append("\n" + "data_CharArr " + id + ":\n");
+                    C3D.append("\n" + id + " = " + parteUnica + ";\n");
+
+                    RESULT = id;
+
+
                 :}
                 | error char_keyword identifier left_bracket arithmetic_expression right_bracket delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
@@ -1615,46 +1662,53 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
                 {: System.err.println("Error en declaracion de array"); :}
 
 
-                // HASTA AQUI LO DEJE
+                // seria tipo let int arr[5] = ¿1,2,3,4?$
                 |  let_keyword int_keyword identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator left_block array_literals:rec right_block delimiter
                 {: 
                     System.out.println("Declaracion: array int con valores"); 
-                    //Descomponer los valores en símbolos
+                    
+                    // Lo dividimos para que así sea más fácil acceder a lo que se ocupa
                     String[] elementosArray = rec.toString().split("::");
-                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
-
-                    //Descomponer la operación aritmética del tamaño para revisar el tipo
+                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();
+                    
+                    // Para código 3D
+                    C3D.append("\n" + "data_intArr " + id + ":\n");
+                    
+                    // Descomponer tamaño
+                    //Descomponer la operación
                     String[] partesOperador = op.toString().split("::");
+                    //Revvisar el tipo
                     if(!(partesOperador[1].equals("int"))){
-                        System.err.println(String.format(
-                        "Error Semantico: La expresion aritmetica para indicar el tamanio del arrego debe ser de tipo int. Linea %s.", 
-                        (idleft +1)
-                        ));
+                        System.err.println("Error Semantico: tamaño debe ser int. Linea " + (idleft + 1));
                         erroresSemanticos++;
-                    }else{
+                    } else {
+                        int indice = 0;
+                        
+                        
                         for (String elemento : elementosArray){
-                        //Split con :: para obtener el simbolo y el tipo
-                        String[] simboloTipo = elemento.toString().split(";;");
-                        
-                        //Verificar que el tipo sea del mismo que el arreglo
-                        if(simboloTipo[1].equals("int")){
-                            simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
-                        }else{
-                            System.err.println("Error Semantico: El tipo del elemento " + simboloTipo[0] + " debe ser int para poder incluirlo en el arreglo " + id + " de la linea " + idleft +".");
-                            erroresSemanticos++;
-                        }
-                        
-                        }
+                            String[] partes = elemento.split(";;");  // recordar [valor, tipo, temporal]
+                            
+                            if(partes.length >= 3) {
+                                String valor = partes[0];
+                                String tipo = partes[1];
+                                String temporal = partes[2];
 
-                        //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
-                        for(Simbolo simbolo : simbolosArreglo){
-                             System.out.println(simbolo.toString());
+                                //Vemos que sea del mismo tipo
+                                if(tipo.equals("int")){
+                                    simbolosArreglo.add(new Simbolo(valor, tipo));
+                                    
+                                    // Esto es para mostrar [0] = temporal;
+                                    C3D.append(id + "[" + indice + "] = " + temporal + ";\n");
+                                    indice++;
+                                } else {
+                                    System.err.println("Error Semantico: elemento " + valor + " debe ser int. Linea " + (idleft + 1));
+                                    erroresSemanticos++;
+                                }
+                            }
                         }
+                        
                         agregarSimboloArray("arrayInt", id, partesOperador[0], simbolosArreglo);
                     }
-                    
-                    
-                    
                 :}
                 | error int_keyword identifier left_bracket arithmetic_expression right_bracket assignment_operator left_block array_literals right_block delimiter
                 {: System.err.println("Error en declaracion de array, falta let"); :}
@@ -1677,11 +1731,9 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
                 |  let_keyword char_keyword identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator left_block array_literals:rec right_block delimiter
                 {: 
                     System.out.println("Declaracion: array char con valores"); 
-                    //Descomponer los valores en símbolos
                     String[] elementosArray = rec.toString().split("::");
                     ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
 
-                    //Descomponer la operación aritmética del tamaño para revisar el tipo
                     String[] partesOperador = op.toString().split("::");
                     if(!(partesOperador[1].equals("int"))){
                         System.err.println(String.format(
@@ -1691,10 +1743,8 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
                         erroresSemanticos++;
                     }else{
                         for (String elemento : elementosArray){
-                        //Split con :: para obtener el simbolo y el tipo
                         String[] simboloTipo = elemento.toString().split(";;");
                         
-                        //Verificar que el tipo sea del mismo que el arreglo
                         if(simboloTipo[1].equals("char")){
                             simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
                         }else{
@@ -1704,7 +1754,6 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
                         
                         }
 
-                        //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
                         for(Simbolo simbolo : simbolosArreglo){
                              System.out.println(simbolo.toString());
                         }
@@ -1731,25 +1780,36 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
 
                 ;
 
-array_literals ::= int_literal:e {: RESULT = e + ";;int"; :} //valor;;tipo
-                 |  CHAR_LITERAL:e {: RESULT = e + ";;char"; :}
-                 |  identifier:n 
-                    {: 
-                        //Verificar que exista el identificador
-                        reportarErrorNoExisteSimbolo(n);
-                        //Obtener el tipo
-                        Simbolo simbolo = buscarSimbolo(n);
-                        if(simbolo != null){
-                            RESULT = e + ";;" +simbolo.getTipo();
-                        }else{
-                            RESULT = e+";;null";
-                            erroresSemanticos++;
-                        }
-                     :}
-                 |  array_literals:rec comma_keyword int_literal:e //valor;;tipo::valor;;tipo... Se separa primero por :: para obtener todos los valores con su tipo y luego por ;; para obtener el tipo
-                    {:
-                        RESULT = rec + "::" + e + ";;int";
-                    :}
+array_literals ::= int_literal:e 
+                {: 
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + temp + " = " + e + ";\n");
+                    RESULT = e + ";;int;;" + temp;  
+                :}
+                |  CHAR_LITERAL:e 
+                {: 
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + temp + " = " + e + ";\n");
+                    RESULT = e + ";;char;;" + temp;
+                :}
+                |  identifier:n 
+                {: 
+                    reportarErrorNoExisteSimbolo(n);
+                    Simbolo simbolo = buscarSimbolo(n);
+                    if(simbolo != null){
+                        RESULT = n + ";;" + simbolo.getTipo() + ";;" + n;  
+                    }else{
+                        RESULT = n + ";;null;;null";
+                        erroresSemanticos++;
+                    }
+                :}
+                |  array_literals:rec comma_keyword int_literal:e
+                {: 
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + temp + " = " + e + ";\n");
+                    RESULT = rec + "::" + e + ";;int;;" + temp;  
+                    System.out.println("DEBUG - resultado: " + RESULT);
+                :}
                  |  array_literals:rec comma_keyword CHAR_LITERAL:e
                     {:
                         RESULT = rec + "::" + e + ";;char";
@@ -1757,9 +1817,7 @@ array_literals ::= int_literal:e {: RESULT = e + ";;int"; :} //valor;;tipo
                  |  array_literals:rec comma_keyword identifier:n
 
                  {: 
-                        //Verificar que exista el identificador
                         reportarErrorNoExisteSimbolo(n);
-                        //Obtener el tipo
                         Simbolo simbolo = buscarSimbolo(n);
                         if(simbolo != null){
                             RESULT = rec + "::" + n + ";;"+ simbolo.getTipo();

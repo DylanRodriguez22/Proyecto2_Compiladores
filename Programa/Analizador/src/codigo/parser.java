@@ -8,6 +8,7 @@ package codigo;
 import java_cup.runtime.*;
 import java.lang.String;
 import java.util.ArrayList;
+import java.util.List;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -1637,7 +1638,7 @@ class CUP$parser$actions {
                             String sumaiz = partesE1[0]; // parte izquierda de la suma
                             String sumader = partesE2[0]; // parte derecha de la suma
                             
-                            // Verificar el operando IZQUIERDO
+                            // revisamos si la parte izq es temporal 
                             if(continuouNo(sumaiz) == false){ 
                                 System.out.println("resultado " + sumaiz + " no es temporal, se pasa a temporal");
                                 String tempIzq = registroTemporalI();
@@ -1645,7 +1646,7 @@ class CUP$parser$actions {
                                 sumaiz = tempIzq; // actualizar la variable
                             }
                             
-                            // Verificar el operando DERECHO
+                            // revisamos si la parte derecha es temporal 
                             if(continuouNo(sumader) == false){ 
                                 System.out.println("resultado " + sumader + " no es temporal, se pasa a temporal");
                                 String tempDer = registroTemporalI();
@@ -1698,7 +1699,7 @@ class CUP$parser$actions {
                                 restaIzq = tempIzq; // actualizar la variable
                             }
                             
-                            // Verificar el operando DERECHO
+                            // revisamos si la parte derecha es temporal
                             if(continuouNo(restaDer) == false){ 
                                 System.out.println("resultado " + restaDer + " no es temporal, se pasa a temporal");
                                 String tempDer = registroTemporalI();
@@ -1763,7 +1764,7 @@ class CUP$parser$actions {
             mulIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(mulDer) == false){ 
             System.out.println("resultado " + mulDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -1806,7 +1807,7 @@ class CUP$parser$actions {
             divsimpleIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(divsimpleDer) == false){ 
             System.out.println("resultado " + divsimpleDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -1851,7 +1852,7 @@ class CUP$parser$actions {
             diventeraIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(diventeraDer) == false){ 
             System.out.println("resultado " + diventeraDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -1892,7 +1893,7 @@ class CUP$parser$actions {
             moduloIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(moduloDer) == false){ 
             System.out.println("resultado " + moduloDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -1949,7 +1950,7 @@ class CUP$parser$actions {
             elevadoIzq = tempIzq; // actualizar la variable
         }
         
-        // Verificar el operando DERECHO
+        // revisamos si la parte derecha es temporal
         if(continuouNo(elevadoDer) == false){ 
             System.out.println("resultado " + elevadoDer + " no es temporal, se pasa a temporal");
             String tempDer = registroTemporalI();
@@ -3285,8 +3286,30 @@ class CUP$parser$actions {
                         ArrayList<Simbolo> simbolos = new ArrayList<>();
                         agregarSimboloArray("arrayInt", id, partesOperador[0], simbolos);
                     }
-
                     
+                    String parteUnica;
+                    if (partesOperador.length > 4) {
+                        // es una op anidada entonces se empieza a tomar desde ahí
+                        parteUnica = partesOperador[4];
+                    } else {
+                        // sino entonces sigue siendo un numero 
+                        parteUnica = partesOperador[0];
+                    }
+                    
+                    System.out.println("Valor a guardar en arr: " + parteUnica);
+
+                    // Solo creamos un temporal sino es un temporal 
+                    if (!continuouNo(parteUnica)) {
+                        String tempExtra = registroTemporalI();
+                        C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
+                        parteUnica = tempExtra;
+                    }
+
+                    C3D.append("\n" + "data_intArr " + id + ":\n");
+                    C3D.append("\n" + id + " = " + parteUnica + ";\n");
+
+                    RESULT = id;
+ 
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3386,8 +3409,32 @@ class CUP$parser$actions {
                     }else{
                         //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
                         ArrayList<Simbolo> simbolos = new ArrayList<>();
-                        agregarSimboloArray("arrayChar", id, i, simbolos);
+                        agregarSimboloArray("arrayChar", id, partesOperador[0], simbolos);
                     }
+                    String parteUnica;
+                    if (partesOperador.length > 4) {
+                        // es una op anidada entonces se empieza a tomar desde ahí
+                        parteUnica = partesOperador[4];
+                    } else {
+                        // sino entonces sigue siendo un numero 
+                        parteUnica = partesOperador[0];
+                    }
+                    
+                    System.out.println("Valor a guardar en arr cchar: " + parteUnica);
+
+                    // Solo creamos un temporal sino es un temporal 
+                    if (!continuouNo(parteUnica)) {
+                        String tempExtra = registroTemporalI();
+                        C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
+                        parteUnica = tempExtra;
+                    }
+
+                    C3D.append("\n" + "data_CharArr " + id + ":\n");
+                    C3D.append("\n" + id + " = " + parteUnica + ";\n");
+
+                    RESULT = id;
+
+
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3471,42 +3518,49 @@ class CUP$parser$actions {
 		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		 
                     System.out.println("Declaracion: array int con valores"); 
-                    //Descomponer los valores en símbolos
+                    
+                    // Lo dividimos para que así sea más fácil acceder a lo que se ocupa
                     String[] elementosArray = rec.toString().split("::");
-                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
-
-                    //Descomponer la operación aritmética del tamaño para revisar el tipo
+                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();
+                    
+                    // Para código 3D
+                    C3D.append("\n" + "data_intArr " + id + ":\n");
+                    
+                    // Descomponer tamaño
+                    //Descomponer la operación
                     String[] partesOperador = op.toString().split("::");
+                    //Revvisar el tipo
                     if(!(partesOperador[1].equals("int"))){
-                        System.err.println(String.format(
-                        "Error Semantico: La expresion aritmetica para indicar el tamanio del arrego debe ser de tipo int. Linea %s.", 
-                        (idleft +1)
-                        ));
+                        System.err.println("Error Semantico: tamaño debe ser int. Linea " + (idleft + 1));
                         erroresSemanticos++;
-                    }else{
+                    } else {
+                        int indice = 0;
+                        
+                        
                         for (String elemento : elementosArray){
-                        //Split con :: para obtener el simbolo y el tipo
-                        String[] simboloTipo = elemento.toString().split(";;");
-                        
-                        //Verificar que el tipo sea del mismo que el arreglo
-                        if(simboloTipo[1].equals("int")){
-                            simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
-                        }else{
-                            System.err.println("Error Semantico: El tipo del elemento " + simboloTipo[0] + " debe ser int para poder incluirlo en el arreglo " + id + " de la linea " + idleft +".");
-                            erroresSemanticos++;
-                        }
-                        
-                        }
+                            String[] partes = elemento.split(";;");  // recordar [valor, tipo, temporal]
+                            
+                            if(partes.length >= 3) {
+                                String valor = partes[0];
+                                String tipo = partes[1];
+                                String temporal = partes[2];
 
-                        //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
-                        for(Simbolo simbolo : simbolosArreglo){
-                             System.out.println(simbolo.toString());
+                                //Vemos que sea del mismo tipo
+                                if(tipo.equals("int")){
+                                    simbolosArreglo.add(new Simbolo(valor, tipo));
+                                    
+                                    // Esto es para mostrar [0] = temporal;
+                                    C3D.append(id + "[" + indice + "] = " + temporal + ";\n");
+                                    indice++;
+                                } else {
+                                    System.err.println("Error Semantico: elemento " + valor + " debe ser int. Linea " + (idleft + 1));
+                                    erroresSemanticos++;
+                                }
+                            }
                         }
+                        
                         agregarSimboloArray("arrayInt", id, partesOperador[0], simbolosArreglo);
                     }
-                    
-                    
-                    
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-10)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3599,11 +3653,9 @@ class CUP$parser$actions {
 		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		 
                     System.out.println("Declaracion: array char con valores"); 
-                    //Descomponer los valores en símbolos
                     String[] elementosArray = rec.toString().split("::");
                     ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
 
-                    //Descomponer la operación aritmética del tamaño para revisar el tipo
                     String[] partesOperador = op.toString().split("::");
                     if(!(partesOperador[1].equals("int"))){
                         System.err.println(String.format(
@@ -3613,10 +3665,8 @@ class CUP$parser$actions {
                         erroresSemanticos++;
                     }else{
                         for (String elemento : elementosArray){
-                        //Split con :: para obtener el simbolo y el tipo
                         String[] simboloTipo = elemento.toString().split(";;");
                         
-                        //Verificar que el tipo sea del mismo que el arreglo
                         if(simboloTipo[1].equals("char")){
                             simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
                         }else{
@@ -3626,7 +3676,6 @@ class CUP$parser$actions {
                         
                         }
 
-                        //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
                         for(Simbolo simbolo : simbolosArreglo){
                              System.out.println(simbolo.toString());
                         }
@@ -3705,7 +3754,11 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = e + ";;int"; 
+		 
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + temp + " = " + e + ";\n");
+                    RESULT = e + ";;int;;" + temp;  
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3717,7 +3770,11 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = e + ";;char"; 
+		 
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + temp + " = " + e + ";\n");
+                    RESULT = e + ";;char;;" + temp;
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3730,17 +3787,15 @@ class CUP$parser$actions {
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 
-                        //Verificar que exista el identificador
-                        reportarErrorNoExisteSimbolo(n);
-                        //Obtener el tipo
-                        Simbolo simbolo = buscarSimbolo(n);
-                        if(simbolo != null){
-                            RESULT = e + ";;" +simbolo.getTipo();
-                        }else{
-                            RESULT = e+";;null";
-                            erroresSemanticos++;
-                        }
-                     
+                    reportarErrorNoExisteSimbolo(n);
+                    Simbolo simbolo = buscarSimbolo(n);
+                    if(simbolo != null){
+                        RESULT = n + ";;" + simbolo.getTipo() + ";;" + n;  
+                    }else{
+                        RESULT = n + ";;null;;null";
+                        erroresSemanticos++;
+                    }
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3755,9 +3810,12 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-                        RESULT = rec + "::" + e + ";;int";
-                    
+		 
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + temp + " = " + e + ";\n");
+                    RESULT = rec + "::" + e + ";;int;;" + temp;  
+                    System.out.println("DEBUG - resultado: " + RESULT);
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3790,9 +3848,7 @@ class CUP$parser$actions {
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 
-                        //Verificar que exista el identificador
                         reportarErrorNoExisteSimbolo(n);
-                        //Obtener el tipo
                         Simbolo simbolo = buscarSimbolo(n);
                         if(simbolo != null){
                             RESULT = rec + "::" + n + ";;"+ simbolo.getTipo();
