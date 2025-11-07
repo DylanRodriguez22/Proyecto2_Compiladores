@@ -3654,7 +3654,9 @@ class CUP$parser$actions {
 		 
                     System.out.println("Declaracion: array char con valores"); 
                     String[] elementosArray = rec.toString().split("::");
-                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();;
+                    ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();
+
+                    C3D.append("\n" + "data_CharArr " + id + ":\n");
 
                     String[] partesOperador = op.toString().split("::");
                     if(!(partesOperador[1].equals("int"))){
@@ -3664,27 +3666,32 @@ class CUP$parser$actions {
                         ));
                         erroresSemanticos++;
                     }else{
+                        int indice = 0;
+
                         for (String elemento : elementosArray){
-                        String[] simboloTipo = elemento.toString().split(";;");
-                        
-                        if(simboloTipo[1].equals("char")){
-                            simbolosArreglo.add(new Simbolo(simboloTipo[0], simboloTipo[1]));
-                        }else{
-                            System.err.println("Error Semantico: El tipo del elemento " + simboloTipo[0] + " debe ser char para poder incluirlo en el arreglo " + id + " de la linea " + idleft +".");
-                            erroresSemanticos++;
-                        }
-                        
+                            String[] partes = elemento.split(";;");
+                            
+                            if(partes.length >= 3){  
+                                String valor = partes[0];
+                                String tipo = partes[1];
+                                String temporal = partes[2];
+
+                                if(tipo.equals("char")){
+                                    simbolosArreglo.add(new Simbolo(valor, tipo));
+                                    C3D.append(id + "[" + indice + "] = " + temporal + ";\n");
+                                    indice++;
+                                } else {  
+                                    System.err.println("Error Semantico: El tipo del elemento " + valor + " debe ser char para poder incluirlo en el arreglo " + id + " de la linea " + (idleft + 1) + ".");
+                                    erroresSemanticos++;
+                                }
+                            } else {  
+                                System.err.println("Error Semantico: Formato incorrecto en elemento del arreglo " + id + " de la linea " + (idleft + 1) + ".");
+                                erroresSemanticos++;
+                            }
                         }
 
-                        for(Simbolo simbolo : simbolosArreglo){
-                             System.out.println(simbolo.toString());
-                        }
                         agregarSimboloArray("arrayChar", id, partesOperador[0], simbolosArreglo);
                     }
-
-                    
-                    
-                    
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_declaration",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-10)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3831,7 +3838,11 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String e = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        RESULT = rec + "::" + e + ";;char";
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + e + ";\n");
+                        RESULT = rec + "::" + e + ";;char;;" + temp;
+                        System.out.println("DEBUG - resultado: " + RESULT);
+
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

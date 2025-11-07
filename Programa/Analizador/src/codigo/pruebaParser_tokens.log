@@ -23,7 +23,20 @@ COMMA                    	,              	2	32
 INT_LITERAL              	15             	2	33
 RIGHT_BLOCK              	?              	2	35
 DELIMITER                	$              	2	36
-RIGHT_BLOCK              	?              	3	1
+LET                      	let            	3	5
+CHAR                     	char           	3	9
+IDENTIFIER               	arre           	3	14
+UNKNOWN                  	[              	3	18
+INT_LITERAL              	2              	3	19
+UNKNOWN                  	]              	3	20
+ASSIGN                   	=              	3	22
+LEFT_BLOCK               	¿              	3	24
+CHAR_LITERAL             	'a'            	3	25
+COMMA                    	,              	3	28
+CHAR_LITERAL             	'b'            	3	29
+RIGHT_BLOCK              	?              	3	32
+DELIMITER                	$              	3	33
+RIGHT_BLOCK              	?              	4	1
 ----------------------------------------------------------
 === FIN DEL ANÁLISIS ===
 ✓ Sin errores léxicos
