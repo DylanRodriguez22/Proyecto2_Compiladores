@@ -6,9 +6,9 @@ void principal є э¿
    let int prueba = 4+2$
    let int papu$
     let float a = 3.0 + 2.1$
-    let bool pp = True @ False ~ True $
-    let char bb$
-    let string mundo$
+    let bool pp = True @ False$
+    let char bb = 'a'$
+    let string mundo = "Doctor mundo" $
     let bool bandera$
      
 ?

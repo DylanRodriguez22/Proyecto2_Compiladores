@@ -75,17 +75,19 @@ ASSIGN                   	=              	9	17
 BOOL_LITERAL             	True           	9	19
 AND                      	@              	9	24
 BOOL_LITERAL             	False          	9	26
-OR                       	~              	9	32
-BOOL_LITERAL             	True           	9	34
-DELIMITER                	$              	9	39
+DELIMITER                	$              	9	31
 LET                      	let            	10	5
 CHAR                     	char           	10	9
 IDENTIFIER               	bb             	10	14
-DELIMITER                	$              	10	16
+ASSIGN                   	=              	10	17
+CHAR_LITERAL             	'a'            	10	19
+DELIMITER                	$              	10	22
 LET                      	let            	11	5
 STRING                   	string         	11	9
 IDENTIFIER               	mundo          	11	16
-DELIMITER                	$              	11	21
+ASSIGN                   	=              	11	22
+STRING_LITERAL           	"Doctor mundo" 	11	24
+DELIMITER                	$              	11	39
 LET                      	let            	12	5
 BOOL                     	bool           	12	9
 IDENTIFIER               	bandera        	12	14

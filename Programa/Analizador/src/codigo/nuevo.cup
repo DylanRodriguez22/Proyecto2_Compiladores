@@ -414,6 +414,24 @@ parser code {:
         }
     }
 
+    public boolean esChar(String valor){
+        if(!valor.matches("'[a-zA-Z]'")){
+            return true; // seria char
+        }
+        else {
+            return false; // sino
+        }
+    }
+
+    public boolean esString(String valor){
+        if(!valor.matches("\"[^\"]*\"")){
+            return true; // seria string
+        }
+        else {
+            return false; // sino
+        }
+    }
+
     int[] array = {1,2,3,4,5,7,8,9};
 
 
@@ -1322,7 +1340,7 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 String parteUnica = partesOperador[0];
                 System.out.println("Valor a guardar en bool: " + parteUnica);
 
-                // Si es un numero siempre hacemos temporal
+                // Si es un booleano siempre hacemos temporal
                 if (esBool(parteUnica)) {
                     String tempLiteral = registroTemporalI();
                     C3D.append("\n" + tempLiteral + " = " + parteUnica + ";\n");
@@ -1341,11 +1359,6 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 C3D.append("\n" + id + " = " + parteUnica + ";\n");
 
                 RESULT = id;
-
-
-
-
-                C3D.append("\n" + "data_bool " + id + ":\n");
             :}
              |  let_keyword char_keyword identifier:id assignment_operator declaration_values:e delimiter
              {: System.out.println("Declaracion: char con valor con el id " + id); 
@@ -1354,10 +1367,28 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 if(validacionAsignacion(id, "char", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("char", id);
                 }
-                System.out.println("Valor a guardar en char: " + guarda);
-                String temp = registroTemporalI();
+                String parteUnica = partesOperador[0];
+                System.out.println("Valor a guardar en bool: " + parteUnica);
+
+                // Si es un char siempre hacemos temporal
+                if (esChar(parteUnica)) {
+                    String tempLiteral = registroTemporalI();
+                    C3D.append("\n" + tempLiteral + " = " + parteUnica + ";\n");
+                    parteUnica = tempLiteral; 
+                } 
+                
+                // si es un temporal entonces lo asigno de una vez 
+                else if (!continuouNo(parteUnica)) {
+                    String tempExtra = registroTemporalI();
+                    C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
+                    parteUnica = tempExtra;
+                }
+
+                // asignamos su id y lo mostramos
                 C3D.append("\n" + "data_char " + id + ":\n");
-                C3D.append("\n" + temp + " = " + guarda + ";\n");
+                C3D.append("\n" + id + " = " + parteUnica + ";\n");
+
+                RESULT = id;
                 //C3D.append("\n" + temp + " = " + partesOperador[2] + "\n");
             :}
              |  let_keyword string_keyword identifier:id assignment_operator declaration_values:e delimiter
@@ -1366,9 +1397,28 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 if(validacionAsignacion(id, "string", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("string", id);
                 }
-                String temp = registroTemporalI();
+                String parteUnica = partesOperador[0];
+                System.out.println("Valor a guardar en bool: " + parteUnica);
+
+                // Si es un string siempre hacemos temporal
+                if (esString(parteUnica)) {
+                    String tempLiteral = registroTemporalI();
+                    C3D.append("\n" + tempLiteral + " = " + parteUnica + ";\n");
+                    parteUnica = tempLiteral; 
+                } 
+                
+                // si es un temporal entonces lo asigno de una vez 
+                else if (!continuouNo(parteUnica)) {
+                    String tempExtra = registroTemporalI();
+                    C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
+                    parteUnica = tempExtra;
+                }
+
+                // asignamos su id y lo mostramos
                 C3D.append("\n" + "data_string " + id + ":\n");
-                C3D.append("\n" + temp + " = " + partesOperador[0] + ";\n");
+                C3D.append("\n" + id + " = " + parteUnica + ";\n");
+
+                RESULT = id;
             :}
              | error delimiter
              {:
@@ -1530,6 +1580,8 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
                 | let_keyword char_keyword identifier error delimiter
                 {: System.err.println("Error en declaracion de array"); :}
 
+
+                // HASTA AQUI LO DEJE
                 |  let_keyword int_keyword identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator left_block array_literals:rec right_block delimiter
                 {: 
                     System.out.println("Declaracion: array int con valores"); 
