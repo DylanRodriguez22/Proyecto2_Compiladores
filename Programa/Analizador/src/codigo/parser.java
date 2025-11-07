@@ -1223,6 +1223,15 @@ public class parser extends java_cup.runtime.lr_parser {
         }
     }
 
+    public boolean esTemporal(String valor){
+        if (valor.matches("t[0-9]+")){
+            return true; 
+        }
+        else {
+            return false;
+        }
+    }
+
     int[] array = {1,2,3,4,5,7,8,9};
 
 
@@ -2753,28 +2762,29 @@ class CUP$parser$actions {
                 if(validacionAsignacion(id, "int", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("int", id);
                 }
+                
                 String parteUnica = partesOperador[0];
                 System.out.println("Valor a guardar en int: " + parteUnica);
 
-                // Si es un numero siempre hacemos temporal
+                // Si es literal, creamos un temporal
                 if (esLiteral(parteUnica)) {
                     String tempLiteral = registroTemporalI();
                     C3D.append("\n" + tempLiteral + " = " + parteUnica + ";\n");
                     parteUnica = tempLiteral; 
                 } 
-                
-                // si es un temporal entonces lo asigno de una vez 
-                else if (!continuouNo(parteUnica)) {
+                // Si NO es literal pero TAMPOCO es temporal, generamos uno extra
+                else if (!esTemporal(parteUnica)) {
                     String tempExtra = registroTemporalI();
                     C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
                     parteUnica = tempExtra;
                 }
 
-                // asignamos su id y lo mostramos
+                // Ya con parteUnica siendo el temporal final:
                 C3D.append("\n" + "data_int " + id + ":\n");
                 C3D.append("\n" + id + " = " + parteUnica + ";\n");
 
                 RESULT = id;
+
 
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2842,24 +2852,24 @@ class CUP$parser$actions {
                 if(validacionAsignacion(id, "bool", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("bool", id);
                 }
-                String parteUnica = partesOperador[0];
+                String parteUnica;
+                if (partesOperador.length > 4) {
+                    // Ya hay un temporal generado en índice 4
+                    parteUnica = partesOperador[4];
+                } else {
+                    // Es un literal directo
+                    parteUnica = partesOperador[0];
+                }
+                
                 System.out.println("Valor a guardar en bool: " + parteUnica);
 
-                // Si es un booleano siempre hacemos temporal
-                if (esBool(parteUnica)) {
-                    String tempLiteral = registroTemporalI();
-                    C3D.append("\n" + tempLiteral + " = " + parteUnica + ";\n");
-                    parteUnica = tempLiteral; 
-                } 
-                
-                // si es un temporal entonces lo asigno de una vez 
-                else if (!continuouNo(parteUnica)) {
+                // Solo crear temporal si NO es ya un temporal
+                if (!continuouNo(parteUnica)) {
                     String tempExtra = registroTemporalI();
                     C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
                     parteUnica = tempExtra;
                 }
 
-                // asignamos su id y lo mostramos
                 C3D.append("\n" + "data_bool " + id + ":\n");
                 C3D.append("\n" + id + " = " + parteUnica + ";\n");
 
