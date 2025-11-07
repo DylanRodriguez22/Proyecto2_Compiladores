@@ -2,10 +2,11 @@ void principal є э¿
    let int x = 5 - 3$
    let string saludo = "hola mundo"$
    let bool s = 5 > 3  @ 3 < 2 @ 3>=3$
-   let bool pruebita =  4 < 2 ~ 3 <=3$
+   let bool pruebita =  4 < 2 ~ 3 <=3 $
    let int prueba = 4+2$
    let int papu$
-    let float a$
+    let float a = 3.0 + 2.1$
+    let bool pp = True @ False ~ True $
     let char bb$
     let string mundo$
     let bool bandera$
