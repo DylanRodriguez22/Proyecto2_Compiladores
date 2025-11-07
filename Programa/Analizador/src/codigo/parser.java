@@ -2705,19 +2705,26 @@ class CUP$parser$actions {
                 }
                 String parteUnica = partesOperador[0];
                 System.out.println("Valor a guardar en int: " + parteUnica);
-                // Seria tipo me dan un let int x =3$
-                // Entonces yo envio un data_int x
-                String temp = registroTemporalI();
 
-                if(!esLiteral(parteUnica) && continuouNo(parteUnica) == false){ 
-                    String tempunica = registroTemporalI();
-                    C3D.append("\n" + tempunica + " = " + parteUnica + ";\n");
-                    parteUnica = tempunica;
+                // Si es literal, siempre generar un temporal
+                if (esLiteral(parteUnica)) {
+                    String tempLiteral = registroTemporalI();
+                    C3D.append("\n" + tempLiteral + " = " + parteUnica + ";\n");
+                    parteUnica = tempLiteral; // ahora parteUnica es un temporal
+                } 
+                // Si ya es un temporal pero no ha sido marcado como tal (continuouNo == false), convertirlo en temporal
+                else if (!continuouNo(parteUnica)) {
+                    String tempExtra = registroTemporalI();
+                    C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
+                    parteUnica = tempExtra;
                 }
 
+                // Finalmente asignar al id
                 C3D.append("\n" + "data_int " + id + ":\n");
                 C3D.append("\n" + id + " = " + parteUnica + ";\n");
+
                 RESULT = id;
+
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
