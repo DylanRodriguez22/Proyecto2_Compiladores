@@ -1728,6 +1728,7 @@ array_declaration ::= let_keyword int_keyword identifier:id left_bracket arithme
                 | let_keyword int_keyword identifier left_bracket arithmetic_expression right_bracket assignment_operator left_block error right_block delimiter
                 {: System.err.println("Error en inicializacion de array"); :}
 
+                // seria tipo let int arr[2] = ¿'a','b'?$
                 |  let_keyword char_keyword identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator left_block array_literals:rec right_block delimiter
                 {: 
                     System.out.println("Declaracion: array char con valores"); 
@@ -1844,7 +1845,27 @@ assign_elements_array ::= identifier:id left_bracket arithmetic_expression:op ri
                     String[] posicionArreglo = op.toString().split("::");
                     String[] elementoAsignado = element.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], elementoAsignado[1], posicionArreglo[0], elementoAsignado[0]);
+                        
+
+                    String indiceArr = posicionArreglo[0];
+                    String valor = elementoAsignado[0];
+    
+                     
+
+                    
+                    // si es un temporal entonces lo asigno de una vez 
+                    if (!esTemporal(valor)) {
+                        String tempExtra = registroTemporalI();
+                        C3D.append(tempExtra + " = " + valor + ";\n");
+                        valor = tempExtra;
+                    }
+
+                    // C3D
+
+                    C3D.append("\n" + id + "[" +  indiceArr + "] = " + valor + ";\n");
+
                 :}
+                
 
                 |  identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator CHAR_LITERAL:element delimiter
                 {: System.out.println("Asignacion a elemento de arreglo"); 

@@ -1,4 +1,5 @@
 void principal є э¿
     let int arreglo[3] = ¿1,2,3,15?$     
     let char arre[2] = ¿'a','b'?$ 
+    arreglo [1] = 2+2$
 ?

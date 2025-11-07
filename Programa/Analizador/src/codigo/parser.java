@@ -3889,6 +3889,25 @@ class CUP$parser$actions {
                     String[] posicionArreglo = op.toString().split("::");
                     String[] elementoAsignado = element.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], elementoAsignado[1], posicionArreglo[0], elementoAsignado[0]);
+                        
+
+                    String indiceArr = posicionArreglo[0];
+                    String valor = elementoAsignado[0];
+    
+                     
+
+                    
+                    // si es un temporal entonces lo asigno de una vez 
+                    if (!esTemporal(valor)) {
+                        String tempExtra = registroTemporalI();
+                        C3D.append(tempExtra + " = " + valor + ";\n");
+                        valor = tempExtra;
+                    }
+
+                    // C3D
+
+                    C3D.append("\n" + id + "[" +  indiceArr + "] = " + valor + ";\n");
+
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("assign_elements_array",14, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

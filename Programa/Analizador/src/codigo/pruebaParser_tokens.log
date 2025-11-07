@@ -36,7 +36,16 @@ COMMA                    	,              	3	28
 CHAR_LITERAL             	'b'            	3	29
 RIGHT_BLOCK              	?              	3	32
 DELIMITER                	$              	3	33
-RIGHT_BLOCK              	?              	4	1
+IDENTIFIER               	arreglo        	4	5
+UNKNOWN                  	[              	4	13
+INT_LITERAL              	1              	4	14
+UNKNOWN                  	]              	4	15
+ASSIGN                   	=              	4	17
+INT_LITERAL              	2              	4	19
+PLUS_OPERATOR            	+              	4	20
+INT_LITERAL              	2              	4	21
+DELIMITER                	$              	4	22
+RIGHT_BLOCK              	?              	5	1
 ----------------------------------------------------------
 === FIN DEL ANÁLISIS ===
 ✓ Sin errores léxicos
