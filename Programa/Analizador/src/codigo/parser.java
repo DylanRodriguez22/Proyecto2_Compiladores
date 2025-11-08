@@ -3894,17 +3894,12 @@ class CUP$parser$actions {
                     String indiceArr = posicionArreglo[0];
                     String valor = elementoAsignado[0];
     
-                     
-
-                    
                     // si es un temporal entonces lo asigno de una vez 
                     if (!esTemporal(valor)) {
                         String tempExtra = registroTemporalI();
                         C3D.append(tempExtra + " = " + valor + ";\n");
                         valor = tempExtra;
                     }
-
-                    // C3D
 
                     C3D.append("\n" + id + "[" +  indiceArr + "] = " + valor + ";\n");
 
@@ -3929,7 +3924,13 @@ class CUP$parser$actions {
 		 System.out.println("Asignacion a elemento de arreglo"); 
                     String[] posicionArreglo = op.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], "char", posicionArreglo[0], element.toString());
-                        
+                     
+
+                    String indiceArr = posicionArreglo[0];
+                    String tempChar = registroTemporalI();
+                    C3D.append(tempChar + " = " + element + ";\n");
+    
+                    C3D.append(id + "[" + indiceArr + "] = " + tempChar + ";\n");
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("assign_elements_array",14, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -3949,6 +3950,8 @@ class CUP$parser$actions {
                     System.out.println(op);
                     String[] posicionArreglo = op.toString().split("::");
                     String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1), idright); //valor::tipo::fila::columna
+                    
+
                     RESULT = elemento; //Para guardarlo y proceder con la validación posterior
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_access",15, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -3959,7 +3962,15 @@ class CUP$parser$actions {
           case 123: // input_statement ::= input_keyword identifier delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Input reconocido"); 
+		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+                    System.out.println("Input reconocido");
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + "input " + " = " + temp + ";\n");
+                    C3D.append("\n" + i + " = " + temp + ";\n");
+                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("input_statement",19, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -3995,7 +4006,17 @@ class CUP$parser$actions {
           case 127: // output_statement ::= output_keyword identifier delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Output id"); 
+		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+                    System.out.println("Output id"); 
+                    System.out.println("output reconocido");
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + "output " + " = " + temp + ";\n");
+                    C3D.append("\n" + i + " = " + temp + ";\n");
+                    
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4004,7 +4025,16 @@ class CUP$parser$actions {
           case 128: // output_statement ::= output_keyword int_literal delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Output entero"); 
+		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + i + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        System.out.println("Output entero"); 
+                        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4013,7 +4043,17 @@ class CUP$parser$actions {
           case 129: // output_statement ::= output_keyword float_literal delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Output float"); 
+		int fleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int fright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String f = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+                        System.out.println("Output float"); 
+                        String temp = registroTemporalF();
+                         C3D.append("\n" + temp + " = " + f + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        System.out.println("Output float");                        
+
+                    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4022,7 +4062,15 @@ class CUP$parser$actions {
           case 130: // output_statement ::= output_keyword bool_literal delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Output booleano"); 
+		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + b + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        System.out.println("Output booleano");                        
+                        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4031,7 +4079,15 @@ class CUP$parser$actions {
           case 131: // output_statement ::= output_keyword CHAR_LITERAL delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Output char"); 
+		int cleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String c = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + c + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        System.out.println("Output char");                      
+                        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4040,7 +4096,16 @@ class CUP$parser$actions {
           case 132: // output_statement ::= output_keyword STRING_LITERAL delimiter 
             {
               Object RESULT =null;
-		 System.out.println("Output string"); 
+		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String s = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+                        System.out.println("Output string"); 
+                    
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + s + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

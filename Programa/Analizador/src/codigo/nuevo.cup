@@ -1850,17 +1850,12 @@ assign_elements_array ::= identifier:id left_bracket arithmetic_expression:op ri
                     String indiceArr = posicionArreglo[0];
                     String valor = elementoAsignado[0];
     
-                     
-
-                    
                     // si es un temporal entonces lo asigno de una vez 
                     if (!esTemporal(valor)) {
                         String tempExtra = registroTemporalI();
                         C3D.append(tempExtra + " = " + valor + ";\n");
                         valor = tempExtra;
                     }
-
-                    // C3D
 
                     C3D.append("\n" + id + "[" +  indiceArr + "] = " + valor + ";\n");
 
@@ -1871,24 +1866,38 @@ assign_elements_array ::= identifier:id left_bracket arithmetic_expression:op ri
                 {: System.out.println("Asignacion a elemento de arreglo"); 
                     String[] posicionArreglo = op.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], "char", posicionArreglo[0], element.toString());
-                        
+                     
+
+                    String indiceArr = posicionArreglo[0];
+                    String tempChar = registroTemporalI();
+                    C3D.append(tempChar + " = " + element + ";\n");
+    
+                    C3D.append(id + "[" + indiceArr + "] = " + tempChar + ";\n");
                 :}
                 ;
 
 //Ya puede acceder a posiciones del arreglo con expresiones aritmeticas
+// esto es algo como x[2 + 3] RECORDAR HACERLO DESPUÉS PORQUE NO ENTIENDO
 array_access ::= identifier:id left_bracket arithmetic_expression:op right_bracket
                 {: //Verificar que exista el arreglo y que la expresión sea entero. Tipo arrayInt o arrayChar 
                     System.out.println(op);
                     String[] posicionArreglo = op.toString().split("::");
                     String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1), idright); //valor::tipo::fila::columna
+                    
+
                     RESULT = elemento; //Para guardarlo y proceder con la validación posterior
                 :}
                 ;
 
 
 // input y output
-input_statement ::= input_keyword identifier delimiter
-                 {: System.out.println("Input reconocido"); :}
+input_statement ::= input_keyword identifier:i delimiter
+                 {: 
+                    System.out.println("Input reconocido");
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + "input " + " = " + temp + ";\n");
+                    C3D.append("\n" + i + " = " + temp + ";\n");
+                 :}
                  |  input_keyword error delimiter
                  {: System.err.println("Error en input"); :}
                  | error input_keyword identifier delimiter
@@ -1897,19 +1906,55 @@ input_statement ::= input_keyword identifier delimiter
                  {: System.err.println("Error falta el delimitador en input"); :}
                  ;
 
+// FALTAN ERRORES EN OUTPUT
+output_statement ::= output_keyword identifier:i delimiter
+                {: 
+                    System.out.println("Output id"); 
+                    System.out.println("output reconocido");
+                    String temp = registroTemporalI();
+                    C3D.append("\n" + "output " + " = " + temp + ";\n");
+                    C3D.append("\n" + i + " = " + temp + ";\n");
+                    
+                :}
+                  |  output_keyword int_literal:i delimiter
+                    {: 
 
-output_statement ::= output_keyword identifier delimiter
-                {: System.out.println("Output id"); :}
-                  |  output_keyword int_literal delimiter
-                    {: System.out.println("Output entero"); :}
-                  |  output_keyword float_literal delimiter
-                    {: System.out.println("Output float"); :}
-                  |  output_keyword bool_literal delimiter
-                    {: System.out.println("Output booleano"); :}
-                  |  output_keyword CHAR_LITERAL delimiter
-                    {: System.out.println("Output char"); :}
-                  |  output_keyword STRING_LITERAL delimiter
-                    {: System.out.println("Output string"); :}
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + i + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        System.out.println("Output entero"); 
+                        :}
+                  |  output_keyword float_literal:f delimiter
+                    {: 
+                        System.out.println("Output float"); 
+                        String temp = registroTemporalF();
+                         C3D.append("\n" + temp + " = " + f + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        System.out.println("Output float");                        
+
+                    :}
+                  |  output_keyword bool_literal:b delimiter
+                    {: 
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + b + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        System.out.println("Output booleano");                        
+                        :}
+                  |  output_keyword CHAR_LITERAL:c delimiter
+                    {: 
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + c + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        System.out.println("Output char");                      
+                        :}
+                  |  output_keyword STRING_LITERAL:s delimiter
+                    {: 
+                        System.out.println("Output string"); 
+                    
+                        String temp = registroTemporalI();
+                        C3D.append("\n" + temp + " = " + s + ";\n");
+                        C3D.append("\n" + "output " + " = " + temp + ";\n");
+                        :}
                   | output_keyword error delimiter
                   {: System.err.println("Error en output"); :}
                   ;

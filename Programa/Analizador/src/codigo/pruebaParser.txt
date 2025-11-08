@@ -2,4 +2,12 @@ void principal є э¿
     let int arreglo[3] = ¿1,2,3,15?$     
     let char arre[2] = ¿'a','b'?$ 
     arreglo [1] = 2+2$
+    arre[1+2] = 'a'$
+    let int x = 2+3+4$
+    input b$
+    output a$
+    output "b"$
+    output 3.0$
+    output True$
+    output 'z'$
 ?
