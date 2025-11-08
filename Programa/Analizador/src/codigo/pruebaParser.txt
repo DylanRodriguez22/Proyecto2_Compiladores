@@ -5,13 +5,19 @@ void principal є э¿
     let int x = 2+3+4$
     input b$
     output a$
-    output "b"$
+    output "boludo"$
     output 3.0$
     output True$
     output 'z'$
-    decide of є 5>3 @ 3==3 э ->
-    ¿
+    let char i = 'a'$ 
+    let int y = 1$
+    decide of є x > 5 э ->
+    ¿                            
         output "x es mayor que 5"$
-    ?
+    ?                            
+    є y < 10 э ->
+    ¿                            
+        output "y es menor que 10"$
+    ?                            
     end decide$
 ?

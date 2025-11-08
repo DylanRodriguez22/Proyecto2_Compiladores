@@ -1162,6 +1162,32 @@ public class parser extends java_cup.runtime.lr_parser {
         return temp;
     }
 
+
+    // Esto puede ser que lo quuite 
+    // Porque no sé si el break va en el decide of 
+    ArrayList<String> direccionesBreak = new ArrayList<>();
+    public void AgregarDireccion(String direccion) {
+        direccionesBreak.add(direccion);
+        System.out.println("DEBUG - direcccion break: " + direccion);
+    }
+
+    public String obtenerDireccionActual() {
+        if (!direccionesBreak.isEmpty()) {
+            return direccionesBreak.get(direccionesBreak.size() - 1);
+        } else {
+            System.err.println("Error Semantico: break fuera de estructura de control");
+            return "ERROR";
+        }
+    }
+
+    public void eliminarDireccionBreak() {
+        if (!direccionesBreak.isEmpty()) {
+            String direccion = direccionesBreak.remove(direccionesBreak.size() - 1);
+            System.out.println("DEBUG - direccion break quitadc|: " + direccion);
+        }
+    }
+
+
     public DatoT crearDatoT(String tipo, String lexema, String direccion){
         return new DatoT(tipo, lexema, direccion); 
     }
@@ -4161,6 +4187,7 @@ class CUP$parser$actions {
                         C3D.append("\n" + "if " + param + " goto " + "decideOf_true" + ";\n");
                         C3D.append("\n" + "goto " + "endDecideOf" + ";\n");
                         C3D.append("\n" + "decideOf_true" + ";\n");
+                        AgregarDireccion("endDecideOf");
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("decide_of_left",28, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4183,8 +4210,8 @@ class CUP$parser$actions {
               Object RESULT =null;
 		 
                 C3D.append("\n" + "endDecideOf" + ":\n");
-                System.out.println("decide of normal");  
-                
+                System.out.println("decide of normal"); 
+                eliminarDireccionBreak(); 
                 
                 
                 
@@ -4196,7 +4223,13 @@ class CUP$parser$actions {
           case 137: // decide_of ::= decide_of_left_and_content elif_list end_keyword decide_keyword delimiter 
             {
               Object RESULT =null;
-		 System.out.println("decide of con varias condiciones"); ;
+		 
+            System.out.println("decide of con varias condiciones"); 
+
+            C3D.append("\n" + "endDecideOf" + ":\n");
+            
+            
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("decide_of",27, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4269,6 +4302,26 @@ class CUP$parser$actions {
                         //Crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("elif"); //Crear la nueva tabla para el decide of
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+
+                            AgregarDireccion("endDecideOf");
+    
+                        
+                        String param;
+                        if (expresion.length > 4 && expresion[4] != null) {
+                            param = expresion[4];
+                        } else {
+                            param = expresion[0];
+                        }
+                        
+                        C3D.append("\n" + "elif_check:\n");
+                        C3D.append("if " + param + " goto elif_true;\n");
+                        C3D.append("goto elif_next;\n");
+                        C3D.append("elif_true:\n");
+
+
+
+            
+                    
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elif_part_left",32, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4279,6 +4332,10 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 System.out.println("elif"); 
+            C3D.append("goto endDecideOf;\n");
+            C3D.append("elif_next:\n");
+            
+            eliminarDireccionBreak();
                 desapilarTablaDeSimbolos();
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elif_part",31, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -4396,9 +4453,9 @@ class CUP$parser$actions {
               Object RESULT =null;
 		 
                     System.out.println("break"); 
-                    
-                    //C3D.append("break")
-                    
+                    String direccion = obtenerDireccionActual();
+                    C3D.append("\n" + "goto " + direccion  + ";\n");
+
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("break_statement",26, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

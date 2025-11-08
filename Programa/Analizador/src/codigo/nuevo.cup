@@ -370,6 +370,32 @@ parser code {:
         return temp;
     }
 
+
+    // Esto puede ser que lo quuite 
+    // Porque no sé si el break va en el decide of 
+    ArrayList<String> direccionesBreak = new ArrayList<>();
+    public void AgregarDireccion(String direccion) {
+        direccionesBreak.add(direccion);
+        System.out.println("DEBUG - direcccion break: " + direccion);
+    }
+
+    public String obtenerDireccionActual() {
+        if (!direccionesBreak.isEmpty()) {
+            return direccionesBreak.get(direccionesBreak.size() - 1);
+        } else {
+            System.err.println("Error Semantico: break fuera de estructura de control");
+            return "ERROR";
+        }
+    }
+
+    public void eliminarDireccionBreak() {
+        if (!direccionesBreak.isEmpty()) {
+            String direccion = direccionesBreak.remove(direccionesBreak.size() - 1);
+            System.out.println("DEBUG - direccion break quitadc|: " + direccion);
+        }
+    }
+
+
     public DatoT crearDatoT(String tipo, String lexema, String direccion){
         return new DatoT(tipo, lexema, direccion); 
     }
@@ -1994,6 +2020,7 @@ decide_of_left ::=
                         C3D.append("\n" + "if " + param + " goto " + "decideOf_true" + ";\n");
                         C3D.append("\n" + "goto " + "endDecideOf" + ";\n");
                         C3D.append("\n" + "decideOf_true" + ";\n");
+                        AgregarDireccion("endDecideOf");
                     :};
 
 decide_of_left_and_content ::= 
@@ -2007,13 +2034,19 @@ decide_of_left_and_content ::=
 decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
               {: 
                 C3D.append("\n" + "endDecideOf" + ":\n");
-                System.out.println("decide of normal");  
-                
+                System.out.println("decide of normal"); 
+                eliminarDireccionBreak(); 
                 
                 
                 :}
            |  decide_of_left_and_content elif_list end_keyword decide_keyword delimiter
-           {: System.out.println("decide of con varias condiciones"); ;:}
+           {: 
+            System.out.println("decide of con varias condiciones"); 
+
+            C3D.append("\n" + "endDecideOf" + ":\n");
+            
+            
+            :}
            |  decide_of_left_and_content else_part end_keyword decide_keyword delimiter
               {: System.out.println("decide of con else"); :}          
            |  decide_of_left_and_content elif_list else_part end_keyword decide_keyword delimiter
@@ -2040,11 +2073,35 @@ elif_part_left ::= left_parenthesis:i logical_expresion_and:e right_parenthesis 
                         //Crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("elif"); //Crear la nueva tabla para el decide of
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+
+                            AgregarDireccion("endDecideOf");
+    
+                        
+                        String param;
+                        if (expresion.length > 4 && expresion[4] != null) {
+                            param = expresion[4];
+                        } else {
+                            param = expresion[0];
+                        }
+                        
+                        C3D.append("\n" + "elif_check:\n");
+                        C3D.append("if " + param + " goto elif_true;\n");
+                        C3D.append("goto elif_next;\n");
+                        C3D.append("elif_true:\n");
+
+
+
+            
+                    
                     :}
                 ;
 
 elif_part ::= elif_part_left left_block loop_content right_block 
            {: System.out.println("elif"); 
+            C3D.append("goto endDecideOf;\n");
+            C3D.append("elif_next:\n");
+            
+            eliminarDireccionBreak();
                 desapilarTablaDeSimbolos();
             :};
             
@@ -2094,9 +2151,9 @@ loop_content ::= statement
 break_statement ::= break_keyword delimiter
                  {: 
                     System.out.println("break"); 
-                    
-                    //C3D.append("break")
-                    
+                    String direccion = obtenerDireccionActual();
+                    C3D.append("\n" + "goto " + direccion  + ";\n");
+
                 :}
 ;
 
