@@ -13,5 +13,11 @@ void principal є э¿
         output "aiuda"$
     ? 
     end decide$
-
+    loop
+    let int i$
+    i = 0$
+    output i$
+    i = i + 1$
+    exit when i > 5+2$
+    end loop$
 ?

@@ -656,7 +656,7 @@ non terminal program;
 non terminal decide_of_helper;
 non terminal elif_helper;
 non terminal else_helper;
-
+non terminal loop_helper;
 // Por úlitmo un orden precendencia para el cup
 precedence left or_operator; // ~
 precedence left and_operator; // @
@@ -2225,10 +2225,21 @@ else_part ::= else_part_left left_block loop_content right_block
            {: System.out.println("else"); desapilarTablaDeSimbolos();:}
 ;
 
+// Estoy aquí
+
 //Loop
-loop_left ::= loop_keyword 
+loop_helper ::= loop_keyword
+            {:
+                String etiquetaInicioLoop = "loop_inicio_1";
+                C3D.append("\n" + etiquetaInicioLoop + ":\n");
+                AgregarDireccion(etiquetaInicioLoop);
+            :}
+            ;
+
+loop_left ::= loop_helper 
             {: 
              //Crear la tabla de símbolos
+
                 TablaDeSimbolos t = crearTablaDeSimbolos("loop"); 
                 apilarNuevaTablaDeSimbolos(t); 
             :};
@@ -2244,6 +2255,31 @@ loop ::= loop_left loop_content exit_keyword when_keyword logical_expresion_and:
             erroresSemanticos++;
          }
 
+
+        //Agarro el último temporal
+        String valorFinal;
+        String valor = expresion[expresion.length - 1];
+        if(esTemporal(valor)){
+            valorFinal = valor;
+        } else {
+            // Sino viene entonces lo que hago es asignarle un registro temporal
+            valorFinal = expresion[0];
+            if(!esTemporal(valorFinal)){
+                String tmp = registroTemporalI();
+                C3D.append(tmp + " = " + valorFinal + ";\n");
+                valorFinal = tmp;
+            }
+        }
+
+        String inicio = "loop_inicio_1";
+        String fin = "loop_fin_1";
+
+        C3D.append("if " + valorFinal + " goto " + fin + ";\n");
+        C3D.append("goto " + inicio + ";\n");
+        C3D.append(fin + ":\n");        
+
+
+         
          desapilarTablaDeSimbolos();
         :}
       | loop_left error exit_keyword when_keyword loop_keyword delimiter

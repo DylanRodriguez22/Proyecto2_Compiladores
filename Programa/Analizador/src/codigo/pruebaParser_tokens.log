@@ -71,7 +71,36 @@ RIGHT_BLOCK              	?              	14	5
 UNKNOWN                  	end            	15	5
 DECIDE                   	decide         	15	9
 DELIMITER                	$              	15	15
-RIGHT_BLOCK              	?              	17	1
+LOOP                     	loop           	16	5
+LET                      	let            	17	5
+INT                      	int            	17	9
+IDENTIFIER               	i              	17	13
+DELIMITER                	$              	17	14
+IDENTIFIER               	i              	18	5
+ASSIGN                   	=              	18	7
+INT_LITERAL              	0              	18	9
+DELIMITER                	$              	18	10
+OUTPUT                   	output         	19	5
+IDENTIFIER               	i              	19	12
+DELIMITER                	$              	19	13
+IDENTIFIER               	i              	20	5
+ASSIGN                   	=              	20	7
+IDENTIFIER               	i              	20	9
+PLUS_OPERATOR            	+              	20	11
+INT_LITERAL              	1              	20	13
+DELIMITER                	$              	20	14
+EXIT                     	exit           	21	5
+WHEN                     	when           	21	10
+IDENTIFIER               	i              	21	15
+GREATER                  	>              	21	17
+INT_LITERAL              	5              	21	19
+PLUS_OPERATOR            	+              	21	20
+INT_LITERAL              	2              	21	21
+DELIMITER                	$              	21	22
+UNKNOWN                  	end            	22	5
+LOOP                     	loop           	22	9
+DELIMITER                	$              	22	13
+RIGHT_BLOCK              	?              	23	1
 ----------------------------------------------------------
 === FIN DEL ANÁLISIS ===
 ✓ Sin errores léxicos
