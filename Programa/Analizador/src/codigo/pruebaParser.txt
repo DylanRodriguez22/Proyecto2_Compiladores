@@ -1,4 +1,5 @@
 void principal є э¿
+    let int f$
     let bool bbc = 5>3 @ 4<2$
     let int x = 2+3+4$
     let int y = 1$
@@ -20,4 +21,10 @@ void principal є э¿
     i = i + 1$
     exit when i > 5+2$
     end loop$
+    for f = 0$ step 1 to 10 do ¿
+        output a$
+    ?
+    for zz = 0$ step 1 to 10 do ¿
+        output kk$
+    ?
 ?

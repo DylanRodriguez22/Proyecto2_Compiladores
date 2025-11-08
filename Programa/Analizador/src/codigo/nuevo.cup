@@ -360,6 +360,7 @@ parser code {:
     int contadorBloque = 1;
     int contadorIF = 1;
     int encabezado = 1;
+    int contadorFor = 1;
     boolean UltimoElif = false;
     boolean existeElif = false;
     StringBuffer C3D = new StringBuffer();
@@ -657,6 +658,7 @@ non terminal decide_of_helper;
 non terminal elif_helper;
 non terminal else_helper;
 non terminal loop_helper;
+non terminal for_helperInicio;
 // Por úlitmo un orden precendencia para el cup
 precedence left or_operator; // ~
 precedence left and_operator; // @
@@ -2300,28 +2302,44 @@ break_statement ::= break_keyword delimiter
 
                 :}
 ;
+for_helperInicio ::= for_keyword
+        {:
+            C3D.append("\n" + "for_inicio " + contadorFor + ":\n");
+            RESULT = String.valueOf(contadorFor);
+            //AgregarDireccion("for1_fin");
+        :}
+        ;
 
 //For
 for_loop_left ::= 
-        for_keyword reassignment step_keyword int_literal to_keyword int_literal do_keyword 
+        for_helperInicio reassignment step_keyword int_literal:paso to_keyword int_literal:hasta do_keyword 
         {: System.out.println("for loop int to"); 
             //Crear la tabla de símbolos
+            String temp = registroTemporalI();
+            C3D.append("\n" + temp + " = " + paso + ";\n");
+            C3D.append("\n" + "for_step = " + temp + ";\n");
+            String temp2 = registroTemporalI();
+            C3D.append("\n" + temp2 + " = " + hasta + ";\n");
+            C3D.append("\n" + "for_hasta = " + hasta + ";\n");
+            String temp3 = registroTemporalI();
+            C3D.append("\n" + temp3 + " = " + temp + " >= " + hasta + ";\n");
+            C3D.append("\n" + "if " + temp3 + " goto fin_for" + contadorFor + ";\n");
             TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
             apilarNuevaTablaDeSimbolos(t); 
         :}
-          |  for_keyword reassignment step_keyword int_literal downto_keyword int_literal do_keyword 
+          |  for_helperInicio reassignment step_keyword int_literal downto_keyword int_literal do_keyword 
         {: System.out.println("for loop int downto"); 
             //Crear la tabla de símbolos
             TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
             apilarNuevaTablaDeSimbolos(t); 
         :}
-          |  for_keyword reassignment step_keyword float_literal to_keyword float_literal do_keyword 
+          |  for_helperInicio reassignment step_keyword float_literal to_keyword float_literal do_keyword 
         {: System.out.println("for loop float to"); 
             //Crear la tabla de símbolos
                 TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
                 apilarNuevaTablaDeSimbolos(t); 
         :}
-          |  for_keyword reassignment step_keyword float_literal downto_keyword float_literal do_keyword 
+          |  for_helperInicio reassignment step_keyword float_literal downto_keyword float_literal do_keyword 
         {: System.out.println("for loop float downto"); 
             //Crear la tabla de símbolos
                 TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
@@ -2331,7 +2349,13 @@ for_loop_left ::=
 
 
 for_loop ::= for_loop_left left_block loop_content right_block
-        {: System.out.println("fin for"); desapilarTablaDeSimbolos();:}
+        {: 
+            System.out.println("fin for"); desapilarTablaDeSimbolos();
+            C3D.append("\n" + "goto for_inicio" + contadorFor + ":");
+            C3D.append("\n" + "fin_for " + contadorFor + ":\n");
+            contadorFor++;
+            
+            :}
         ;
 
 //Funciones
