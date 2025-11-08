@@ -1,6 +1,5 @@
 void principal є э¿
-    let int arreglo[3] = ¿1,2,3,15?$     
-    let char arre[2] = ¿'a','b'?$ 
+    let bool bbc = 5>3 @ 4<2$p
     arreglo [1] = 2+2$
     arre[1+2] = 'a'$
     let int x = 2+3+4$
@@ -10,4 +9,9 @@ void principal є э¿
     output 3.0$
     output True$
     output 'z'$
+    decide of є 5>3 @ 3==3 э ->
+    ¿
+        output "x es mayor que 5"$
+    ?
+    end decide$
 ?

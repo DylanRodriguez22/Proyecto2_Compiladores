@@ -1963,6 +1963,7 @@ output_statement ::= output_keyword identifier:i delimiter
 decide_of_left ::= 
                 decide_keyword of_keyword:i left_parenthesis logical_expresion_and:e right_parenthesis minus_operator greater_operator
                     {:  
+                        C3D.append("\n" + "decideOf" + ":\n");
                         //Verificar que la expresión lógica sea booleana
                         String[] expresion = e.toString().split("::");
                         if(!(expresion[1].equals("bool"))){
@@ -1972,10 +1973,27 @@ decide_of_left ::=
                         ));
                         erroresSemanticos++;
                         }
+                        
 
                         //Crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("decide of"); //Crear la nueva tabla para el decide of
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                        // DECLARO PARAMAETROS EN DECIDE OF
+                        String param;
+                        if (expresion.length > 4 && expresion[4] != null) {
+                            param = expresion[4];
+                        } else {
+                            param = expresion[0];
+                        }
+
+        
+
+
+
+                        C3D.append("\n" + "param" + " = " + param + ";\n");
+                        C3D.append("\n" + "if " + param + " goto " + "decideOf_true" + ";\n");
+                        C3D.append("\n" + "goto " + "endDecideOf" + ";\n");
+                        C3D.append("\n" + "decideOf_true" + ";\n");
                     :};
 
 decide_of_left_and_content ::= 
@@ -1987,7 +2005,13 @@ decide_of_left_and_content ::=
                             
 
 decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
-              {: System.out.println("decide of normal");  :}
+              {: 
+                C3D.append("\n" + "endDecideOf" + ":\n");
+                System.out.println("decide of normal");  
+                
+                
+                
+                :}
            |  decide_of_left_and_content elif_list end_keyword decide_keyword delimiter
            {: System.out.println("decide of con varias condiciones"); ;:}
            |  decide_of_left_and_content else_part end_keyword decide_keyword delimiter
@@ -2068,7 +2092,12 @@ loop_content ::= statement
               ;
 
 break_statement ::= break_keyword delimiter
-                 {: System.out.println("break"); :}
+                 {: 
+                    System.out.println("break"); 
+                    
+                    //C3D.append("break")
+                    
+                :}
 ;
 
 //For

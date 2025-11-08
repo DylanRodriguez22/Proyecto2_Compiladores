@@ -4130,6 +4130,7 @@ class CUP$parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 		  
+                        C3D.append("\n" + "decideOf" + ":\n");
                         //Verificar que la expresión lógica sea booleana
                         String[] expresion = e.toString().split("::");
                         if(!(expresion[1].equals("bool"))){
@@ -4139,10 +4140,27 @@ class CUP$parser$actions {
                         ));
                         erroresSemanticos++;
                         }
+                        
 
                         //Crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("decide of"); //Crear la nueva tabla para el decide of
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
+                        // DECLARO PARAMAETROS EN DECIDE OF
+                        String param;
+                        if (expresion.length > 4 && expresion[4] != null) {
+                            param = expresion[4];
+                        } else {
+                            param = expresion[0];
+                        }
+
+        
+
+
+
+                        C3D.append("\n" + "param" + " = " + param + ";\n");
+                        C3D.append("\n" + "if " + param + " goto " + "decideOf_true" + ";\n");
+                        C3D.append("\n" + "goto " + "endDecideOf" + ";\n");
+                        C3D.append("\n" + "decideOf_true" + ";\n");
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("decide_of_left",28, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4163,7 +4181,13 @@ class CUP$parser$actions {
           case 136: // decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter 
             {
               Object RESULT =null;
-		 System.out.println("decide of normal");  
+		 
+                C3D.append("\n" + "endDecideOf" + ":\n");
+                System.out.println("decide of normal");  
+                
+                
+                
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("decide_of",27, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4370,7 +4394,12 @@ class CUP$parser$actions {
           case 154: // break_statement ::= break_keyword delimiter 
             {
               Object RESULT =null;
-		 System.out.println("break"); 
+		 
+                    System.out.println("break"); 
+                    
+                    //C3D.append("break")
+                    
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("break_statement",26, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
