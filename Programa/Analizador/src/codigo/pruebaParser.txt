@@ -1,22 +1,15 @@
 void principal є э¿
-    let bool bbc = 5>3 @ 4<2$p
-    arreglo [1] = 2+2$
-    arre[1+2] = 'a'$
+    let bool bbc = 5>3 @ 4<2$
     let int x = 2+3+4$
-    input b$
-    output a$
-    output "boludo"$
-    output 3.0$
-    output True$
-    output 'z'$
-    let char i = 'a'$ 
     let int y = 1$
     decide of є x > 5 э ->
     ¿                            
         output "x es mayor que 5"$
+        break$
     ?                            
     є y < 10 э ->
-    ¿                            
+    ¿           
+        break$                 
         output "y es menor que 10"$
     ?                            
     end decide$
