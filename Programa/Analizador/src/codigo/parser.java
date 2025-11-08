@@ -1158,9 +1158,13 @@ public class parser extends java_cup.runtime.lr_parser {
     int contadorBloque = 1;
     int contadorIF = 1;
     int encabezado = 1;
-
+    boolean UltimoElif = false;
+    boolean existeElif = false;
     StringBuffer C3D = new StringBuffer();
 
+
+
+    
     public String registroTemporalI()
     {
         String temp = "t" + contadorTemporalINT;
@@ -4213,22 +4217,20 @@ class CUP$parser$actions {
                         } else {
                             param = expresion[0];
                         }
-                    String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
-
-                        //int contador2IF = contadorIF - 1;
                         String etiquetaBloque = "if_bloque" + contadorBloque;
                         String etiquetaFin = "if_" + contadorIF + "_fin";
-                        String etiquetaBloqueSig = "if_bloque" + (contadorBloque + 1);
+                        String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
+                        
+                        C3D.append("if " + param + " goto " + etiquetaBloque + ":\n"); 
+                        
 
-                        C3D.append("if " + param + " goto " + etiquetaBloque + ":\n");
-                        C3D.append("goto " + etiquetaEncabezado + ":\n");  
+                        C3D.append("goto " + etiquetaEncabezado + ";\n");
+                        
                         C3D.append("\n" + etiquetaBloque + ":\n");
                         AgregarDireccion(etiquetaFin);
-    System.out.println("soy contador" + contadorIF);
-
+                        
                         contadorBloque++;
                         contadorIF++;
-                            System.out.println("soy contador" + contadorIF);
 
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("decide_of_left",28, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -4251,11 +4253,13 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-                C3D.append("goto if_1_fin;\n");
-                C3D.append("\nif_1_fin:\n");
-
-                System.out.println("decide of normal"); 
-                eliminarDireccionBreak(); 
+            String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
+            C3D.append("\n" + etiquetaEncabezado + ":\n");
+            C3D.append("goto if_1_fin;\n");
+            
+            C3D.append("\nif_1_fin:\n");
+            System.out.println("decide of normal"); 
+            eliminarDireccionBreak(); 
                 
                 
                 
@@ -4311,6 +4315,9 @@ class CUP$parser$actions {
           case 142: // elif_list ::= elif_part 
             {
               Object RESULT =null;
+		
+    UltimoElif = true;
+    System.out.println("llegue al final");
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elif_list",30, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4320,7 +4327,11 @@ class CUP$parser$actions {
           case 143: // elif_list ::= elif_list elif_part 
             {
               Object RESULT =null;
-
+		
+        UltimoElif = false;
+        existeElif = true;
+        System.out.println("me faltan elif");
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elif_list",30, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4334,13 +4345,11 @@ class CUP$parser$actions {
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
     System.out.println("soy contador" + contadorIF);
-
     C3D.append("goto if_1_fin;\n");
     String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
     C3D.append("\n" + etiquetaEncabezado + ":\n");
     
-    RESULT = String.valueOf(contadorIF);
-    contadorIF++;
+    RESULT = String.valueOf(encabezado);
 
 
 
@@ -4379,14 +4388,26 @@ class CUP$parser$actions {
                         } else {
                             param = expresion[0];
                         }
-                        
                         String etiquetaBloque = "if_bloque" + contadorBloque;
+                        String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
                         
                         C3D.append("if " + param + " goto " + etiquetaBloque + ";\n");
-                        C3D.append("goto if_1_fin;\n");
+
+                        System.out.println("wuju" + UltimoElif);
+                        // 🔥 AQUÍ SÍ PUEDES USAR esUltimoElif
+                        if (UltimoElif) {
+                            // Si es el último elif, no vayas al siguiente encabezado, ve directo al fin
+                            C3D.append("goto if_1_fin;\n");
+                        } else {
+                            // Si hay más elifs, ve al siguiente encabezado
+                            encabezado++;
+                            String etiquetaEncabezado2 = "if_" + encabezado + "_encabezado";
+                            C3D.append("goto " + etiquetaEncabezado2 + ";\n");
+                        }
+                        
                         C3D.append("\n" + etiquetaBloque + ":\n");
                         
-                        contadorBloque++;                    
+                        contadorBloque++;                     
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elif_part_left",32, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

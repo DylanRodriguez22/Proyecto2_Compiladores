@@ -47,27 +47,11 @@ LEFT_BLOCK               	¿              	6	5
 OUTPUT                   	output         	7	9
 STRING_LITERAL           	"x es mayor que 5"	7	16
 DELIMITER                	$              	7	34
-BREAK                    	break          	8	9
-DELIMITER                	$              	8	14
-RIGHT_BLOCK              	?              	9	5
-LEFT_PAREN               	є              	10	5
-IDENTIFIER               	y              	10	7
-LESS                     	<              	10	9
-INT_LITERAL              	10             	10	11
-RIGHT_PAREN              	э              	10	14
-MINUS_OPERATOR           	-              	10	16
-GREATER                  	>              	10	17
-LEFT_BLOCK               	¿              	11	5
-BREAK                    	break          	12	9
-DELIMITER                	$              	12	14
-OUTPUT                   	output         	13	9
-STRING_LITERAL           	"y es menor que 10"	13	16
-DELIMITER                	$              	13	35
-RIGHT_BLOCK              	?              	14	5
-UNKNOWN                  	end            	15	5
-DECIDE                   	decide         	15	9
-DELIMITER                	$              	15	15
-RIGHT_BLOCK              	?              	16	1
+RIGHT_BLOCK              	?              	8	5
+UNKNOWN                  	end            	9	5
+DECIDE                   	decide         	9	9
+DELIMITER                	$              	9	15
+RIGHT_BLOCK              	?              	11	1
 ----------------------------------------------------------
 === FIN DEL ANÁLISIS ===
 ✓ Sin errores léxicos

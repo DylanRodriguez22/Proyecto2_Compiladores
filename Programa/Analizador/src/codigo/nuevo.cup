@@ -360,9 +360,13 @@ parser code {:
     int contadorBloque = 1;
     int contadorIF = 1;
     int encabezado = 1;
-
+    boolean UltimoElif = false;
+    boolean existeElif = false;
     StringBuffer C3D = new StringBuffer();
 
+
+
+    
     public String registroTemporalI()
     {
         String temp = "t" + contadorTemporalINT;
@@ -2035,22 +2039,20 @@ decide_of_left ::=
                         } else {
                             param = expresion[0];
                         }
-                    String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
-
-                        //int contador2IF = contadorIF - 1;
                         String etiquetaBloque = "if_bloque" + contadorBloque;
                         String etiquetaFin = "if_" + contadorIF + "_fin";
-                        String etiquetaBloqueSig = "if_bloque" + (contadorBloque + 1);
+                        String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
+                        
+                        C3D.append("if " + param + " goto " + etiquetaBloque + ":\n"); 
+                        
 
-                        C3D.append("if " + param + " goto " + etiquetaBloque + ":\n");
-                        C3D.append("goto " + etiquetaEncabezado + ":\n");  
+                        C3D.append("goto " + etiquetaEncabezado + ";\n");
+                        
                         C3D.append("\n" + etiquetaBloque + ":\n");
                         AgregarDireccion(etiquetaFin);
-    System.out.println("soy contador" + contadorIF);
-
+                        
                         contadorBloque++;
                         contadorIF++;
-                            System.out.println("soy contador" + contadorIF);
 
                     :};
 
@@ -2066,11 +2068,13 @@ decide_of_left_and_content ::=
 
 decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
               {: 
-                C3D.append("goto if_1_fin;\n");
-                C3D.append("\nif_1_fin:\n");
-
-                System.out.println("decide of normal"); 
-                eliminarDireccionBreak(); 
+            String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
+            C3D.append("\n" + etiquetaEncabezado + ":\n");
+            C3D.append("goto if_1_fin;\n");
+            
+            C3D.append("\nif_1_fin:\n");
+            System.out.println("decide of normal"); 
+            eliminarDireccionBreak(); 
                 
                 
                 :}
@@ -2092,19 +2096,24 @@ decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
            {: System.err.println("Error en condicion de decide of"); :}
            ;
 
-elif_list ::= elif_part
-           |  elif_list elif_part
+elif_list ::= elif_part {:
+    UltimoElif = true;
+    System.out.println("llegue al final");
+:}
+        |  elif_list elif_part {:
+        UltimoElif = false;
+        existeElif = true;
+        System.out.println("me faltan elif");
+        :}
            ;
 
 elif_helper ::= left_parenthesis:i {:
     System.out.println("soy contador" + contadorIF);
-
     C3D.append("goto if_1_fin;\n");
     String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
     C3D.append("\n" + etiquetaEncabezado + ":\n");
     
-    RESULT = String.valueOf(contadorIF);
-    contadorIF++;
+    RESULT = String.valueOf(encabezado);
 
 
 
@@ -2134,14 +2143,26 @@ elif_part_left ::= elif_helper logical_expresion_and:e right_parenthesis minus_o
                         } else {
                             param = expresion[0];
                         }
-                        
                         String etiquetaBloque = "if_bloque" + contadorBloque;
+                        String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
                         
                         C3D.append("if " + param + " goto " + etiquetaBloque + ";\n");
-                        C3D.append("goto if_1_fin;\n");
+
+                        System.out.println("wuju" + UltimoElif);
+                        // 🔥 AQUÍ SÍ PUEDES USAR esUltimoElif
+                        if (UltimoElif) {
+                            // Si es el último elif, no vayas al siguiente encabezado, ve directo al fin
+                            C3D.append("goto if_1_fin;\n");
+                        } else {
+                            // Si hay más elifs, ve al siguiente encabezado
+                            encabezado++;
+                            String etiquetaEncabezado2 = "if_" + encabezado + "_encabezado";
+                            C3D.append("goto " + etiquetaEncabezado2 + ";\n");
+                        }
+                        
                         C3D.append("\n" + etiquetaBloque + ":\n");
                         
-                        contadorBloque++;                    
+                        contadorBloque++;                     
                     :}
                 ;
 
