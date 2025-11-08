@@ -48,10 +48,30 @@ OUTPUT                   	output         	7	9
 STRING_LITERAL           	"x es mayor que 5"	7	16
 DELIMITER                	$              	7	34
 RIGHT_BLOCK              	?              	8	5
-UNKNOWN                  	end            	9	5
-DECIDE                   	decide         	9	9
-DELIMITER                	$              	9	15
-RIGHT_BLOCK              	?              	11	1
+LEFT_PAREN               	є              	8	7
+IDENTIFIER               	y              	8	9
+LESS                     	<              	8	11
+INT_LITERAL              	5              	8	13
+RIGHT_PAREN              	э              	8	15
+MINUS_OPERATOR           	-              	8	17
+GREATER                  	>              	8	18
+LEFT_BLOCK               	¿              	9	5
+OUTPUT                   	output         	10	9
+STRING_LITERAL           	"puede ser pa" 	10	16
+DELIMITER                	$              	10	30
+RIGHT_BLOCK              	?              	11	5
+ELSE                     	else           	11	7
+MINUS_OPERATOR           	-              	11	12
+GREATER                  	>              	11	13
+LEFT_BLOCK               	¿              	12	5
+OUTPUT                   	output         	13	9
+STRING_LITERAL           	"aiuda"        	13	16
+DELIMITER                	$              	13	23
+RIGHT_BLOCK              	?              	14	5
+UNKNOWN                  	end            	15	5
+DECIDE                   	decide         	15	9
+DELIMITER                	$              	15	15
+RIGHT_BLOCK              	?              	17	1
 ----------------------------------------------------------
 === FIN DEL ANÁLISIS ===
 ✓ Sin errores léxicos

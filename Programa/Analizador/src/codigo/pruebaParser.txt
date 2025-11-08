@@ -5,7 +5,13 @@ void principal є э¿
     decide of є x > 5 э ->
     ¿                            
         output "x es mayor que 5"$
-    ?                    
+    ? є y < 5 э ->
+    ¿
+        output "puede ser pa"$
+    ? else -> 
+    ¿
+        output "aiuda"$
+    ? 
     end decide$
 
 ?
