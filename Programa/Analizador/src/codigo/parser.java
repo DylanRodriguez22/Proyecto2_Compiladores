@@ -4834,7 +4834,8 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-    
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;
     C3D.append("\n" + "inicio_funcionInt" + contadorFuncINT + ":\n");
     funcInt = true;
 
@@ -4848,7 +4849,8 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-    
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;
     C3D.append("\n" + "inicio_funcionFloat" + contadorFuncFLOAT + ":\n");
     funcFloat = true; 
     
@@ -4861,7 +4863,8 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-    
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;    
     C3D.append("\n" + "inicio_funcionBool" + contadorFuncBOOL + ":\n");
     funcBool = true; 
     
@@ -4874,7 +4877,8 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-    
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;    
     C3D.append("\n" + "inicio_funcionChar" + contadorFuncCHAR + ":\n");
     funcChar = true; 
     
@@ -4887,7 +4891,8 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;
     C3D.append("\n" + "inicio_funcionString" + contadorFuncSTRING + ":\n");
     funcString = true; 
     
@@ -4900,7 +4905,8 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;
     C3D.append("\n" + "inicio_funcionVoid" + contadorFuncVOID + ":\n");
     funcVoid = true; 
     

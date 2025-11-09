@@ -2427,7 +2427,8 @@ for_loop ::= for_loop_left left_block loop_content right_block
 
 function_helper ::= int_keyword 
 {: 
-    
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;
     C3D.append("\n" + "inicio_funcionInt" + contadorFuncINT + ":\n");
     funcInt = true;
 
@@ -2435,7 +2436,8 @@ function_helper ::= int_keyword
 
 function_helperF ::= float_keyword 
 {: 
-    
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;
     C3D.append("\n" + "inicio_funcionFloat" + contadorFuncFLOAT + ":\n");
     funcFloat = true; 
     :};
@@ -2443,7 +2445,8 @@ function_helperF ::= float_keyword
 
 function_helperB ::= bool_keyword 
 {: 
-    
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;    
     C3D.append("\n" + "inicio_funcionBool" + contadorFuncBOOL + ":\n");
     funcBool = true; 
     :};
@@ -2451,7 +2454,8 @@ function_helperB ::= bool_keyword
 
 function_helperC ::= char_keyword 
 {: 
-    
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;    
     C3D.append("\n" + "inicio_funcionChar" + contadorFuncCHAR + ":\n");
     funcChar = true; 
     :};
@@ -2459,14 +2463,16 @@ function_helperC ::= char_keyword
 
 function_helperS ::= string_keyword 
 {: 
-
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;
     C3D.append("\n" + "inicio_funcionString" + contadorFuncSTRING + ":\n");
     funcString = true; 
     :};
 
 function_helperV ::= void_keyword 
 {: 
-
+    contadorTemporalINT = 1;
+    contadorTemporalFLOAT = 1;
     C3D.append("\n" + "inicio_funcionVoid" + contadorFuncVOID + ":\n");
     funcVoid = true; 
     :};
