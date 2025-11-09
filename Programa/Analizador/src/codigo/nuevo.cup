@@ -14,6 +14,8 @@ action code {:
          System.out.println(tablaActual.toString());
     }
     
+
+
     //Se crea una nueva tabla de símbolos
     public TablaDeSimbolos crearTablaDeSimbolos(String nombre){
         return new TablaDeSimbolos(nombre);
@@ -323,6 +325,21 @@ parser code {:
         System.err.println("   Token inesperado: " + s.value);
     }
     
+    public String revisarTemporal(){
+        
+
+        if(codigo.Lexer.hayFloat){
+            String temp = "f" + contadorTemporalFloat;
+            contadorTemporalFloat++;
+            return temp;
+        } else
+        {
+            String temp = "t" + contadorTemporalInt;
+            contadorTemporalInt++;
+            return temp;
+        }
+    }
+
     public void report_error(String message, Object info) {
         System.err.println("ERROR: " + message);
     }
