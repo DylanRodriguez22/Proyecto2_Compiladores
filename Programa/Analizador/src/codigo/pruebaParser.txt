@@ -3,6 +3,7 @@ int suma є э ¿
     let int b$
     a = 2$
     b = 3$
+
     return a + b$
 ?
 
@@ -18,7 +19,7 @@ float calcularPromedio є float nota1, float nota2, float nota3 э ¿
 ?
 
 bool esMayor є int x, int y э ¿
-    decide of є x > y э -> ¿
+    decide of є x == y э -> ¿
         output prueba$
         return True$
     ?
@@ -54,11 +55,12 @@ string mamawebo2  є э ¿
     output madremia$
     return final$
 ?
+¡
 void jijijaja є э ¿
     let int LL = 5+2$
     let int peru = 5*4 - 3 - 2$
 ?
-
+!
 
 void principal є э¿
     let bool bbc = 5>3 @ 4<2$
