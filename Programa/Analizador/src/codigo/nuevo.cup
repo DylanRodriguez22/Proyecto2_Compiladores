@@ -673,6 +673,10 @@ non terminal for_helperInicio;
 non terminal function_helper;
 non terminal function_helperF;
 non terminal function_helperB;
+non terminal function_helperC;
+non terminal function_helperS;
+non terminal function_helperV;
+
 
 // Por úlitmo un orden precendencia para el cup
 precedence left or_operator; // ~
@@ -2445,6 +2449,29 @@ function_helperB ::= bool_keyword
     :};
 
 
+function_helperC ::= char_keyword 
+{: 
+    
+    C3D.append("\n" + "inicio_funcionChar" + contadorFuncCHAR + ":\n");
+    funcChar = true; 
+    :};
+
+
+function_helperS ::= string_keyword 
+{: 
+
+    C3D.append("\n" + "inicio_funcionString" + contadorFuncSTRING + ":\n");
+    funcString = true; 
+    :};
+
+function_helperV ::= void_keyword 
+{: 
+
+    C3D.append("\n" + "inicio_funcionVoid" + contadorFuncVOID + ":\n");
+    funcVoid = true; 
+    :};
+
+
 //Esta parte es para poder tomar el identificador y ejecutar el código que va a crear la tabla de símbolos de esta parte
 function_left ::=  
            // Solo para enteros 
@@ -2473,7 +2500,7 @@ function_left ::=
                     //Agregar a la tabla de funciones
                     agregarFuncion(id, "bool", (idleft + 1));
                 :}
-            |  char_keyword identifier:id
+            |  function_helperC identifier:id
                 {: System.out.println("Crear tabla de símbolos para función char: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
@@ -2481,7 +2508,7 @@ function_left ::=
                     //Agregar a la tabla de funciones
                     agregarFuncion(id, "char", (idleft + 1));
                 :}
-            |  string_keyword identifier:id
+            |  function_helperS identifier:id
                 {: System.out.println("Crear tabla de símbolos para función string: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
@@ -2489,7 +2516,7 @@ function_left ::=
                     //Agregar a la tabla de funciones
                     agregarFuncion(id, "string", (idleft + 1));
                 :}
-            |  void_keyword identifier:id
+            |  function_helperV identifier:id
                 {: System.out.println("Crear tabla de símbolos para función void: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
@@ -2522,6 +2549,25 @@ function ::=
                 C3D.append("\n" + "fin_funcionBool" + contadorFuncBOOL + ":\n");
                 contadorFuncBOOL++;
                 funcBool = false;
+
+                }
+                if (funcChar == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionChar" + contadorFuncCHAR + ":\n");
+                contadorFuncCHAR++;
+                funcChar = false;
+
+                }
+                if (funcString == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionString" + contadorFuncSTRING + ":\n");
+                contadorFuncSTRING++;
+                funcString = false;
+                }
+                if (funcVoid == true){
+                C3D.append("\n" + "fin_funcionVoid" + contadorFuncVOID + ":\n");
+                contadorFuncVOID++;
+                funcVoid = false;
 
                 }
 

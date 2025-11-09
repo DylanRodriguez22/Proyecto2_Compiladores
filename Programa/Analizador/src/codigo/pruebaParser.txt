@@ -17,6 +17,19 @@ bool evelda  є э ¿
     let bool res = z @ y$
     return res$
 ?
+char mamawebo  є э ¿
+    let char final = 'a'$
+    return final$
+?
+string mamawebo2  є э ¿
+    let string final2 = "Papuuu"$
+    output madremia$
+    return final$
+?
+void jijijaja є э ¿
+    let int LL = 5+2$
+    let int peru = 5*4 > 3-2$
+?
 
 
 void principal є э¿
