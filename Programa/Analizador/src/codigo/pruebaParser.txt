@@ -1,9 +1,8 @@
 void principal є э¿
-    let bool bbc = 5>3 @ 4<2$
-    let int x = 5$
-    let int y = 10$
+    let int x = 2$
+    let bool papa = True$
+    let float y = 1.0 + 2.0$
     let bool prueba = 5>5 @ 10 < 3$
-    let bool resultado = Σ x > y$
     let bool activo = True$
     let bool inactivo = Σactivo$
     output inactivo$
