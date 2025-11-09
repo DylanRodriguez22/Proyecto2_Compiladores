@@ -1,31 +1,26 @@
+int suma є э ¿
+    let int a$
+    let int b$
+    a = 2$
+    b = 3$
+    return a + b$
+?
+
+float resta  є э ¿
+    let float z$
+    z = 2.0$
+    return z - 3.0$
+?
+bool evelda  є э ¿
+    let bool z = 5 > 3$
+    let bool y = 3 == 3$
+    let bool res = z @ y$
+    return res$
+?
+
+
 void principal є э¿
-    let int f$
     let bool bbc = 5>3 @ 4<2$
-    let int x = 2+3+4$
+    let bool x = 2>3 @ 3<2$
     let int y = 1$
-    decide of є x > 5 э ->
-    ¿                            
-        output "x es mayor que 5"$
-    ? є y < 5 э ->
-    ¿
-        output "puede ser pa"$
-    ? else -> 
-    ¿
-        output "aiuda"$
-    ? 
-    end decide$
-    loop
-    let int i$
-    i = 0$
-    output i$
-    i = i + 1$
-    exit when i > 5+2$
-    end loop$
-    let float p$
-    for f = 13.0$ step 1.0 downto 10.0 do ¿
-        output a$
-    ?
-    for p =1.0$ step 3.0 to 10.0 do ¿
-        output papa$
-    ?
 ?

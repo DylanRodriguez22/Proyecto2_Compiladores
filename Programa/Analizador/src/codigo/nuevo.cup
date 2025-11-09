@@ -363,10 +363,21 @@ parser code {:
     int contadorFor = 1;
     boolean UltimoElif = false;
     boolean existeElif = false;
+    int contadorFuncINT = 1;
+    int contadorFuncFLOAT = 1;
+    int contadorFuncCHAR = 1;
+    int contadorFuncSTRING = 1;
+    int contadorFuncBOOL = 1;
+    int contadorFuncVOID = 1;
     StringBuffer C3D = new StringBuffer();
 
 
-
+    boolean funcFloat = false;
+    boolean funcInt = false;
+    boolean funcChar = false;
+    boolean funcString = false;
+    boolean funcBool = false;
+    boolean funcVoid = false;
     
     public String registroTemporalI()
     {
@@ -659,6 +670,10 @@ non terminal elif_helper;
 non terminal else_helper;
 non terminal loop_helper;
 non terminal for_helperInicio;
+non terminal function_helper;
+non terminal function_helperF;
+non terminal function_helperB;
+
 // Por úlitmo un orden precendencia para el cup
 precedence left or_operator; // ~
 precedence left and_operator; // @
@@ -2406,10 +2421,34 @@ for_loop ::= for_loop_left left_block loop_content right_block
 
 //Funciones
 
+function_helper ::= int_keyword 
+{: 
+    
+    C3D.append("\n" + "inicio_funcionInt" + contadorFuncINT + ":\n");
+    funcInt = true;
+
+    :};
+
+function_helperF ::= float_keyword 
+{: 
+    
+    C3D.append("\n" + "inicio_funcionFloat" + contadorFuncFLOAT + ":\n");
+    funcFloat = true; 
+    :};
+
+
+function_helperB ::= bool_keyword 
+{: 
+    
+    C3D.append("\n" + "inicio_funcionBool" + contadorFuncBOOL + ":\n");
+    funcBool = true; 
+    :};
+
+
 //Esta parte es para poder tomar el identificador y ejecutar el código que va a crear la tabla de símbolos de esta parte
 function_left ::=  
            // Solo para enteros 
-            int_keyword identifier:id
+            function_helper identifier:id
                 {: 
                     System.out.println("Crear tabla de símbolos para función int: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
@@ -2418,7 +2457,7 @@ function_left ::=
                     //Agregar a la tabla de funciones
                     agregarFuncion(id, "int", (idleft + 1));
                 :}
-            |  float_keyword identifier:id
+            |  function_helperF identifier:id
                 {: System.out.println("Crear tabla de símbolos para función flotante: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
@@ -2426,7 +2465,7 @@ function_left ::=
                     //Agregar a la tabla de funciones
                     agregarFuncion(id, "float", (idleft + 1));
                 :}
-            |  bool_keyword identifier:id
+            |  function_helperB identifier:id
                 {: System.out.println("Crear tabla de símbolos para función bool: " +id); 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
@@ -2462,8 +2501,30 @@ function_left ::=
 
 function ::= 
           // Solo para enteros 
-          function_left left_parenthesis right_parenthesis block
+          function_left left_parenthesis right_parenthesis block:var
             {: 
+                int cont = contadorTemporalINT - 1;
+                if(funcInt == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcion" + contadorFuncINT + ":\n");
+                contadorTemporalINT++;
+                funcInt = false;
+                }
+                if ( funcFloat == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionFloat" + contadorFuncFLOAT + ":\n");
+                contadorTemporalFLOAT++;
+                funcFloat = false;
+
+                }
+                if (funcBool == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionBool" + contadorFuncBOOL + ":\n");
+                contadorFuncBOOL++;
+                funcBool = false;
+
+                }
+
                 //Aquí desapilo
                 desapilarTablaDeSimbolos();
                 
