@@ -10,9 +10,7 @@ action code {:
     String funcionActual = "";
 
     int erroresSemanticos = 0;
-    public void hola(){
-         System.out.println(tablaActual.toString());
-    }
+    
     
     //Se crea una nueva tabla de símbolos
     public TablaDeSimbolos crearTablaDeSimbolos(String nombre){
@@ -95,6 +93,74 @@ action code {:
             System.err.println(String.format(
                 "Error Semantico: Ambos operandos en la %s de la linea %s deben ser enteros o flotantes.",
                 operacion, linea1
+            ));
+            erroresSemanticos++;
+            return "null";
+        }
+    }
+
+    public String verificacionAritmeticaDivisionFlotante(String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
+        boolean tipo1b = true;
+        boolean tipo2b = true;
+
+        if(!(tipo1.equals("float"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando izquierdo de la division en la linea %s columna %s debe ser flotante.", 
+                linea1, columna1
+            ));
+            erroresSemanticos++;
+            tipo1b = false;
+        }
+
+        if(!(tipo2.equals("float"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando derecho de la division en la linea %s columna %s debe ser flotante.",
+                linea2, columna2
+            ));
+            erroresSemanticos++;
+            tipo2b = false;
+        }
+
+        if(tipo1b && tipo2b && tipo1.equals(tipo2)){
+            return tipo1;
+        } else {
+            System.err.println(String.format(
+                "Error Semantico: Ambos operandos en la division de la linea %s deben ser flotantes.",
+                linea1
+            ));
+            erroresSemanticos++;
+            return "null";
+        }
+    }
+
+    public String verificacionAritmeticaDivisionEntera(String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
+        boolean tipo1b = true;
+        boolean tipo2b = true;
+
+        if(!(tipo1.equals("int"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando izquierdo de la division entera en la linea %s columna %s debe ser entero.", 
+                linea1, columna1
+            ));
+            erroresSemanticos++;
+            tipo1b = false;
+        }
+
+        if(!(tipo2.equals("int"))){
+            System.err.println(String.format(
+                "Error Semantico: El operando derecho de la division entera en la linea %s columna %s debe ser entero.",
+                linea2, columna2
+            ));
+            erroresSemanticos++;
+            tipo2b = false;
+        }
+
+        if(tipo1b && tipo2b && tipo1.equals(tipo2)){
+            return tipo1;
+        } else {
+            System.err.println(String.format(
+                "Error Semantico: Ambos operandos en la division de la linea %s deben ser enteros.",
+                linea1
             ));
             erroresSemanticos++;
             return "null";
@@ -203,11 +269,20 @@ action code {:
             verificacionOperador2 = false;
         }
 
-        //Si pasan las verificaciones se resuelve la expresión
-        if(verificacionOperador1 && verificacionOperador2){
+        //Si pasan las verificaciones se resuelve la expresión en el caso de que ambos sean del mismo tipo
+        if(verificacionOperador1 && verificacionOperador2 && (tipo1.equals(tipo2))){
+            
             retorno = operador1 + operacionSimbolo + operador2 + "::bool::" + linea1 + "::" + columna1; 
+        }else{
+            System.err.println(String.format(
+                "Error Semantico: Ambos operandos de la operacion %s en la linea %s columna %s debe ser del mismo tipo sean enteros o flotantes.", 
+                operacionTexto, linea2, columna2
+            ));
+            erroresSemanticos++;
         }
         return retorno;
+
+        
     }
 
     public String validacionRelacionalConBoleanos(String operacionTexto , String operacionSimbolo, String operador1 , String operador2 ,String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
@@ -235,8 +310,14 @@ action code {:
         }
 
         //Si pasan las verificaciones se resuelve la expresión
-        if(verificacionOperador1 && verificacionOperador2){
+        if(verificacionOperador1 && verificacionOperador2 && (tipo1.equals(tipo2))){
             retorno = operador1 + operacionSimbolo + operador2 + "::bool::" + linea1 + "::" + columna1; 
+        }else{
+            System.err.println(String.format(
+                "Error Semantico: Ambos operandos de la operacion %s en la linea %s columna %s debe ser del mismo tipo sean enteros, flotantes o booleanos.", 
+                operacionTexto, linea2, columna2
+            ));
+            erroresSemanticos++;
         }
         return retorno;
     }
@@ -675,7 +756,6 @@ non terminal function_helperF;
 non terminal function_helperB;
 non terminal function_helperC;
 non terminal function_helperS;
-non terminal function_helperV;
 
 
 // Por úlitmo un orden precendencia para el cup
@@ -803,7 +883,7 @@ term ::= term:e1 multiplication_operator power:e2
       {: System.out.println("Division (/)"); 
         String[] partesE1 = e1.toString().split("::");
         String[] partesE2 = e2.toString().split("::");
-        String verificacion = verifiacionSemanticaAritmeticaBinaria("division", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+        String verificacion = verificacionAritmeticaDivisionFlotante(partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
 
 
         String divsimpleIzq = partesE1[0]; // parte izquierda de la division
@@ -830,12 +910,14 @@ term ::= term:e1 multiplication_operator power:e2
 
        
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+       
+        
       :}
       |  term:e1 int_division_operator power:e2
       {: System.out.println("Division entera (//)");
         String[] partesE1 = e1.toString().split("::");
         String[] partesE2 = e2.toString().split("::");
-        String verificacion = verifiacionSemanticaAritmeticaBinaria("division entera", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
+        String verificacion = verificacionAritmeticaDivisionEntera(partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
 
         String diventeraIzq = partesE1[0]; // parte izquierda de la division entera
@@ -2045,7 +2127,7 @@ decide_of_left ::=
                         if(!(expresion[1].equals("bool"))){
                             System.err.println(String.format(
                             "Error Semantico: La expresion %s es de tipo %s. Debe ser de tipo bool para poder se utilizada como condicion en la estructura Decide Of. Linea %s.", 
-                            expresion[0], expresion[1], ileft+1
+                            expresion[0], expresion[1], eleft+1
                         ));
                         erroresSemanticos++;
                         }
@@ -2176,7 +2258,7 @@ elif_part_left ::= elif_helper logical_expresion_and:e right_parenthesis minus_o
                         if(!(expresion[1].equals("bool"))){
                             System.err.println(String.format(
                             "Error Semantico: La expresion %s es de tipo %s. Debe ser de tipo bool para poder se utilizada como condicion en la estructura Decide Of. Linea %s.", 
-                            expresion[0], expresion[1], ileft+1
+                            expresion[0], expresion[1], eleft+1
                         ));
                         erroresSemanticos++;
                         }
@@ -2469,14 +2551,6 @@ function_helperS ::= string_keyword
     funcString = true; 
     :};
 
-function_helperV ::= void_keyword 
-{: 
-    contadorTemporalINT = 1;
-    contadorTemporalFLOAT = 1;
-    C3D.append("\n" + "inicio_funcionVoid" + contadorFuncVOID + ":\n");
-    funcVoid = true; 
-    :};
-
 
 //Esta parte es para poder tomar el identificador y ejecutar el código que va a crear la tabla de símbolos de esta parte
 function_left ::=  
@@ -2522,14 +2596,7 @@ function_left ::=
                     //Agregar a la tabla de funciones
                     agregarFuncion(id, "string", (idleft + 1));
                 :}
-            |  function_helperV identifier:id
-                {: System.out.println("Crear tabla de símbolos para función void: " +id); 
-                    TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
-                    apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
-
-                    //Agregar a la tabla de funciones
-                    agregarFuncion(id, "void", (idleft + 1));
-                :}
+            
             ;
 
 function ::= 
@@ -2838,7 +2905,7 @@ statement ::= declaration
 
 // Variables globales
 global_variables ::= /* empty */
-                  |  global_variables declaration {: hola(); //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada  :}
+                  |  global_variables declaration {:   :}
                   ;
 
 //Programa principal
