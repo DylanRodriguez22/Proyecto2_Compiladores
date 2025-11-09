@@ -4657,6 +4657,9 @@ class CUP$parser$actions {
           case 160: // for_loop_left ::= for_helperInicio reassignment step_keyword int_literal to_keyword int_literal do_keyword 
             {
               Object RESULT =null;
+		int varleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
+		int varright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
+		Object var = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
 		int pasoleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int pasoright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String paso = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
@@ -4667,13 +4670,16 @@ class CUP$parser$actions {
             //Crear la tabla de símbolos
             String temp = registroTemporalI();
             C3D.append("\n" + temp + " = " + paso + ";\n");
-            C3D.append("\n" + "for_step = " + temp + ";\n");
+            C3D.append("\n" + "for_stepDO = " + temp + ";\n");
             String temp2 = registroTemporalI();
             C3D.append("\n" + temp2 + " = " + hasta + ";\n");
             C3D.append("\n" + "for_hasta = " + hasta + ";\n");
             String temp3 = registroTemporalI();
-            C3D.append("\n" + temp3 + " = " + temp + " >= " + hasta + ";\n");
+            C3D.append("\n" + temp3 + " = " + var + " >= " + temp2 + ";\n");
             C3D.append("\n" + "if " + temp3 + " goto fin_for" + contadorFor + ";\n");
+            String temp4 = registroTemporalI(); 
+            C3D.append("\n" + temp4 + " = " + var + " + " + paso + ";\n");
+            C3D.append("\n" + var + " = " + temp4 + ";\n");
             TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
             apilarNuevaTablaDeSimbolos(t); 
         
@@ -4685,8 +4691,32 @@ class CUP$parser$actions {
           case 161: // for_loop_left ::= for_helperInicio reassignment step_keyword int_literal downto_keyword int_literal do_keyword 
             {
               Object RESULT =null;
+		int varleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
+		int varright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
+		Object var = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
+		int pasoleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int pasoright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		String paso = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int hastaleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int hastaright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String hasta = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 System.out.println("for loop int downto"); 
             //Crear la tabla de símbolos
+
+            //Crear la tabla de símbolos
+            String temp = registroTemporalI();
+            C3D.append("\n" + temp + " = " + paso + ";\n");
+            C3D.append("\n" + "for_stepDOWNto = " + temp + ";\n");
+            String temp2 = registroTemporalI();
+            C3D.append("\n" + temp2 + " = " + hasta + ";\n");
+            C3D.append("\n" + "for_hasta = " + hasta + ";\n");
+            String temp3 = registroTemporalI();
+            C3D.append("\n" + temp3 + " = " + var + " <= " + temp2 + ";\n");
+            C3D.append("\n" + "if " + temp3 + " goto fin_for" + contadorFor + ";\n");
+            String temp4 = registroTemporalI(); 
+            C3D.append("\n" + temp4 + " = " + var + " - " + paso + ";\n");
+            C3D.append("\n" + var + " = " + temp4 + ";\n");
+
             TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
             apilarNuevaTablaDeSimbolos(t); 
         
@@ -4698,7 +4728,31 @@ class CUP$parser$actions {
           case 162: // for_loop_left ::= for_helperInicio reassignment step_keyword float_literal to_keyword float_literal do_keyword 
             {
               Object RESULT =null;
-		 System.out.println("for loop float to"); 
+		int varleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
+		int varright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
+		Object var = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
+		int pasoleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int pasoright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		String paso = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int hastaleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int hastaright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String hasta = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 
+
+            System.out.println("for loop float to"); 
+            String temp = registroTemporalF();
+            C3D.append("\n" + temp + " = " + paso + ";\n");
+            C3D.append("\n" + "for_stepDO = " + temp + ";\n");
+            String temp2 = registroTemporalF();
+            C3D.append("\n" + temp2 + " = " + hasta + ";\n");
+            C3D.append("\n" + "for_hasta = " + hasta + ";\n");
+            String temp3 = registroTemporalF();
+            C3D.append("\n" + temp3 + " = " + var + " >= " + temp2 + ";\n");
+            C3D.append("\n" + "if " + temp3 + " goto fin_for" + contadorFor + ";\n");
+            String temp4 = registroTemporalF(); 
+            C3D.append("\n" + temp4 + " = " + var + " + " + paso + ";\n");
+            C3D.append("\n" + var + " = " + temp4 + ";\n");
+
             //Crear la tabla de símbolos
                 TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
                 apilarNuevaTablaDeSimbolos(t); 
@@ -4711,8 +4765,30 @@ class CUP$parser$actions {
           case 163: // for_loop_left ::= for_helperInicio reassignment step_keyword float_literal downto_keyword float_literal do_keyword 
             {
               Object RESULT =null;
-		 System.out.println("for loop float downto"); 
+		int varleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
+		int varright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
+		Object var = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
+		int pasoleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int pasoright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		String paso = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int hastaleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int hastaright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String hasta = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		
+             System.out.println("for loop float downto"); 
             //Crear la tabla de símbolos
+            String temp = registroTemporalF();
+            C3D.append("\n" + temp + " = " + paso + ";\n");
+            C3D.append("\n" + "for_stepDOWNto = " + temp + ";\n");
+            String temp2 = registroTemporalF();
+            C3D.append("\n" + temp2 + " = " + hasta + ";\n");
+            C3D.append("\n" + "for_hasta = " + hasta + ";\n");
+            String temp3 = registroTemporalF();
+            C3D.append("\n" + temp3 + " = " + var + " <= " + temp2 + ";\n");
+            C3D.append("\n" + "if " + temp3 + " goto fin_for" + contadorFor + ";\n");
+            String temp4 = registroTemporalF(); 
+            C3D.append("\n" + temp4 + " = " + var + " - " + paso + ";\n");
+            C3D.append("\n" + var + " = " + temp4 + ";\n");
                 TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
                 apilarNuevaTablaDeSimbolos(t); 
         

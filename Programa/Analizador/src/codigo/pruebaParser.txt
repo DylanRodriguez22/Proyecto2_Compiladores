@@ -21,10 +21,11 @@ void principal є э¿
     i = i + 1$
     exit when i > 5+2$
     end loop$
-    for f = 0$ step 1 to 10 do ¿
+    let float p$
+    for f = 13.0$ step 1.0 downto 10.0 do ¿
         output a$
     ?
-    for zz = 0$ step 1 to 10 do ¿
-        output kk$
+    for p =1.0$ step 3.0 to 10.0 do ¿
+        output papa$
     ?
 ?
