@@ -64,6 +64,7 @@ action code {:
         if(simbolo == null){
             System.err.println("Error Semantico: El identificador " + pSimbolo + " no ha sido declarado previamente");
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }
     }
 
@@ -77,6 +78,7 @@ action code {:
                 operacion, linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo1b = false;
         }
 
@@ -86,6 +88,7 @@ action code {:
                 operacion, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo2b = false;
         }
 
@@ -97,6 +100,7 @@ action code {:
                 operacion, linea1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return "null";
         }
     }
@@ -108,13 +112,15 @@ action code {:
         if(simbolo == null){
             System.err.println("Error Semantico: El identificador " + nombreArreglo + " no ha sido declarado previamente. Linea " + linea);
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }else{
             //Verificar que el identificador sea un arreglo
             if(simbolo.getTipo().equals("arrayChar") | simbolo.getTipo().equals("arrayInt")){
                 //Verificar que el tipo de la expresión que me indica la posición sea entero
-                if(!(tipoPosicion.equals("int")){
+                if(!(tipoPosicion.equals("int"))){
                     System.err.println("Error Semantico: La expresion que indica la posicion donde se asignara el elemento en el arreglo " + nombreArreglo + " debe ser de tipo int. Linea " + linea);
                     erroresSemanticos++;
+                    parser.erroresSemanticos++;
                 }else{
                     //Verificar que el tipo del arreglo sea el mismo del elemento que se quiere asignar
                     if(simbolo.getTipo().toLowerCase().contains(tipoElementoAsignado)) {
@@ -123,12 +129,14 @@ action code {:
                     }else{
                         System.err.println("Error Semantico: El tipo de la expresion que se quiere agregar al arreglo " + nombreArreglo + " no coincide con el del arreglo. Linea " + linea);
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                         }
                 }  
             }
             else{
                 System.err.println("Error Semantico: El tipo del identificador " + nombreArreglo + " no es un arreglo. Linea " + linea);
                 erroresSemanticos++;
+                parser.erroresSemanticos++;
             }
         }
 
@@ -142,6 +150,7 @@ action code {:
         if(simbolo == null){
             System.err.println("Error Semantico: El identificador " + nombreArreglo + " no ha sido declarado previamente. Linea " + linea);
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }else{
             //Verificar que sea un arreglo
             if(simbolo.getTipo().equals("arrayChar") | simbolo.getTipo().equals("arrayInt")){
@@ -149,6 +158,7 @@ action code {:
                if(!(tipoPosicionElemento.equals("int"))){
                     System.err.println("Error Semantico: La expresion que indica la posicion del elemento a tomar en el arreglo " + nombreArreglo + " debe ser de tipo int. Linea " + linea);
                     erroresSemanticos++;
+                    parser.erroresSemanticos++;
                 }else{
                         if(simbolo.getTipo().equals("arrayChar")){
                             retorno = "desconocido::char::" + linea + "::" + columna; //Hay que resolver esto para poder retornar el valor
@@ -160,6 +170,7 @@ action code {:
             else{
                 System.err.println("Error Semantico: El tipo del identificador " + nombreArreglo + " no es un arreglo. Linea " + linea);
                 erroresSemanticos++;
+                parser.erroresSemanticos++;
             }
         }
         return retorno;
@@ -171,6 +182,7 @@ action code {:
         if(!agregar){
             System.err.println("Error Semantico: Ya existe una funcion llamada " + pNombre + " Linea: " + linea);
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             funcionActual = "";
         }
     }
@@ -191,6 +203,7 @@ action code {:
                 operacionTexto, linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador1 = false;
         }
 
@@ -200,6 +213,7 @@ action code {:
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador2 = false;
         }
 
@@ -222,6 +236,7 @@ action code {:
                 operacionTexto, linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador1 = false;
         }
 
@@ -231,6 +246,7 @@ action code {:
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador2 = false;
         }
 
@@ -253,6 +269,7 @@ action code {:
                 operacionTexto, linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador1 = false;
         }
 
@@ -262,6 +279,7 @@ action code {:
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador2 = false;
         }
 
@@ -279,6 +297,7 @@ action code {:
                 identificador, linea, columna, tipoIdentificador, tipoExpresion 
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return false;
         }
         return true; //Pasa la validacion
@@ -294,6 +313,7 @@ action code {:
                 identificador, simbolo.getTipo(), tipoExpresion, linea, columna
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return false;
             }else{
                  return true; //Pasa la validacion
@@ -302,6 +322,7 @@ action code {:
         }else{
             System.err.println("Error Semantico: El identificador " + identificador + " no ha sido declarado previamente. Linea "+ linea);
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return false;
         }
         
@@ -315,7 +336,7 @@ action code {:
 
 parser code {:
     public static int syntaxErrors = 0;
-    
+    public static int erroresSemanticos = 0;
     public void syntax_error(Symbol s) {
         syntaxErrors++;
         System.err.println("\n ERROR DE SINTAXIS:");
@@ -439,6 +460,13 @@ parser code {:
     }
 
     public void mostrarCodigo3Direcciones(){
+        int lexerErrors = codigo.Lexer.errorCount;
+        int syntaxErrors = codigo.parser.syntaxErrors;
+        int ErroresSemanticos = codigo.parser.erroresSemanticos;
+        if(lexerErrors > 0 || syntaxErrors > 0 || ErroresSemanticos > 0){
+            System.out.println("No se puede generar el código de tres direcciones ya que todavía hay errores en el sistema.");
+            return;
+        }
         System.out.println("Código de tres direcciones generado:");
         System.out.println(C3D.toString());
     }
@@ -676,7 +704,7 @@ non terminal function_helperB;
 non terminal function_helperC;
 non terminal function_helperS;
 non terminal function_helperV;
-
+non terminal declaration_helperInt;
 
 // Por úlitmo un orden precendencia para el cup
 precedence left or_operator; // ~
@@ -1320,22 +1348,8 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
 //Declaraciones. Se salvan los valores tanto el de la expresión lógica que viene de todo un proceso de reducción para el tipo y los literales
 declaration_values ::= logical_expresion_and:e {: RESULT = e; :} | CHAR_LITERAL:e {: RESULT = e + "::char::" + (eleft + 1) + "::" + eright; :} | STRING_LITERAL:e {: RESULT = e + "::string::" + (eleft + 1) + "::" + eright; :};
 
-
-             
-declaration ::= let_keyword int_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: int sin valor con id "+ id); agregarSimbolo("int", id); C3D.append("\n" + "data_int " + id + ":\n");:}
-             
-             |  let_keyword float_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: float sin valor con id " + id); agregarSimbolo("float", id); C3D.append("\n" + "data_float " + id + ":\n");:}
-             |  let_keyword bool_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: bool sin valor con id " + id); agregarSimbolo("bool", id); C3D.append("\n" + "data_bool " + id + ":\n");:}
-             |  let_keyword char_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: char sin valor con id " + id); agregarSimbolo("char", id); C3D.append("\n" + "data_char " + id + ":\n");:}
-             |  let_keyword string_keyword identifier:id delimiter
-             {: System.out.println("Declaracion: string sin valor con id "+ id); agregarSimbolo("string", id); C3D.append("\n" + "data_string " + id + ":\n");:}
-
-             |  let_keyword int_keyword identifier:id assignment_operator declaration_values:e delimiter
-             {: 
+declaration_helperInt ::= let_keyword int_keyword identifier:id assignment_operator declaration_values:e delimiter {:
+            C3D.append("\n" + "data_int " + id);
                 /// Preguntarle al profe sobre esto 
                 System.out.println("Declaracion: int con valor con el id "+ id); 
                 //Verificar si el tipo de la expresión coincide con el del identificador
@@ -1361,13 +1375,29 @@ declaration ::= let_keyword int_keyword identifier:id delimiter
                 }
 
                 // Ya con parteUnica siendo el temporal final:
-                C3D.append("\n" + "data_int " + id + ":\n");
                 C3D.append("\n" + id + " = " + parteUnica + ";\n");
 
                 RESULT = id;
 
+:};
+             
+declaration ::= let_keyword int_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: int sin valor con id "+ id); agregarSimbolo("int", id); C3D.append("\n" + "data_int " + id + ":\n");:}
+             
+             |  let_keyword float_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: float sin valor con id " + id); agregarSimbolo("float", id); C3D.append("\n" + "data_float " + id + ":\n");:}
+             |  let_keyword bool_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: bool sin valor con id " + id); agregarSimbolo("bool", id); C3D.append("\n" + "data_bool " + id + ":\n");:}
+             |  let_keyword char_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: char sin valor con id " + id); agregarSimbolo("char", id); C3D.append("\n" + "data_char " + id + ":\n");:}
+             |  let_keyword string_keyword identifier:id delimiter
+             {: System.out.println("Declaracion: string sin valor con id "+ id); agregarSimbolo("string", id); C3D.append("\n" + "data_string " + id + ":\n");:}
 
-            :}
+
+
+
+             |  declaration_helperInt 
+
              |  let_keyword float_keyword identifier:id assignment_operator declaration_values:e delimiter
              {: System.out.println("Declaracion: float con valor con el id "+ id); 
 

@@ -1,67 +1,11 @@
-int suma є э ¿
-    let int a$
-    let int b$
-    a = 2$
-    b = 3$
-    return a + b$
-?
-
-int sumar є int a, int b э ¿
-    let int resultado = a + b$
-    return resultado$
-?
-
-float calcularPromedio є float nota1, float nota2, float nota3 э ¿
-    let float suma = nota1 + nota2 + nota3$
-    let float promedio = suma / 3.0$
-    return promedio$
-?
-
-bool esMayor є int x, int y э ¿
-    decide of є x > y э -> ¿
-        output prueba$
-        return True$
-    ?
-    else -> ¿
-        output prueba2$
-        return False$
-    ?
-    end decide$
-?
-
-char obtenerPrimeraLetra є string texto, int indice э ¿
-    let char letra = 'A'$  
-    return letra$
-?
-
-float resta  є э ¿
-    let float z$
-    z = 2.0$
-    return z - 3.0$
-?
-bool evelda  є э ¿
-    let bool z = 5 > 3$
-    let bool y = 3 == 3$
-    let bool res = z @ y$
-    return res$
-?
-char mamawebo  є э ¿
-    let char final = 'a'$
-    return final$
-?
-string mamawebo2  є э ¿
-    let string final2 = "Papuuu"$
-    output madremia$
-    return final$
-?
-void jijijaja є э ¿
-    let int LL = 5+2$
-    let int peru = 5*4 - 3 - 2$
-?
-
-
 void principal є э¿
     let bool bbc = 5>3 @ 4<2$
-    let bool x = 2>3 @ 3<2$
-    let int y = 1$
+    let int x = 5$
+    let int y = 10$
+    let bool prueba = 5>5 @ 10 < 3$
+    let bool resultado = Σ x > y$
+    let bool activo = True$
+    let bool inactivo = Σactivo$
+    output inactivo$
+    let int bb$
 ?
