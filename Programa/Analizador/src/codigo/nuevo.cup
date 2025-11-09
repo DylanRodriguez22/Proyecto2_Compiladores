@@ -2535,18 +2535,21 @@ function ::=
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcion" + contadorFuncINT + ":\n");
                 contadorTemporalINT++;
+                contadorFuncINT++;
                 funcInt = false;
                 }
                 if ( funcFloat == true){
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionFloat" + contadorFuncFLOAT + ":\n");
                 contadorTemporalFLOAT++;
+                contadorFuncFLOAT++;
                 funcFloat = false;
 
                 }
                 if (funcBool == true){
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionBool" + contadorFuncBOOL + ":\n");
+                contadorTemporalINT++;
                 contadorFuncBOOL++;
                 funcBool = false;
 
@@ -2554,6 +2557,7 @@ function ::=
                 if (funcChar == true){
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionChar" + contadorFuncCHAR + ":\n");
+                contadorTemporalINT++;
                 contadorFuncCHAR++;
                 funcChar = false;
 
@@ -2561,11 +2565,13 @@ function ::=
                 if (funcString == true){
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionString" + contadorFuncSTRING + ":\n");
+                contadorTemporalINT++;
                 contadorFuncSTRING++;
                 funcString = false;
                 }
                 if (funcVoid == true){
                 C3D.append("\n" + "fin_funcionVoid" + contadorFuncVOID + ":\n");
+                contadorTemporalINT++;
                 contadorFuncVOID++;
                 funcVoid = false;
 
@@ -2577,6 +2583,54 @@ function ::=
              :}
           |  function_left left_parenthesis params right_parenthesis block
             {: 
+                int cont = contadorTemporalINT - 1;
+                if(funcInt == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcion" + contadorFuncINT + ":\n");
+                contadorTemporalINT++;
+                funcInt = false;
+                }
+
+                if ( funcFloat == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionFloat" + contadorFuncFLOAT + ":\n");
+                contadorTemporalFLOAT++;
+                contadorFuncFLOAT++;
+                funcFloat = false;
+
+                }
+
+                if (funcBool == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionBool" + contadorFuncBOOL + ":\n");
+                contadorTemporalINT++;
+                contadorFuncBOOL++;
+                funcBool = false;
+
+                }
+                if (funcChar == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionChar" + contadorFuncCHAR + ":\n");
+                contadorTemporalINT++;
+                contadorFuncCHAR++;
+                funcChar = false;
+
+                }
+                if (funcString == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionString" + contadorFuncSTRING + ":\n");
+                contadorTemporalINT++;
+                contadorFuncSTRING++;
+                funcString = false;
+                }
+                if (funcVoid == true){
+                C3D.append("\n" + "fin_funcionVoid" + contadorFuncVOID + ":\n");
+                contadorTemporalINT++;
+                contadorFuncVOID++;
+                funcVoid = false;
+
+                }
+
                 desapilarTablaDeSimbolos();
              :}
           |  function_left left_parenthesis error right_parenthesis block
@@ -2592,11 +2646,41 @@ params_tail ::= /* empty */
              |  comma_keyword param params_tail
              ;
 
-param ::= int_keyword identifier:id {: agregarSimbolo("int", id); agregarParametro(new Simbolo(id, "int"));:}
-       |  float_keyword identifier:id {: agregarSimbolo("float", id); agregarParametro(new Simbolo(id, "float"));:}
-       |  bool_keyword identifier:id {: agregarSimbolo("bool", id); agregarParametro(new Simbolo(id, "bool"));:}
-       |  char_keyword identifier:id {: agregarSimbolo("char", id); agregarParametro(new Simbolo(id, "char")); :}
-       |  string_keyword identifier:id {: agregarSimbolo("string", id); agregarParametro(new Simbolo(id, "string"));:}
+param ::= int_keyword identifier:id {: 
+        agregarSimbolo("int", id); 
+        agregarParametro(new Simbolo(id, "int"));
+        C3D.append("\n" + "data_paramInt " +  id + ":\n");
+        RESULT = id;
+    
+    ;:}
+       |  float_keyword identifier:id {: 
+        agregarSimbolo("float", id); 
+        agregarParametro(new Simbolo(id, "float"));
+        C3D.append("\n" + "data_paramFloat " + id + ":\n");
+        RESULT = id;
+
+        
+        :}
+       |  bool_keyword identifier:id {: 
+        agregarSimbolo("bool", id); 
+        agregarParametro(new Simbolo(id, "bool"));
+        C3D.append("\n" + "data_paramBool " + id + ":\n");
+        RESULT = id;       
+        
+        :}
+       |  char_keyword identifier:id {: 
+        agregarSimbolo("char", id); 
+        agregarParametro(new Simbolo(id, "char")); 
+        C3D.append("\n" + "data_paramChar " + id + ":\n");
+        RESULT = id; 
+
+        :}
+       |  string_keyword identifier:id {: 
+        agregarSimbolo("string", id); 
+        agregarParametro(new Simbolo(id, "string")); 
+        C3D.append("\n" + "data_paramString " + id + ":\n");
+        RESULT = id;
+       :}
        ;
 
 return_statement ::= return_keyword:r delimiter

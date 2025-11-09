@@ -5030,18 +5030,21 @@ class CUP$parser$actions {
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcion" + contadorFuncINT + ":\n");
                 contadorTemporalINT++;
+                contadorFuncINT++;
                 funcInt = false;
                 }
                 if ( funcFloat == true){
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionFloat" + contadorFuncFLOAT + ":\n");
                 contadorTemporalFLOAT++;
+                contadorFuncFLOAT++;
                 funcFloat = false;
 
                 }
                 if (funcBool == true){
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionBool" + contadorFuncBOOL + ":\n");
+                contadorTemporalINT++;
                 contadorFuncBOOL++;
                 funcBool = false;
 
@@ -5049,6 +5052,7 @@ class CUP$parser$actions {
                 if (funcChar == true){
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionChar" + contadorFuncCHAR + ":\n");
+                contadorTemporalINT++;
                 contadorFuncCHAR++;
                 funcChar = false;
 
@@ -5056,11 +5060,13 @@ class CUP$parser$actions {
                 if (funcString == true){
                 C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionString" + contadorFuncSTRING + ":\n");
+                contadorTemporalINT++;
                 contadorFuncSTRING++;
                 funcString = false;
                 }
                 if (funcVoid == true){
                 C3D.append("\n" + "fin_funcionVoid" + contadorFuncVOID + ":\n");
+                contadorTemporalINT++;
                 contadorFuncVOID++;
                 funcVoid = false;
 
@@ -5079,6 +5085,54 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
+                int cont = contadorTemporalINT - 1;
+                if(funcInt == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcion" + contadorFuncINT + ":\n");
+                contadorTemporalINT++;
+                funcInt = false;
+                }
+
+                if ( funcFloat == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionFloat" + contadorFuncFLOAT + ":\n");
+                contadorTemporalFLOAT++;
+                contadorFuncFLOAT++;
+                funcFloat = false;
+
+                }
+
+                if (funcBool == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionBool" + contadorFuncBOOL + ":\n");
+                contadorTemporalINT++;
+                contadorFuncBOOL++;
+                funcBool = false;
+
+                }
+                if (funcChar == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionChar" + contadorFuncCHAR + ":\n");
+                contadorTemporalINT++;
+                contadorFuncCHAR++;
+                funcChar = false;
+
+                }
+                if (funcString == true){
+                C3D.append("\n" + "return " + "t" +cont + ":\n");
+                C3D.append("\n" + "fin_funcionString" + contadorFuncSTRING + ":\n");
+                contadorTemporalINT++;
+                contadorFuncSTRING++;
+                funcString = false;
+                }
+                if (funcVoid == true){
+                C3D.append("\n" + "fin_funcionVoid" + contadorFuncVOID + ":\n");
+                contadorTemporalINT++;
+                contadorFuncVOID++;
+                funcVoid = false;
+
+                }
+
                 desapilarTablaDeSimbolos();
              
               CUP$parser$result = parser.getSymbolFactory().newSymbol("function",36, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -5128,7 +5182,13 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("int", id); agregarParametro(new Simbolo(id, "int"));
+		 
+        agregarSimbolo("int", id); 
+        agregarParametro(new Simbolo(id, "int"));
+        C3D.append("\n" + "data_paramInt " +  id + ":\n");
+        RESULT = id;
+    
+    ;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -5140,7 +5200,14 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("float", id); agregarParametro(new Simbolo(id, "float"));
+		 
+        agregarSimbolo("float", id); 
+        agregarParametro(new Simbolo(id, "float"));
+        C3D.append("\n" + "data_paramFloat " + id + ":\n");
+        RESULT = id;
+
+        
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -5152,7 +5219,13 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("bool", id); agregarParametro(new Simbolo(id, "bool"));
+		 
+        agregarSimbolo("bool", id); 
+        agregarParametro(new Simbolo(id, "bool"));
+        C3D.append("\n" + "data_paramBool " + id + ":\n");
+        RESULT = id;       
+        
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -5164,7 +5237,13 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("char", id); agregarParametro(new Simbolo(id, "char")); 
+		 
+        agregarSimbolo("char", id); 
+        agregarParametro(new Simbolo(id, "char")); 
+        C3D.append("\n" + "data_paramChar " + id + ":\n");
+        RESULT = id; 
+
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -5176,7 +5255,12 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 agregarSimbolo("string", id); agregarParametro(new Simbolo(id, "string"));
+		 
+        agregarSimbolo("string", id); 
+        agregarParametro(new Simbolo(id, "string")); 
+        C3D.append("\n" + "data_paramString " + id + ":\n");
+        RESULT = id;
+       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("param",40, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

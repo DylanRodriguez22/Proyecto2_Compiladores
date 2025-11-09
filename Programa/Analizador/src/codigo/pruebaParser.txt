@@ -6,6 +6,34 @@ int suma є э ¿
     return a + b$
 ?
 
+int sumar є int a, int b э ¿
+    let int resultado = a + b$
+    return resultado$
+?
+
+float calcularPromedio є float nota1, float nota2, float nota3 э ¿
+    let float suma = nota1 + nota2 + nota3$
+    let float promedio = suma / 3.0$
+    return promedio$
+?
+
+bool esMayor є int x, int y э ¿
+    decide of є x > y э -> ¿
+        output prueba$
+        return True$
+    ?
+    else -> ¿
+        output prueba2$
+        return False$
+    ?
+    end decide$
+?
+
+char obtenerPrimeraLetra є string texto, int indice э ¿
+    let char letra = 'A'$  
+    return letra$
+?
+
 float resta  є э ¿
     let float z$
     z = 2.0$
@@ -28,7 +56,7 @@ string mamawebo2  є э ¿
 ?
 void jijijaja є э ¿
     let int LL = 5+2$
-    let int peru = 5*4 > 3-2$
+    let int peru = 5*4 - 3 - 2$
 ?
 
 
