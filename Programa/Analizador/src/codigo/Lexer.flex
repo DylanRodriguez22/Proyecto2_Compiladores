@@ -14,6 +14,7 @@ import java.util.ArrayList;
 %column
 
 %{
+    public static boolean hayFloat = false;
     private PrintWriter logWriter;
     private ArrayList<String> errores = new ArrayList<>();
     public static int errorCount = 0;
@@ -248,7 +249,7 @@ StringLiteral = \"([^\"\n\\]|\\n)*\"
     "$"                 { return symbol(sym.delimiter, yytext()); }
 
     "int"             { return symbol(sym.int_keyword, yytext()); }
-    "float"           { return symbol(sym.float_keyword, yytext()); }
+    "float"           { hayFloat = true; return symbol(sym.float_keyword, yytext()); }
     "bool"            { return symbol(sym.bool_keyword, yytext()); }
     "char"            { return symbol(sym.char_keyword, yytext()); }
     "string"          { return symbol(sym.string_keyword, yytext()); }
@@ -276,7 +277,7 @@ StringLiteral = \"([^\"\n\\]|\\n)*\"
 
     /* Literales */
     {IntegerLiteral}    { return symbol(sym.int_literal, yytext()); }
-    {FloatLiteral}      { return symbol(sym.float_literal, yytext()); }
+    {FloatLiteral}      { hayFloat = true; return symbol(sym.float_literal, yytext()); }
     {CharLiteral}       {  // Char y string es ais por una prueba
         return symbol(sym.CHAR_LITERAL, yytext());
     }
