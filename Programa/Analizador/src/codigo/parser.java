@@ -1289,6 +1289,11 @@ public class parser extends java_cup.runtime.lr_parser {
         }
     }
 
+    public boolean esLiteralVerdadero(String valor){
+        return valor.matches("^-?\\d+(\\.\\d+)?$")  || valor.matches("^'.'$")               
+            || valor.matches("^\".*\"$") || valor.matches("^(True|False)$");     
+    }
+
 
     public boolean esBool(String valor){
         if(!valor.matches("True|False")){
@@ -4024,7 +4029,7 @@ class CUP$parser$actions {
                     String valor = elementoAsignado[0];
     
                     // si es un temporal entonces lo asigno de una vez 
-                    if (!esTemporal(valor)) {
+                    if (!esTemporal(valor) && esLiteralVerdadero(valor)) {
                         String tempExtra = registroTemporalI();
                         C3D.append(tempExtra + " = " + valor + ";\n");
                         valor = tempExtra;
@@ -4051,6 +4056,8 @@ class CUP$parser$actions {
 		int elementright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String element = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 System.out.println("Asignacion a elemento de arreglo"); 
+                   System.out.println(op);
+                   System.out.println(id);
                     String[] posicionArreglo = op.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], "char", posicionArreglo[0], element.toString());
                      

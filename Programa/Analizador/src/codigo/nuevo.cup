@@ -498,6 +498,11 @@ parser code {:
         }
     }
 
+    public boolean esLiteralVerdadero(String valor){
+        return valor.matches("^-?\\d+(\\.\\d+)?$")  || valor.matches("^'.'$")               
+            || valor.matches("^\".*\"$") || valor.matches("^(True|False)$");     
+    }
+
 
     public boolean esBool(String valor){
         if(!valor.matches("True|False")){
@@ -1970,7 +1975,7 @@ assign_elements_array ::= identifier:id left_bracket arithmetic_expression:op ri
                     String valor = elementoAsignado[0];
     
                     // si es un temporal entonces lo asigno de una vez 
-                    if (!esTemporal(valor)) {
+                    if (!esTemporal(valor) && esLiteralVerdadero(valor)) {
                         String tempExtra = registroTemporalI();
                         C3D.append(tempExtra + " = " + valor + ";\n");
                         valor = tempExtra;
@@ -1983,6 +1988,8 @@ assign_elements_array ::= identifier:id left_bracket arithmetic_expression:op ri
 
                 |  identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator CHAR_LITERAL:element delimiter
                 {: System.out.println("Asignacion a elemento de arreglo"); 
+                   System.out.println(op);
+                   System.out.println(id);
                     String[] posicionArreglo = op.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], "char", posicionArreglo[0], element.toString());
                      
