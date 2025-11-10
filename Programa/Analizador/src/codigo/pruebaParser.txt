@@ -2,7 +2,6 @@ void principal є э¿
     let int x = 2$
     let bool papa = True$
     let int bb$
-    return bb$
     let int i$
     decide of є i == 5э -> 
     ¿

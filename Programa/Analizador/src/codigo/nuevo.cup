@@ -2913,12 +2913,15 @@ statement ::= declaration
 
 // Variables globales
 global_variables ::= /* empty */
-                  |  global_variables declaration {: hola(); //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada  :}
+                  |  global_variables declaration {: hola();  //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada  :}
                   ;
+
+
 
 //Programa principal
 principal_left ::= void_keyword:id principal_keyword left_parenthesis right_parenthesis 
                     {: //Para poder crear la tabla de símbolos
+                        C3D.append("\n" + "inicio principal:\n");
                         TablaDeSimbolos t = crearTablaDeSimbolos("Principal"); //Crear la nueva tabla
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
                         //Agregar a la tabla de funciones
@@ -2938,6 +2941,7 @@ functions ::= /* empty */
 //Símbolo inicial. Ya se inicia con funciones y luego la principal
 program ::= global_variables  functions principal
          {: System.out.println("\n========== PROGRAMA COMPLETO VALIDADO ==========\n"); 
+         C3D.append("\n" + "fin principal\n");
          parser.sePuedeoNo();
          System.out.println("\nFUNCIONA EL 3 DIRECCIONES?\n");
          mostrarCodigo3Direcciones();

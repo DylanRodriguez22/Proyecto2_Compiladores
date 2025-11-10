@@ -5796,7 +5796,7 @@ class CUP$parser$actions {
           case 220: // global_variables ::= global_variables declaration 
             {
               Object RESULT =null;
-		 hola(); //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada  
+		 hola();  //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada  
               CUP$parser$result = parser.getSymbolFactory().newSymbol("global_variables",48, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -5809,6 +5809,7 @@ class CUP$parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 		 //Para poder crear la tabla de símbolos
+                        C3D.append("\n" + "inicio principal:\n");
                         TablaDeSimbolos t = crearTablaDeSimbolos("Principal"); //Crear la nueva tabla
                         apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
                         //Agregar a la tabla de funciones
@@ -5850,6 +5851,7 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 System.out.println("\n========== PROGRAMA COMPLETO VALIDADO ==========\n"); 
+         C3D.append("\n" + "fin principal\n");
          parser.sePuedeoNo();
          System.out.println("\nFUNCIONA EL 3 DIRECCIONES?\n");
          mostrarCodigo3Direcciones();
