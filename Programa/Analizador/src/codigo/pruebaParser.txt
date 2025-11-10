@@ -1,16 +1,6 @@
 void principal є э ¿
-    let int x = 5+3*2$
-    let int y = 2 - 3 - 1 - x$
-    let int z = 5*2* y - x$
-    let int w = 5 + 5 - 2 / z$
-    let bool j = False$
-    let bool p = True$
-    return$
-    let bool pp = p @ j$
-    let bool aw = w > z @ y <= 1$
-    let int y = x$
-    let int arr[10]$
-    let int i = 2$
-    arr[i + 3] = 100$
-    let bool zz = Σp$
+    let int bbcita = - 2$  
+    let int contador = 5$
+    let int resultado = contador ++$
+    let int result2 = contador --$
 ?
