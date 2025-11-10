@@ -1760,25 +1760,21 @@ class CUP$parser$actions {
                             String sumader = partesE2[0]; // parte derecha de la suma
                             
                             // revisamos si la parte izq es temporal 
-                            if(continuouNo(sumaiz) == false){ 
-                                System.out.println("resultado " + sumaiz + " no es temporal, se pasa a temporal");
+                            if(!esTemporal(sumaiz) && esLiteralVerdadero(sumaiz)){ 
                                 String tempIzq = registroTemporalI();
                                 C3D.append("\n" + tempIzq + " = " + sumaiz + ";\n");
-                                sumaiz = tempIzq; // actualizar la variable
+                                sumaiz = tempIzq;
                             }
                             
-                            // revisamos si la parte derecha es temporal 
-                            if(continuouNo(sumader) == false){ 
-                                System.out.println("resultado " + sumader + " no es temporal, se pasa a temporal");
+                            if(!esTemporal(sumader) && esLiteralVerdadero(sumader)){ 
                                 String tempDer = registroTemporalI();
                                 C3D.append("\n" + tempDer + " = " + sumader + ";\n");
-                                sumader = tempDer; // actualizar la variable
+                                sumader = tempDer;
                             }
 
                             String temp = registroTemporalI();
                             C3D.append("\n" + temp + " = " + sumaiz + " + " + sumader + ";\n");
 
-                            //falta agregarlo en RESULT
                             RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
                             System.out.println(partesE1[0] + "+" + partesE2[0] + "::" + temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3] + "::" + temp);
                           
@@ -1813,19 +1809,16 @@ class CUP$parser$actions {
 
                             String restaIzq = partesE1[0]; // parte izquierda de la resta
                             String restaDer = partesE2[0]; // parte derecha de la resta
-                            if(continuouNo(restaIzq) == false){ 
-                                System.out.println("resultado " + restaIzq + " no es temporal, se pasa a temporal");
+                            if(!esTemporal(restaIzq) && esLiteralVerdadero(restaIzq)){ 
                                 String tempIzq = registroTemporalI();
                                 C3D.append("\n" + tempIzq + " = " + restaIzq + ";\n");
-                                restaIzq = tempIzq; // actualizar la variable
+                                restaIzq = tempIzq;
                             }
                             
-                            // revisamos si la parte derecha es temporal
-                            if(continuouNo(restaDer) == false){ 
-                                System.out.println("resultado " + restaDer + " no es temporal, se pasa a temporal");
+                            if(!esTemporal(restaDer) && esLiteralVerdadero(restaDer)){ 
                                 String tempDer = registroTemporalI();
                                 C3D.append("\n" + tempDer + " = " + restaDer + ";\n");
-                                restaDer = tempDer; // actualizar la variable
+                                restaDer = tempDer;
                             }
 
                             String temp = registroTemporalI();
@@ -1878,19 +1871,16 @@ class CUP$parser$actions {
        
         String mulIzq = partesE1[0]; // parte izquierda de la multiplicacion
         String mulDer = partesE2[0]; // parte derecha de la multiplicacion
-        if(continuouNo(mulIzq) == false){ 
-            System.out.println("resultado " + mulIzq + " no es temporal, se pasa a temporal");
+        if(!esTemporal(mulIzq) && esLiteralVerdadero(mulIzq)){ 
             String tempIzq = registroTemporalI();
             C3D.append("\n" + tempIzq + " = " + mulIzq + ";\n");
-            mulIzq = tempIzq; // actualizar la variable
+            mulIzq = tempIzq;
         }
         
-        // revisamos si la parte derecha es temporal
-        if(continuouNo(mulDer) == false){ 
-            System.out.println("resultado " + mulDer + " no es temporal, se pasa a temporal");
+        if(!esTemporal(mulDer) && esLiteralVerdadero(mulDer)){ 
             String tempDer = registroTemporalI();
             C3D.append("\n" + tempDer + " = " + mulDer + ";\n");
-            mulDer = tempDer; // actualizar la variable
+            mulDer = tempDer;
         }
 
         String temp = registroTemporalI();
@@ -1921,27 +1911,20 @@ class CUP$parser$actions {
 
         String divsimpleIzq = partesE1[0]; // parte izquierda de la division
         String divsimpleDer = partesE2[0]; // parte derecha de la division
-        if(continuouNo(divsimpleIzq) == false){ 
-            System.out.println("resultado " + divsimpleIzq + " no es temporal, se pasa a temporal");
+        if(!esTemporal(divsimpleIzq) && esLiteralVerdadero(divsimpleIzq)){ 
             String tempIzq = registroTemporalI();
             C3D.append("\n" + tempIzq + " = " + divsimpleIzq + ";\n");
-            divsimpleIzq = tempIzq; // actualizar la variable
+            divsimpleIzq = tempIzq;
         }
         
-        // revisamos si la parte derecha es temporal
-        if(continuouNo(divsimpleDer) == false){ 
-            System.out.println("resultado " + divsimpleDer + " no es temporal, se pasa a temporal");
+        if(!esTemporal(divsimpleDer) && esLiteralVerdadero(divsimpleDer)){ 
             String tempDer = registroTemporalI();
             C3D.append("\n" + tempDer + " = " + divsimpleDer + ";\n");
-            divsimpleDer = tempDer; // actualizar la variable
+            divsimpleDer = tempDer;
         }
 
         String temp = registroTemporalI();
         C3D.append("\n" + temp + " = " + divsimpleIzq + " / " + divsimpleDer + ";\n");
-
-
-
-       
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1966,25 +1949,22 @@ class CUP$parser$actions {
 
         String diventeraIzq = partesE1[0]; // parte izquierda de la division entera
         String diventeraDer = partesE2[0]; // parte derecha de la division entera
-        if(continuouNo(diventeraIzq) == false){ 
-            System.out.println("resultado " + diventeraIzq + " no es temporal, se pasa a temporal");
+        if(!esTemporal(diventeraIzq) && esLiteralVerdadero(diventeraIzq)){ 
             String tempIzq = registroTemporalI();
             C3D.append("\n" + tempIzq + " = " + diventeraIzq + ";\n");
-            diventeraIzq = tempIzq; // actualizar la variable
+            diventeraIzq = tempIzq;
         }
         
-        // revisamos si la parte derecha es temporal
-        if(continuouNo(diventeraDer) == false){ 
-            System.out.println("resultado " + diventeraDer + " no es temporal, se pasa a temporal");
+        if(!esTemporal(diventeraDer) && esLiteralVerdadero(diventeraDer)){ 
             String tempDer = registroTemporalI();
             C3D.append("\n" + tempDer + " = " + diventeraDer + ";\n");
-            diventeraDer = tempDer; // actualizar la variable
+            diventeraDer = tempDer;
         }
+
         String temp = registroTemporalI();
         C3D.append("\n" + temp + " = " + diventeraIzq + " // " + diventeraDer + ";\n");
-
-
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+
       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2007,27 +1987,22 @@ class CUP$parser$actions {
        
         String moduloIzq = partesE1[0]; // parte izquierda del modulo entera
         String moduloDer = partesE2[0]; // parte derecha del moduloentera
-        if(continuouNo(moduloIzq) == false){ 
-            System.out.println("resultado " + moduloIzq + " no es temporal, se pasa a temporal");
+        if(!esTemporal(moduloIzq) && esLiteralVerdadero(moduloIzq)){ 
             String tempIzq = registroTemporalI();
             C3D.append("\n" + tempIzq + " = " + moduloIzq + ";\n");
-            moduloIzq = tempIzq; // actualizar la variable
+            moduloIzq = tempIzq;
         }
         
-        // revisamos si la parte derecha es temporal
-        if(continuouNo(moduloDer) == false){ 
-            System.out.println("resultado " + moduloDer + " no es temporal, se pasa a temporal");
+        if(!esTemporal(moduloDer) && esLiteralVerdadero(moduloDer)){ 
             String tempDer = registroTemporalI();
             C3D.append("\n" + tempDer + " = " + moduloDer + ";\n");
-            moduloDer = tempDer; // actualizar la variable
+            moduloDer = tempDer;
         }
+
         String temp = registroTemporalI();
         C3D.append("\n" + temp + " = " + moduloIzq + " % " + moduloDer + ";\n");
-
-
-
-
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+
       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("term",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2064,25 +2039,22 @@ class CUP$parser$actions {
 
         String elevadoIzq = partesE1[0]; // parte izquierda de la potencia
         String elevadoDer = partesE2[0]; // parte derecha de la potencia
-        if(continuouNo(elevadoIzq) == false){ 
-            System.out.println("resultado " + elevadoIzq + " no es temporal, se pasa a temporal");
+        if(!esTemporal(elevadoIzq) && esLiteralVerdadero(elevadoIzq)){ 
             String tempIzq = registroTemporalI();
             C3D.append("\n" + tempIzq + " = " + elevadoIzq + ";\n");
-            elevadoIzq = tempIzq; // actualizar la variable
+            elevadoIzq = tempIzq;
         }
         
-        // revisamos si la parte derecha es temporal
-        if(continuouNo(elevadoDer) == false){ 
-            System.out.println("resultado " + elevadoDer + " no es temporal, se pasa a temporal");
+        if(!esTemporal(elevadoDer) && esLiteralVerdadero(elevadoDer)){ 
             String tempDer = registroTemporalI();
             C3D.append("\n" + tempDer + " = " + elevadoDer + ";\n");
-            elevadoDer = tempDer; // actualizar la variable
+            elevadoDer = tempDer;
         }
 
         String temp = registroTemporalI();
         C3D.append("\n" + temp + " = " + elevadoIzq + " ^ " + elevadoDer + ";\n");
-       
-            RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+        RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
+
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("power",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2252,7 +2224,7 @@ class CUP$parser$actions {
                                 parser.erroresSemanticos++;
                                 RESULT = "Σ"+ partesExpresion[0] + "::null::" + (ileft +1) + "::" + iright;
                             }else{
-                                RESULT = "Σ"+ partesExpresion[0] + "::bool::" + (ileft +1) + "::" + iright;
+                                RESULT = "/"+ partesExpresion[0] + "::bool::" + (ileft +1) + "::" + iright;
                             }
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2409,27 +2381,21 @@ class CUP$parser$actions {
                 System.out.println("Parte izq en AND: " + parteIzq2);
                 String validacion = validacionLogicaSoloBoleanos("AND", "@", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
 
-
-                if(continuouNo(parteIzq2) == false){ 
-                    System.out.println("resultado " + parteIzq2 + " no es temporal, se pasa a temporal");
+                if(!esTemporal(parteIzq2) && esLiteralVerdadero(parteIzq2)){ 
                     String tempIzq = registroTemporalI();
                     C3D.append("\n" + tempIzq + " = " + parteIzq2 + ";\n");
-                    parteIzq2 = tempIzq; 
+                    parteIzq2| = tempIzq;
                 }
-
-
-                if(continuouNo(parteDer2) == false){ 
-                    System.out.println("resultado " + parteDer2 + " no es temporal, se pasa a temporal");
+                
+                if(!esTemporal(parteDer2) && esLiteralVerdadero(parteDer2)){ 
                     String tempDer = registroTemporalI();
                     C3D.append("\n" + tempDer + " = " + parteDer2 + ";\n");
-                    parteDer2 = tempDer; 
+                    parteDer2 = tempDer;
                 }
-
                 String temp = registroTemporalI();
                 C3D.append("\n" + temp + " = " + parteIzq2 + " @ " + parteDer2 + ";\n");            
-
-
                 RESULT = validacion + "::" + temp;
+
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_and",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2475,28 +2441,20 @@ class CUP$parser$actions {
                     parteDer2 = partesE2[0];
                 }
 
-
-                if(continuouNo(parteIzq2) == false){ 
-                    System.out.println("resultado " + parteIzq2 + " no es temporal, se pasa a temporal");
+                if(!esTemporal(parteIzq2) && esLiteralVerdadero(parteIzq2)){ 
                     String tempIzq = registroTemporalI();
                     C3D.append("\n" + tempIzq + " = " + parteIzq2 + ";\n");
-                    parteIzq2 = tempIzq; 
+                    parteIzq2| = tempIzq;
                 }
-
-
-                if(continuouNo(parteDer2) == false){ 
-                    System.out.println("resultado " + parteDer2 + " no es temporal, se pasa a temporal");
+                
+                if(!esTemporal(parteDer2) && esLiteralVerdadero(parteDer2)){ 
                     String tempDer = registroTemporalI();
                     C3D.append("\n" + tempDer + " = " + parteDer2 + ";\n");
-                    parteDer2 = tempDer; 
+                    parteDer2 = tempDer;
                 }
-
                 String temp = registroTemporalI();
                 C3D.append("\n" + temp + " = " + parteIzq2 + " ~ " + parteDer2 + ";\n");            
-
-
                 RESULT = validacion + "::" + temp;
-
 
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logical_expresion_or",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2532,26 +2490,21 @@ class CUP$parser$actions {
                 String parteIzq = partesE1[0];
                 String parteDer = partesE2[0];
 
-                if(continuouNo(parteIzq) == false){ 
-                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                if(!esTemporal(parteIzq) && esLiteralVerdadero(parteIzq)){ 
                     String tempIzq = registroTemporalI();
                     C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
-                    parteIzq = tempIzq; // ya casi lo pruebo
+                    parteIzq| = tempIzq;
                 }
-
-                if(continuouNo(parteDer) == false){ 
-                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                
+                if(!esTemporal(parteDer) && esLiteralVerdadero(parteDer)){ 
                     String tempDer = registroTemporalI();
                     C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
-                    parteDer = tempDer; 
+                    parteDer = tempDer;
                 }
-
                 String temp = registroTemporalI();
                 C3D.append("\n" + temp + " = " + parteIzq + " > " + parteDer + ";\n"); 
-                
-
-
                 RESULT = validacion + "::" + temp;
+
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2574,26 +2527,20 @@ class CUP$parser$actions {
                 String parteIzq = partesE1[0];
                 String parteDer = partesE2[0];
 
-                if(continuouNo(parteIzq) == false){ 
-                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                if(!esTemporal(parteIzq) && esLiteralVerdadero(parteIzq)){ 
                     String tempIzq = registroTemporalI();
                     C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
-                    parteIzq = tempIzq; // ya casi lo pruebo
+                    parteIzq| = tempIzq;
                 }
-
-                if(continuouNo(parteDer) == false){ 
-                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                
+                if(!esTemporal(parteDer) && esLiteralVerdadero(parteDer)){ 
                     String tempDer = registroTemporalI();
                     C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
-                    parteDer = tempDer; 
+                    parteDer = tempDer;
                 }
-
                 String temp = registroTemporalI();
                 C3D.append("\n" + temp + " = " + parteIzq + " < " + parteDer + ";\n"); 
-                
-
-
-                RESULT = validacion + "::" + temp;
+                RESULT = validacion + "::" + temp;           
 
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("relational_expression",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2617,25 +2564,19 @@ class CUP$parser$actions {
                 String parteIzq = partesE1[0];
                 String parteDer = partesE2[0];
 
-                if(continuouNo(parteIzq) == false){ 
-                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                if(!esTemporal(parteIzq) && esLiteralVerdadero(parteIzq)){ 
                     String tempIzq = registroTemporalI();
                     C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
-                    parteIzq = tempIzq; // ya casi lo pruebo
+                    parteIzq| = tempIzq;
                 }
-
-                if(continuouNo(parteDer) == false){ 
-                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                
+                if(!esTemporal(parteDer) && esLiteralVerdadero(parteDer)){ 
                     String tempDer = registroTemporalI();
                     C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
-                    parteDer = tempDer; 
-                }
-
+                    parteDer = tempDer;
+                }                
                 String temp = registroTemporalI();
                 C3D.append("\n" + temp + " = " + parteIzq + " >= " + parteDer + ";\n"); 
-                
-
-
                 RESULT = validacion + "::" + temp;
                 
             
@@ -2660,20 +2601,17 @@ class CUP$parser$actions {
                 String parteIzq = partesE1[0];
                 String parteDer = partesE2[0];
 
-                if(continuouNo(parteIzq) == false){ 
-                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                if(!esTemporal(parteIzq) && esLiteralVerdadero(parteIzq)){ 
                     String tempIzq = registroTemporalI();
                     C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
-                    parteIzq = tempIzq; // ya casi lo pruebo
+                    parteIzq| = tempIzq;
                 }
-
-                if(continuouNo(parteDer) == false){ 
-                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                
+                if(!esTemporal(parteDer) && esLiteralVerdadero(parteDer)){ 
                     String tempDer = registroTemporalI();
                     C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
-                    parteDer = tempDer; 
-                }
-
+                    parteDer = tempDer;
+                }                
                 String temp = registroTemporalI();
                 C3D.append("\n" + temp + " = " + parteIzq + " <= " + parteDer + ";\n"); 
                 RESULT = validacion + "::" + temp;
@@ -2700,20 +2638,17 @@ class CUP$parser$actions {
                 String parteIzq = partesE1[0];
                 String parteDer = partesE2[0];
 
-                if(continuouNo(parteIzq) == false){ 
-                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                if(!esTemporal(parteIzq) && esLiteralVerdadero(parteIzq)){ 
                     String tempIzq = registroTemporalI();
                     C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
-                    parteIzq = tempIzq; // ya casi lo pruebo
+                    parteIzq| = tempIzq;
                 }
-
-                if(continuouNo(parteDer) == false){ 
-                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                
+                if(!esTemporal(parteDer) && esLiteralVerdadero(parteDer)){ 
                     String tempDer = registroTemporalI();
                     C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
-                    parteDer = tempDer; 
-                }
-
+                    parteDer = tempDer;
+                }         
                 String temp = registroTemporalI();
                 C3D.append("\n" + temp + " = " + parteIzq + " == " + parteDer + ";\n"); 
                 RESULT = validacion + "::" + temp;
@@ -2740,20 +2675,17 @@ class CUP$parser$actions {
                 String parteIzq = partesE1[0];
                 String parteDer = partesE2[0];
 
-                if(continuouNo(parteIzq) == false){ 
-                    System.out.println("resultado " + parteIzq + " no es temporal, se pasa a temporal");
+                if(!esTemporal(parteIzq) && esLiteralVerdadero(parteIzq)){ 
                     String tempIzq = registroTemporalI();
                     C3D.append("\n" + tempIzq + " = " + parteIzq + ";\n");
-                    parteIzq = tempIzq; // ya casi lo pruebo
+                    parteIzq| = tempIzq;
                 }
-
-                if(continuouNo(parteDer) == false){ 
-                    System.out.println("resultado " + parteDer + " no es temporal, se pasa a temporal");
+                
+                if(!esTemporal(parteDer) && esLiteralVerdadero(parteDer)){ 
                     String tempDer = registroTemporalI();
                     C3D.append("\n" + tempDer + " = " + parteDer + ";\n");
-                    parteDer = tempDer; 
-                }
-
+                    parteDer = tempDer;
+                }         
                 String temp = registroTemporalI();
                 C3D.append("\n" + temp + " = " + parteIzq + " != " + parteDer + ";\n"); 
                 RESULT = validacion + "::" + temp;
