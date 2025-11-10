@@ -1129,6 +1129,7 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
     public static int syntaxErrors = 0;
+    public static int erroresSemanticos = 0;
     
     public void syntax_error(Symbol s) {
         syntaxErrors++;
@@ -1137,6 +1138,21 @@ public class parser extends java_cup.runtime.lr_parser {
         System.err.println("   Token inesperado: " + s.value);
     }
     
+    public String revisarTemporal(){
+        
+
+        if(codigo.Lexer.hayFloat){
+            String temp = "f" + contadorTemporalFloat;
+            contadorTemporalFloat++;
+            return temp;
+        } else
+        {
+            String temp = "t" + contadorTemporalInt;
+            contadorTemporalInt++;
+            return temp;
+        }
+    }
+
     public void report_error(String message, Object info) {
         System.err.println("ERROR: " + message);
     }
@@ -1253,6 +1269,13 @@ public class parser extends java_cup.runtime.lr_parser {
     }
 
     public void mostrarCodigo3Direcciones(){
+        int lexerErrors = codigo.Lexer.errorCount;
+        int syntaxErrors = codigo.parser.syntaxErrors;
+        int ErroresSemanticos = codigo.parser.erroresSemanticos;
+        if(lexerErrors > 0 || syntaxErrors > 0 || ErroresSemanticos > 0){
+            System.out.println("No se puede generar el código de tres direcciones ya que todavía hay errores en el sistema.");
+            return;
+        }
         System.out.println("Código de tres direcciones generado:");
         System.out.println(C3D.toString());
     }
@@ -1357,6 +1380,8 @@ class CUP$parser$actions {
          System.out.println(tablaActual.toString());
     }
     
+
+
     //Se crea una nueva tabla de símbolos
     public TablaDeSimbolos crearTablaDeSimbolos(String nombre){
         return new TablaDeSimbolos(nombre);
@@ -1407,6 +1432,7 @@ class CUP$parser$actions {
         if(simbolo == null){
             System.err.println("Error Semantico: El identificador " + pSimbolo + " no ha sido declarado previamente");
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }
     }
 
@@ -1420,6 +1446,7 @@ class CUP$parser$actions {
                 operacion, linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo1b = false;
         }
 
@@ -1429,6 +1456,7 @@ class CUP$parser$actions {
                 operacion, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo2b = false;
         }
 
@@ -1440,6 +1468,7 @@ class CUP$parser$actions {
                 operacion, linea1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return "null";
         }
     }
@@ -1451,13 +1480,15 @@ class CUP$parser$actions {
         if(simbolo == null){
             System.err.println("Error Semantico: El identificador " + nombreArreglo + " no ha sido declarado previamente. Linea " + linea);
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }else{
             //Verificar que el identificador sea un arreglo
             if(simbolo.getTipo().equals("arrayChar") | simbolo.getTipo().equals("arrayInt")){
                 //Verificar que el tipo de la expresión que me indica la posición sea entero
-                if(!(tipoPosicion.equals("int")){
+                if(!(tipoPosicion.equals("int"))){
                     System.err.println("Error Semantico: La expresion que indica la posicion donde se asignara el elemento en el arreglo " + nombreArreglo + " debe ser de tipo int. Linea " + linea);
                     erroresSemanticos++;
+                    parser.erroresSemanticos++;
                 }else{
                     //Verificar que el tipo del arreglo sea el mismo del elemento que se quiere asignar
                     if(simbolo.getTipo().toLowerCase().contains(tipoElementoAsignado)) {
@@ -1466,12 +1497,14 @@ class CUP$parser$actions {
                     }else{
                         System.err.println("Error Semantico: El tipo de la expresion que se quiere agregar al arreglo " + nombreArreglo + " no coincide con el del arreglo. Linea " + linea);
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                         }
                 }  
             }
             else{
                 System.err.println("Error Semantico: El tipo del identificador " + nombreArreglo + " no es un arreglo. Linea " + linea);
                 erroresSemanticos++;
+                parser.erroresSemanticos++;
             }
         }
 
@@ -1485,6 +1518,7 @@ class CUP$parser$actions {
         if(simbolo == null){
             System.err.println("Error Semantico: El identificador " + nombreArreglo + " no ha sido declarado previamente. Linea " + linea);
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }else{
             //Verificar que sea un arreglo
             if(simbolo.getTipo().equals("arrayChar") | simbolo.getTipo().equals("arrayInt")){
@@ -1492,6 +1526,7 @@ class CUP$parser$actions {
                if(!(tipoPosicionElemento.equals("int"))){
                     System.err.println("Error Semantico: La expresion que indica la posicion del elemento a tomar en el arreglo " + nombreArreglo + " debe ser de tipo int. Linea " + linea);
                     erroresSemanticos++;
+                    parser.erroresSemanticos++;
                 }else{
                         if(simbolo.getTipo().equals("arrayChar")){
                             retorno = "desconocido::char::" + linea + "::" + columna; //Hay que resolver esto para poder retornar el valor
@@ -1503,6 +1538,7 @@ class CUP$parser$actions {
             else{
                 System.err.println("Error Semantico: El tipo del identificador " + nombreArreglo + " no es un arreglo. Linea " + linea);
                 erroresSemanticos++;
+                parser.erroresSemanticos++;
             }
         }
         return retorno;
@@ -1514,6 +1550,7 @@ class CUP$parser$actions {
         if(!agregar){
             System.err.println("Error Semantico: Ya existe una funcion llamada " + pNombre + " Linea: " + linea);
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             funcionActual = "";
         }
     }
@@ -1534,6 +1571,7 @@ class CUP$parser$actions {
                 operacionTexto, linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador1 = false;
         }
 
@@ -1543,6 +1581,7 @@ class CUP$parser$actions {
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador2 = false;
         }
 
@@ -1565,6 +1604,7 @@ class CUP$parser$actions {
                 operacionTexto, linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador1 = false;
         }
 
@@ -1574,6 +1614,7 @@ class CUP$parser$actions {
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador2 = false;
         }
 
@@ -1596,6 +1637,7 @@ class CUP$parser$actions {
                 operacionTexto, linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador1 = false;
         }
 
@@ -1605,6 +1647,7 @@ class CUP$parser$actions {
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             verificacionOperador2 = false;
         }
 
@@ -1622,6 +1665,7 @@ class CUP$parser$actions {
                 identificador, linea, columna, tipoIdentificador, tipoExpresion 
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return false;
         }
         return true; //Pasa la validacion
@@ -1637,6 +1681,7 @@ class CUP$parser$actions {
                 identificador, simbolo.getTipo(), tipoExpresion, linea, columna
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return false;
             }else{
                  return true; //Pasa la validacion
@@ -1645,6 +1690,7 @@ class CUP$parser$actions {
         }else{
             System.err.println("Error Semantico: El identificador " + identificador + " no ha sido declarado previamente. Linea "+ linea);
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return false;
         }
         
@@ -2114,6 +2160,7 @@ class CUP$parser$actions {
                         }else{
                             RESULT = "null::null::" + (nleft + 1) + "::" + nright;
                             erroresSemanticos++;
+                            parser.erroresSemanticos++;
                         }
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arithmetic_operands",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2197,6 +2244,7 @@ class CUP$parser$actions {
                                 //Error 
                                 System.err.println("Error Semantico: La expresion " + partesExpresion[0] + " debe ser de tipo booleano para poder aplicarle la negacion. Linea "+ (ileft +1));
                                 erroresSemanticos++;
+                                parser.erroresSemanticos++;
                                 RESULT = "Σ"+ partesExpresion[0] + "::null::" + (ileft +1) + "::" + iright;
                             }else{
                                 RESULT = "Σ"+ partesExpresion[0] + "::bool::" + (ileft +1) + "::" + iright;
@@ -2276,6 +2324,7 @@ class CUP$parser$actions {
                                     (nleft +1), nright
                                     ));
                                     erroresSemanticos++;
+                                    parser.erroresSemanticos++;
                                     RESULT = "null::null::" + (nleft + 1) + "::" + nright;
                                 }
                             }else{
@@ -2313,6 +2362,7 @@ class CUP$parser$actions {
                                     (nleft +1), nright
                                     ));
                                     erroresSemanticos++;
+                                    parser.erroresSemanticos++;
                                     RESULT = "null::null::" + (nleft + 1) + "::" + nright;
                                 }
                             }else{
@@ -3351,6 +3401,7 @@ class CUP$parser$actions {
                         (idleft +1)
                         ));
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                     }else{
                         //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
                         ArrayList<Simbolo> simbolos = new ArrayList<>();
@@ -3476,6 +3527,7 @@ class CUP$parser$actions {
                         (idleft +1)
                         ));
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                     }else{
                         //Agregar el arreglo a la tabla. La función ya verifica si existía previamente
                         ArrayList<Simbolo> simbolos = new ArrayList<>();
@@ -3603,6 +3655,7 @@ class CUP$parser$actions {
                     if(!(partesOperador[1].equals("int"))){
                         System.err.println("Error Semantico: tamaño debe ser int. Linea " + (idleft + 1));
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                     } else {
                         int indice = 0;
                         
@@ -3625,6 +3678,7 @@ class CUP$parser$actions {
                                 } else {
                                     System.err.println("Error Semantico: elemento " + valor + " debe ser int. Linea " + (idleft + 1));
                                     erroresSemanticos++;
+                                    parser.erroresSemanticos++;
                                 }
                             }
                         }
@@ -3735,6 +3789,7 @@ class CUP$parser$actions {
                         (idleft +1)
                         ));
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                     }else{
                         int indice = 0;
 
@@ -3753,10 +3808,12 @@ class CUP$parser$actions {
                                 } else {  
                                     System.err.println("Error Semantico: El tipo del elemento " + valor + " debe ser char para poder incluirlo en el arreglo " + id + " de la linea " + (idleft + 1) + ".");
                                     erroresSemanticos++;
+                                    parser.erroresSemanticos++;
                                 }
                             } else {  
                                 System.err.println("Error Semantico: Formato incorrecto en elemento del arreglo " + id + " de la linea " + (idleft + 1) + ".");
                                 erroresSemanticos++;
+                                parser.erroresSemanticos++;
                             }
                         }
 
@@ -3871,6 +3928,7 @@ class CUP$parser$actions {
                     }else{
                         RESULT = n + ";;null;;null";
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                     }
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -3936,6 +3994,7 @@ class CUP$parser$actions {
                         }else{
                             RESULT = rec + "::" + n+";;null";
                             erroresSemanticos++;
+                            parser.erroresSemanticos++;
                         }
                      
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -4232,6 +4291,7 @@ class CUP$parser$actions {
                             expresion[0], expresion[1], ileft+1
                         ));
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                         }
                         
 
@@ -4430,6 +4490,7 @@ class CUP$parser$actions {
                             expresion[0], expresion[1], ileft+1
                         ));
                         erroresSemanticos++;
+                        parser.erroresSemanticos++;
                         }
                         //Crear la tabla de símbolos
                         TablaDeSimbolos t = crearTablaDeSimbolos("elif"); //Crear la nueva tabla para el decide of
@@ -4566,6 +4627,7 @@ class CUP$parser$actions {
             expresion[0], expresion[1], eleft+1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
          }
 
 
@@ -5291,6 +5353,7 @@ class CUP$parser$actions {
                         //Se reporta el error semántico. Se pretende retornar algo en una función void
                         System.err.println("Error Semantico: La funcion " + funcionActual + " es de tipo " + tipoFuncion+ ". El retorno debe de incluir un valor de este tipo. Linea " + (rleft + 1)); 
                          erroresSemanticos++;
+                         parser.erroresSemanticos++;
                     }
                     
                   
@@ -5316,6 +5379,7 @@ class CUP$parser$actions {
                         //Se reporta el error semántico. El retorno es diferente al tipo de la función
                         System.err.println("Error Semantico: La funcion " + funcionActual + " es de tipo " + tipoFuncion+ ". El retorno debe de incluir un valor de este tipo. Linea " + (rleft + 1)); 
                          erroresSemanticos++;
+                         parser.erroresSemanticos++;
                     }
                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("return_statement",42, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -5368,15 +5432,18 @@ class CUP$parser$actions {
                             }else{
                                 System.err.println("Error Semantico: No coinciden los tipos de los parametros indicados en la funcion " + id + " Se esperaba: " + tablaDeFunciones.obtenerListaDeTiposDeParametros(id)+ " .Linea " + (idleft + 1)); 
                                 erroresSemanticos++;
+                                parser.erroresSemanticos++;
                             }
                         }else{
                             System.err.println("Error Semantico: La cantidad de parametros indicada en el llamado a la funcion " + id + " no es correcta. Se esperaban " + tablaDeFunciones.cantidadDeParametros(id)+ " .Linea " + (idleft + 1)); 
                             erroresSemanticos++;
+                            parser.erroresSemanticos++;
                             
                         }
                     }else{
                          System.err.println("Error Semantico: No se ha declarado una funcion con el nombre " + id + " .Linea " + (idleft + 1)); 
                          erroresSemanticos++;
+                         parser.erroresSemanticos++;
                     }
                     RESULT = retorno; //Se coloca el valor de retorno en el RESULT para posteriores validaciones   id de la funcion::tipo
                     
@@ -5426,6 +5493,7 @@ class CUP$parser$actions {
             }else{
                 RESULT = n+"::null";
                 erroresSemanticos++;
+                parser.erroresSemanticos++;
             }
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("args",44, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -5522,6 +5590,7 @@ class CUP$parser$actions {
             }else{
                 RESULT = ar + ";;" + n+"::null";
                 erroresSemanticos++;
+                parser.erroresSemanticos++;
             }
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("args",44, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

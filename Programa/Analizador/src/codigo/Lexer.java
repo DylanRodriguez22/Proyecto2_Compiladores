@@ -408,6 +408,7 @@ public class Lexer implements java_cup.runtime.Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
+    public static boolean hayFloat = false;
     private PrintWriter logWriter;
     private ArrayList<String> errores = new ArrayList<>();
     public static int errorCount = 0;
@@ -1178,7 +1179,7 @@ public class Lexer implements java_cup.runtime.Scanner {
           // fall through
           case 99: break;
           case 39:
-            { return symbol(sym.float_literal, yytext());
+            { hayFloat = true; return symbol(sym.float_literal, yytext());
             }
           // fall through
           case 100: break;
@@ -1253,7 +1254,7 @@ public class Lexer implements java_cup.runtime.Scanner {
           // fall through
           case 114: break;
           case 54:
-            { return symbol(sym.float_keyword, yytext());
+            { hayFloat = true; return symbol(sym.float_keyword, yytext());
             }
           // fall through
           case 115: break;
