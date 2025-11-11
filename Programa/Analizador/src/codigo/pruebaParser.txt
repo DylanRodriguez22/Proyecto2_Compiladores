@@ -1,8 +1,10 @@
+let int gInt$
 float miFunc є э¿return 1.2$?
 char miFunc2 є э¿return 'a'$?
+
 void principal є э ¿
     let float a = miFunc є э * 1.2$
-    let float boyaka = 1.2 * 2.5 + -1.5 + a++ /2.2$
+    let float boyaka = 1.2 * 2.5 + -1.5 + a++ / 2.2$
     let int bbcita = - 2$  
     let int contador = 5$
     let int resultado = contador ++$
@@ -10,6 +12,8 @@ void principal є э ¿
     let string a = "hola mundo cruel !·¿%+çç-´´+-.,·$·%$·&$%/&$%(%&()/%&(%(%&''123124214521"$
     let char b = ''$
     let bool booleano = True$
+    output hola$
+    output gInt$
     
     decide of є booleano @ bbcita - contador + contador++ > 5 @ boyaka < 5.2 + miFunc є э  @ Σbooleano э  -> ¿
         let float callese = boyaka$ 

@@ -3,6 +3,7 @@ import java_cup.runtime.*;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
 action code {: 
     TablaDeFunciones tablaDeFunciones = new TablaDeFunciones();
     TablaDeSimbolos tablaGlobal = new TablaDeSimbolos("Global"); //
@@ -34,6 +35,7 @@ action code {:
                 linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo1b = false;
         }
 
@@ -43,6 +45,7 @@ action code {:
                 linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo2b = false;
         }
 
@@ -54,13 +57,14 @@ action code {:
                 linea1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return "null";
         }
     }
 
     public String verificacionAritmeticaDivisionEntera(String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
         boolean tipo1b = true;
-        boolean tipo2b = true;
+        boolean tipo2b = true;  
 
         if(!(tipo1.equals("int"))){
             System.err.println(String.format(
@@ -68,6 +72,7 @@ action code {:
                 linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo1b = false;
         }
 
@@ -77,6 +82,7 @@ action code {:
                 linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo2b = false;
         }
 
@@ -88,6 +94,7 @@ action code {:
                 linea1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return "null";
         }
     }
@@ -305,6 +312,7 @@ action code {:
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }
         return retorno;
     }
@@ -344,6 +352,7 @@ action code {:
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }
         return retorno;
     }
@@ -573,6 +582,16 @@ parser code {:
         if(lexerErrors > 0 || syntaxErrors > 0 || ErroresSemanticos > 0){
             System.out.println("No se puede generar el código de tres direcciones ya que todavía hay errores en el sistema.");
             return;
+        }
+        String codigo = C3D.toString();
+
+        try {
+            java.nio.file.Path out = java.nio.file.Paths.get("Codigo3Direcciones.txt");
+            java.nio.file.Files.write(out, codigo.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            System.out.println("C3D guardado en: " + out.toAbsolutePath());
+        } catch (IOException e) {
+            System.out.println("Se cayó la progra");
+            e.printStackTrace();
         }
         System.out.println("Código de tres direcciones generado:");
         System.out.println(C3D.toString());
@@ -839,7 +858,7 @@ start with program;
 
 
 arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
-                          {: 
+                          {:  
                                String[] partesE1 = e1.toString().split("::"); 
                                String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("suma", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -847,7 +866,7 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                             String sumaiz = partesE1[0]; // parte izquierda de la suma
                             String sumader = partesE2[0]; // parte derecha de la suma
                             
-                            // revisamos si la parte izq es temporal 
+                            // revisamos si la parte izq es temporal  
                             if(!esTemporal(sumaiz) && esLiteralVerdadero(sumaiz)){ 
                                 String tempIzq = registroTemporalI();
                                 C3D.append("\n" + tempIzq + " = " + sumaiz + ";\n");

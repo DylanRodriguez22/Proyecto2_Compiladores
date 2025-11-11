@@ -9,6 +9,7 @@ import java_cup.runtime.*;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -1275,12 +1276,22 @@ public class parser extends java_cup.runtime.lr_parser {
             System.out.println("No se puede generar el código de tres direcciones ya que todavía hay errores en el sistema.");
             return;
         }
+        String codigo = C3D.toString();
+
+        try {
+            java.nio.file.Path out = java.nio.file.Paths.get("Codigo3Direcciones.txt");
+            java.nio.file.Files.write(out, codigo.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            System.out.println("C3D guardado en: " + out.toAbsolutePath());
+        } catch (IOException e) {
+            System.out.println("Se cayó la progra");
+            e.printStackTrace();
+        }
         System.out.println("Código de tres direcciones generado:");
         System.out.println(C3D.toString());
     }
 
     public boolean esLiteral(String valor){
-        if(!valor.matches("t[0-9]+")){
+        if(!valor.matches("t[0-9]+") || !valor.matches("f[0-9]+")){
             return true; // seria literal
         }
         else {
@@ -1404,6 +1415,7 @@ class CUP$parser$actions {
                 linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo1b = false;
         }
 
@@ -1413,6 +1425,7 @@ class CUP$parser$actions {
                 linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo2b = false;
         }
 
@@ -1424,13 +1437,14 @@ class CUP$parser$actions {
                 linea1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return "null";
         }
     }
 
     public String verificacionAritmeticaDivisionEntera(String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
         boolean tipo1b = true;
-        boolean tipo2b = true;
+        boolean tipo2b = true;  
 
         if(!(tipo1.equals("int"))){
             System.err.println(String.format(
@@ -1438,6 +1452,7 @@ class CUP$parser$actions {
                 linea1, columna1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo1b = false;
         }
 
@@ -1447,6 +1462,7 @@ class CUP$parser$actions {
                 linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             tipo2b = false;
         }
 
@@ -1458,6 +1474,7 @@ class CUP$parser$actions {
                 linea1
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
             return "null";
         }
     }
@@ -1675,6 +1692,7 @@ class CUP$parser$actions {
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }
         return retorno;
     }
@@ -1714,6 +1732,7 @@ class CUP$parser$actions {
                 operacionTexto, linea2, columna2
             ));
             erroresSemanticos++;
+            parser.erroresSemanticos++;
         }
         return retorno;
     }
@@ -1839,7 +1858,7 @@ class CUP$parser$actions {
 		int e2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int e2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object e2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 
+		  
                                String[] partesE1 = e1.toString().split("::"); 
                                String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("suma", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1847,7 +1866,7 @@ class CUP$parser$actions {
                             String sumaiz = partesE1[0]; // parte izquierda de la suma
                             String sumader = partesE2[0]; // parte derecha de la suma
                             
-                            // revisamos si la parte izq es temporal 
+                            // revisamos si la parte izq es temporal  
                             if(!esTemporal(sumaiz) && esLiteralVerdadero(sumaiz)){ 
                                 String tempIzq = registroTemporalI();
                                 C3D.append("\n" + tempIzq + " = " + sumaiz + ";\n");
@@ -2983,7 +3002,7 @@ class CUP$parser$actions {
                 } 
                 
                 // si es un temporal entonces lo asigno de una vez 
-                else if (!continuouNo(parteUnica)) {
+                else if (!parteUnica.matches("f[0-9]+")) {
                     String tempExtra = registroTemporalF();
                     C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
                     parteUnica = tempExtra;
