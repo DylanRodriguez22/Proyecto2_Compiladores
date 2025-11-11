@@ -10,10 +10,8 @@ action code {:
     String funcionActual = "";
 
     int erroresSemanticos = 0;
-    public void hola(){
-         System.out.println(tablaActual.toString());
-    }
-    
+   
+   
     public void validacionSemanticaAsignacionFor(String tipoIdentificador, String tipoStep, String fila, String columna){
         if(!(tipoIdentificador.equals(tipoStep))){
             System.err.println(String.format(
@@ -111,26 +109,26 @@ action code {:
 
     //Coloca la tabla anterior a la actual como la nueva tabla actual
     public void desapilarTablaDeSimbolos(){
-        System.out.println("Voy a desapilar tabla: " + tablaActual.getNombre());
+        
         TablaDeSimbolos tablaAnterior = tablaActual.getTablaAnterior();
         if(tablaAnterior != null){
             
             tablaActual = tablaAnterior; //Con esto ya no hay referencia a la primera tabla de la pila
-            System.out.println("La tabla actual es ahora: " + tablaActual.getNombre());
+            
         }else{
-            System.out.println("Error: Se está intentando desapilar la tabla Global");
+            System.err.println("Error: Se está intentando desapilar la tabla Global");
         }
     }
 
     //Añade a la tabla actual el símbolo indicado. VERIFICAR SI EL SÍMBOLO YA ESTÁ EN LA TABLA ACTUAL.
     public void agregarSimbolo(String pTipo, String pSimbolo){
-        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + " con el tipo "+ pTipo);
+        
         tablaActual.agregarSimbolo(new Simbolo(pSimbolo, pTipo));
     }
 
     //Añade a la tabla actual el símbolo indicado. VERIFICAR SI EL SÍMBOLO YA ESTÁ EN LA TABLA ACTUAL.
     public void agregarSimboloArray(String pTipo, String pSimbolo, String pTamanio, ArrayList<Simbolo> pElementosArreglo){
-        System.out.println("Se agrega el simbolo " + pSimbolo + " a la tabla "+tablaActual.getNombre() + " con el tipo "+ pTipo);
+        
         tablaActual.agregarSimbolo(new SimboloArreglo(pSimbolo, pTipo, pTamanio, pElementosArreglo));
     }
     
@@ -189,6 +187,7 @@ action code {:
     //Esto es para cuando se quiere hacer arreglo[i+2] = 5*1$
     public void agregarElementoArregloPosicionEspecifica(String nombreArreglo, int linea, String tipoPosicion, String tipoElementoAsignado, String posicionArreglo, String elementoAsignado){
         //Verificar que el identificador exista,
+        int a = 0;
         Simbolo simbolo = buscarSimbolo(nombreArreglo);
         if(simbolo == null){
             System.err.println("Error Semantico: El identificador " + nombreArreglo + " no ha sido declarado previamente. Linea " + linea);
@@ -206,7 +205,7 @@ action code {:
                     //Verificar que el tipo del arreglo sea el mismo del elemento que se quiere asignar
                     if(simbolo.getTipo().toLowerCase().contains(tipoElementoAsignado)) {
                         //Aquí ya debería de hacer el movimiento y meter el elemento en el arreglo
-                        System.out.println("Se agrega elemento a arreglo");
+                        a = 1;
                     }else{
                         System.err.println("Error Semantico: El tipo de la expresion que se quiere agregar al arreglo " + nombreArreglo + " no coincide con el del arreglo. Linea " + linea);
                         erroresSemanticos++;
@@ -463,15 +462,15 @@ parser code {:
 
     public void sePuedeoNo(){
         int lexerErrors = codigo.Lexer.errorCount; 
-        
-        if (lexerErrors == 0 && syntaxErrors == 0) {
+        int ErroresSemanticos = codigo.parser.erroresSemanticos;
+        if (lexerErrors == 0 && syntaxErrors == 0 && ErroresSemanticos == 0) {
             System.out.println("La gramatica si puede ser generada");
         }
         else {
             System.out.println("La gramatica no puede ser generada");
             System.out.println("Numero de errores en el lexer: " + lexerErrors); 
             System.out.println("Numero de errores en el parser: " + syntaxErrors);
-            
+            System.out.println("Numero de errores semanticos: " + ErroresSemanticos);
         }
     }
 
@@ -527,7 +526,7 @@ parser code {:
     ArrayList<String> direccionesBreak = new ArrayList<>();
     public void AgregarDireccion(String direccion) {
         direccionesBreak.add(direccion);
-        System.out.println("DEBUG - direcccion break: " + direccion);
+        
     }
 
     public String obtenerDireccionActual() {
@@ -542,7 +541,7 @@ parser code {:
     public void eliminarDireccionBreak() {
         if (!direccionesBreak.isEmpty()) {
             String direccion = direccionesBreak.remove(direccionesBreak.size() - 1);
-            System.out.println("DEBUG - direccion break quitadc|: " + direccion);
+            
         }
     }
 
@@ -635,13 +634,13 @@ parser code {:
 
     public boolean continuouNo(String valor){
         if (valor.matches("t[0-9]+")){
-            System.out.println("Es un temporal");
+            
             return true; 
         }
     
 
         
-        System.out.println("Valor en continuouNo: " + valor);
+        
         for (int i : array) {
             if (valor.equals(String.valueOf(i))) {
 
@@ -797,7 +796,7 @@ non terminal params_tail;
 non terminal return_statement;
 non terminal function_call;
 non terminal args;
-non terminal args_tail;
+
 
 // Programa principal
 non terminal principal;
@@ -840,7 +839,7 @@ start with program;
 
 
 arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
-                          {: System.out.println("Suma (+)"); 
+                          {: 
                                String[] partesE1 = e1.toString().split("::"); 
                                String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("suma", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -865,12 +864,12 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                             C3D.append("\n" + temp + " = " + sumaiz + " + " + sumader + ";\n");
 
                             RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
-                            System.out.println(partesE1[0] + "+" + partesE2[0] + "::" + temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3] + "::" + temp);
+                            
                           :}
                        | arithmetic_expression plus_operator error
                        {: System.err.println("Error:En la expresión aritmética después de +"); RESULT = "null::null::-1::-1";:}
                        |  arithmetic_expression:e1 minus_operator term:e2
-                          {: System.out.println("Resta (-)"); 
+                          {: 
                             String[] partesE1 = e1.toString().split("::");
                             String[] partesE2 = e2.toString().split("::");
                             String verificacion = verifiacionSemanticaAritmeticaBinaria("resta", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -906,7 +905,7 @@ term ::= term:e1 multiplication_operator power:e2
       {: 
         String[] partesE1 = e1.toString().split("::");
         String[] partesE2 = e2.toString().split("::");
-        System.out.println("Multiplicacion (*)"); 
+        
         String verificacion = verifiacionSemanticaAritmeticaBinaria("multiplicacion", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
        
         String mulIzq = partesE1[0]; // parte izquierda de la multiplicacion
@@ -930,7 +929,7 @@ term ::= term:e1 multiplication_operator power:e2
         
       :}
       |  term:e1 division_operator power:e2
-      {: System.out.println("Division (/)"); 
+      {: 
         String[] partesE1 = e1.toString().split("::");
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verificacionAritmeticaDivisionFlotante(partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -955,7 +954,7 @@ term ::= term:e1 multiplication_operator power:e2
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       :}
       |  term:e1 int_division_operator power:e2
-      {: System.out.println("Division entera (//)");
+      {: 
         String[] partesE1 = e1.toString().split("::");
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verificacionAritmeticaDivisionEntera(partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -981,7 +980,7 @@ term ::= term:e1 multiplication_operator power:e2
 
       :}
       |  term:e1 modulo_operator power:e2
-      {: System.out.println("Modulo (%)"); 
+      {: 
         String[] partesE1 = e1.toString().split("::");
         String[] partesE2 = e2.toString().split("::");
         String verificacion = verifiacionSemanticaAritmeticaBinaria("modulo", partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1009,7 +1008,7 @@ term ::= term:e1 multiplication_operator power:e2
       ;
 
 power ::= factor:e1 power_operator power:e2
-       {: System.out.println("Potencia (^)"); 
+       {:  
             //Voy a dejarlo de igual manera que ambos sean enteros o flotantes
             String[] partesE1 = e1.toString().split("::");
             String[] partesE2 = e2.toString().split("::");
@@ -1039,7 +1038,7 @@ power ::= factor:e1 power_operator power:e2
        ;
 
 factor ::= left_parenthesis logical_expresion_and:e right_parenthesis
-        {: System.out.println("Expresion entre parentesis reconocida"); RESULT = e;:}
+        {: RESULT = e;:}
         |  arithmetic_operands:e {: RESULT = e;:}
         ;
 
@@ -1061,8 +1060,8 @@ arithmetic_operands ::= int_literal:n {: RESULT = n + "::int::" + (nleft + 1) + 
                     :}
                      |  unary_negative:n {: RESULT = n; :} 
                      |  postfix_expression:n {: RESULT = n; :}
-                     |  array_access:n {: RESULT = n; System.out.println("Operando acceso array: " + n);:}
-                     |  function_call:n {: RESULT = n; System.out.println("Operando funcion: " + n); :}
+                     |  array_access:n {: RESULT = n; :}
+                     |  function_call:n {: RESULT = n;  :}
                      |  bool_literal:n {: RESULT = n + "::bool::" + (nleft +1) + "::" + nright;:}
                      |  not_operator:i logical_expresion_and:e 
                         {:
@@ -1083,7 +1082,7 @@ arithmetic_operands ::= int_literal:n {: RESULT = n + "::int::" + (nleft + 1) + 
 
                      ///PROBAR CUANDO HAYAN ASIGNACIONES
 unary_negative ::= minus_operator int_literal:n 
-                {: System.out.println("Negativo entero"); 
+                {:  
                 String temp2 = registroTemporalI();
                 String temp3 = registroTemporalI();
                 String temp = registroTemporalI();
@@ -1095,7 +1094,7 @@ unary_negative ::= minus_operator int_literal:n
                     RESULT = temp + "::int::" + (nleft +1) + "::" + nright;
                 :}
                 |  minus_operator float_literal:n
-                    {: System.out.println("Negativo flotante"); 
+                    {: 
                     String temp = registroTemporalF();
                     C3D.append("\n" + temp + " = " + " - " + n + ";\n");
                         RESULT = temp  + "::float::" + (nleft +1) + "::" + nright;
@@ -1104,7 +1103,7 @@ unary_negative ::= minus_operator int_literal:n
 
                 //FALTA ASIGNACIONES
 postfix_expression ::= identifier:n increment_operator 
-                        {: System.out.println("Incremento (++)"); 
+                        {: 
                             //Verificar que el identificador sea entero o flotante
                             //Verificar que exista el identificador
                             reportarErrorNoExisteSimbolo(n);
@@ -1143,7 +1142,7 @@ postfix_expression ::= identifier:n increment_operator
                                 RESULT = "null::null::" + (nleft + 1) + "::" + nright;
                             }
                         :}
-                    |  identifier:n decrement_operator {: System.out.println("Decremento (--)"); 
+                    |  identifier:n decrement_operator {: 
                         //Verificar que el identificador sea entero o flotante
                             //Verificar que exista el identificador
                             reportarErrorNoExisteSimbolo(n);
@@ -1187,7 +1186,7 @@ postfix_expression ::= identifier:n increment_operator
 // Expresiones logicas and, or y negación
 
 logical_expresion_and ::= logical_expresion_and:e1 and_operator logical_expresion_or:e2
-            {: System.out.println("Operador logico AND (@)"); 
+            {:  
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String parteIzq2;
@@ -1203,8 +1202,8 @@ logical_expresion_and ::= logical_expresion_and:e1 and_operator logical_expresio
                 } else {
                     parteDer2 = partesE2[0];
                 }
-                System.out.println("Parte der en AND: " + parteDer2);
-                System.out.println("Parte izq en AND: " + parteIzq2);
+                
+            
                 String validacion = validacionLogicaSoloBoleanos("AND", "@", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
 
                 if(!esTemporal(parteIzq2) && esLiteralVerdadero(parteIzq2)){ 
@@ -1227,7 +1226,7 @@ logical_expresion_and ::= logical_expresion_and:e1 and_operator logical_expresio
             ;
 
 logical_expresion_or ::= logical_expresion_or:e1 or_operator relational_expression:e2
-            {: System.out.println("Operador logico OR (~)"); 
+            {:  
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionLogicaSoloBoleanos("OR", "~", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1266,7 +1265,7 @@ logical_expresion_or ::= logical_expresion_or:e1 or_operator relational_expressi
             ;
 //Expresiones relacionales. Ya no va a aceptar expresiones tipo x24 >= var > 5.6
 relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_expression:e2
-            {: System.out.println("Mayor que (>) reconocido"); 
+            {: 
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("mayor que", ">", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1290,7 +1289,7 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
 
             :}
             |  arithmetic_expression:e1 less_operator arithmetic_expression:e2
-            {: System.out.println("Menor que (<) reconocido"); 
+            {: 
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("menor que", "<", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1314,7 +1313,7 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
 
             :}
             |  arithmetic_expression:e1 greater_equal_operator arithmetic_expression:e2
-            {: System.out.println("Mayor o igual que (>=) reconocido"); 
+            {: 
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("mayor o igual que", ">=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1338,7 +1337,7 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
                 
             :}
             |  arithmetic_expression:e1 less_equal_operator arithmetic_expression:e2
-            {: System.out.println("Menor o igual que (<=) reconocido"); 
+            {: 
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalNoBoleanos("menor o igual que", "<=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1362,7 +1361,7 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
     
             :}
             |  arithmetic_expression:e1 equal_operator arithmetic_expression:e2
-            {: System.out.println("Igual que (==) reconocido"); 
+            {: 
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalConBoleanos("igual que", "==", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1386,7 +1385,7 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
       
             :}
             |  arithmetic_expression:e1 not_equal_operator arithmetic_expression:e2
-            {: System.out.println("Diferente que (!=) reconocido"); 
+            {:  
                 String[] partesE1 = e1.toString().split("::");
                 String[] partesE2 = e2.toString().split("::");
                 String validacion = validacionRelacionalConBoleanos("diferente que", "!=", partesE1[0] , partesE2[0] ,partesE1[1], partesE2[1], partesE1[2], partesE2[2], partesE1[3], partesE2[3]);
@@ -1408,7 +1407,7 @@ relational_expression ::= arithmetic_expression:e1 greater_operator arithmetic_e
                 C3D.append("\n" + temp + " = " + parteIzq + " != " + parteDer + ";\n"); 
                 RESULT = validacion + "::" + temp;
             :}
-	    | arithmetic_expression:e {: System.out.println("Expresión aritmética"); RESULT = e; :}
+	    | arithmetic_expression:e {:  RESULT = e; :}
             ;
             
 //Declaraciones. Se salvan los valores tanto el de la expresión lógica que viene de todo un proceso de reducción para el tipo y los literales
@@ -2440,8 +2439,11 @@ for_loop_left ::=
         for_helperInicio reassignment:var step_keyword int_literal:paso to_keyword int_literal:hasta do_keyword 
         {:  
             //Validación
-            Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));         
-            validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "int", String.valueOf(varleft+1), String.valueOf(varright));
+            Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));
+            if (simboloReasignacion != null){
+                validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "int", String.valueOf(varleft+1), String.valueOf(varright));
+            }   
+            
 
             String etiquetaFinFor = "fin_for" + contadorFor;
             AgregarDireccion(etiquetaFinFor);
@@ -2469,7 +2471,9 @@ for_loop_left ::=
             //Validación
             //Validación
             Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));         
-            validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "int", String.valueOf(varleft+1), String.valueOf(varright));
+            if (simboloReasignacion != null){
+                validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "int", String.valueOf(varleft+1), String.valueOf(varright));
+            }  
 
             //Crear la tabla de símbolos
 
@@ -2496,7 +2500,9 @@ for_loop_left ::=
             //Validación
             //Validación
             Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));         
-            validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "float", String.valueOf(varleft+1), String.valueOf(varright));
+            if (simboloReasignacion != null){
+                validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "float", String.valueOf(varleft+1), String.valueOf(varright));
+            }  
 
             String temp = registroTemporalF();
             C3D.append("\n" + temp + " = " + paso + ";\n");
@@ -2519,7 +2525,9 @@ for_loop_left ::=
         {:
             //Validación
             Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));         
-            validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "float", String.valueOf(varleft+1), String.valueOf(varright));
+            if (simboloReasignacion != null){
+                validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "float", String.valueOf(varleft+1), String.valueOf(varright));
+            }  
 
             //Crear la tabla de símbolos
             String temp = registroTemporalF();
@@ -2891,9 +2899,10 @@ args ::= int_literal:e  {: RESULT = e + "::int"; :} //valor::tipo
             }
         :}
       
-      |  array_access:e {: RESULT = e :} //aquí viene de otras producciones el valor del elemento al que se acceda 
-      |  STRING_LITERAL:e args_tail {: RESULT = e + "::string"; :} 
-      |  CHAR_LITERAL:e args_tail {: RESULT = e + "::char"; :} 
+      |  array_access:e {: RESULT = e; :} //aquí viene de otras producciones el valor del elemento al que se acceda 
+      |  STRING_LITERAL:e  {: RESULT = e + "::string"; :} 
+      |  CHAR_LITERAL:e {: RESULT = e + "::char"; :} 
+      |  bool_literal:e {: RESULT = e + "::bool"; :}
       |  args:ar comma_keyword int_literal:e
         {:
             RESULT = ar + ";;" + e + "::int";  
@@ -2928,6 +2937,10 @@ args ::= int_literal:e  {: RESULT = e + "::int"; :} //valor::tipo
       |  args:ar comma_keyword  CHAR_LITERAL:e
         {:
             RESULT = ar + ";;" + e + "::char";  
+        :}
+        |  args:ar comma_keyword  bool_literal:e
+        {:
+            RESULT = ar + ";;" + e + "::bool";  
         :}
       ;
 

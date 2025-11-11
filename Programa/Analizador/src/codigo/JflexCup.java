@@ -110,10 +110,10 @@ public class JflexCup {
             Symbol resultado = parser.parse();
 
             System.out.println("\n" + "=".repeat(45));
-            System.out.println("\n¡Parser funciona!\n");
-            System.out.println("Análisis léxico: OK");
-            System.out.println("Análisis sintáctico: OK");
-            System.out.println("Estructura del programa: VÁLIDA");
+            //System.out.println("\n¡Parser funciona!\n");
+            //System.out.println("Análisis léxico: OK");
+            //System.out.println("Análisis sintáctico: OK");
+            //System.out.println("Estructura del programa: VÁLIDA");
             System.out.println("\n Log de tokens en: " + logTokens);
             System.out.println("\n" + "=".repeat(45));
             

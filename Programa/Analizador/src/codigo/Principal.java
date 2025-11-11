@@ -13,6 +13,8 @@ public class Principal {
         String basePath = System.getProperty("user.dir");
         String rutaTxt = basePath + "/src/codigo/pruebaParser.txt";
        
+        //"/src/codigo/ejemplo código 2.sintactico.base 3.txt"
+        
         //JflexCup.generateFiles();
         JflexCup.probarParser(rutaTxt);
     }
