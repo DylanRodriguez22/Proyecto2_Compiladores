@@ -3993,7 +3993,7 @@ class CUP$parser$actions {
                     String temp = registroTemporalI();
                     C3D.append("\n" + temp + " = " + e + ";\n");
                     RESULT = rec + "::" + e + ";;int;;" + temp;  
-                    System.out.println("DEBUG - resultado: " + RESULT);
+                    
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4013,7 +4013,7 @@ class CUP$parser$actions {
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + e + ";\n");
                         RESULT = rec + "::" + e + ";;char;;" + temp;
-                        System.out.println("DEBUG - resultado: " + RESULT);
+                        
 
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("array_literals",35, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -4058,7 +4058,7 @@ class CUP$parser$actions {
 		int elementleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int elementright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object element = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Asignacion a elemento de arreglo"); 
+		  
                     String[] posicionArreglo = op.toString().split("::");
                     String[] elementoAsignado = element.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], elementoAsignado[1], posicionArreglo[0], elementoAsignado[0]);
@@ -4094,9 +4094,7 @@ class CUP$parser$actions {
 		int elementleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int elementright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String element = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Asignacion a elemento de arreglo"); 
-                   System.out.println(op);
-                   System.out.println(id);
+		 
                     String[] posicionArreglo = op.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], "char", posicionArreglo[0], element.toString());
                      
@@ -4122,7 +4120,7 @@ class CUP$parser$actions {
 		int opright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object op = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 //Verificar que exista el arreglo y que la expresión sea entero. Tipo arrayInt o arrayChar 
-                    System.out.println(op);
+                   
                     String[] posicionArreglo = op.toString().split("::");
                     String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1), idright); //valor::tipo::fila::columna
                     
@@ -4141,7 +4139,7 @@ class CUP$parser$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 
-                    System.out.println("Input reconocido");
+                    
                     String temp = registroTemporalI();
                     C3D.append("\n" + "input " + " = " + temp + ";\n");
                     C3D.append("\n" + i + " = " + temp + ";\n");
@@ -4185,8 +4183,8 @@ class CUP$parser$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 
-                    System.out.println("Output id"); 
-                    System.out.println("output reconocido");
+                    
+                    
                     String temp = registroTemporalI();
                     C3D.append("\n" + "output " + " = " + temp + ";\n");
                     C3D.append("\n" + i + " = " + temp + ";\n");
@@ -4208,7 +4206,7 @@ class CUP$parser$actions {
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + i + ";\n");
                         C3D.append("\n" + "output " + " = " + temp + ";\n");
-                        System.out.println("Output entero"); 
+                        
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4222,11 +4220,11 @@ class CUP$parser$actions {
 		int fright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String f = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 
-                        System.out.println("Output float"); 
+                        
                         String temp = registroTemporalF();
                          C3D.append("\n" + temp + " = " + f + ";\n");
                         C3D.append("\n" + "output " + " = " + temp + ";\n");
-                        System.out.println("Output float");                        
+                                               
 
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -4244,7 +4242,7 @@ class CUP$parser$actions {
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + b + ";\n");
                         C3D.append("\n" + "output " + " = " + temp + ";\n");
-                        System.out.println("Output booleano");                        
+                                                
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4261,7 +4259,7 @@ class CUP$parser$actions {
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + c + ";\n");
                         C3D.append("\n" + "output " + " = " + temp + ";\n");
-                        System.out.println("Output char");                      
+                                              
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("output_statement",20, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4275,7 +4273,7 @@ class CUP$parser$actions {
 		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String s = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 
-                        System.out.println("Output string"); 
+                         
                     
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + s + ";\n");
@@ -4393,7 +4391,7 @@ class CUP$parser$actions {
             C3D.append("goto if_1_fin;\n");
             
             C3D.append("\nif_1_fin:\n");
-            System.out.println("decide of normal"); 
+             
             eliminarDireccionBreak(); 
                 
                 
@@ -4410,7 +4408,7 @@ class CUP$parser$actions {
                 C3D.append("\nif_" + (contadorIF + 1) + "_encabezado:\n");
                 C3D.append("goto if_1_fin;\n");
                 C3D.append("\nif_1_fin:\n");
-            System.out.println("decide of con varias condiciones"); 
+            
             eliminarDireccionBreak();
 
             
@@ -4432,7 +4430,7 @@ class CUP$parser$actions {
                 
                 C3D.append("\nif_1_fin:\n");
                 
-                System.out.println("decide of con else"); 
+                
                 eliminarDireccionBreak();
                 
                 
@@ -4458,7 +4456,7 @@ class CUP$parser$actions {
 
 
 
-                System.out.println("decide of con varias condiciones y else"); 
+                
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("decide_of",27, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4479,7 +4477,7 @@ class CUP$parser$actions {
               Object RESULT =null;
 		
     UltimoElif = true;
-    System.out.println("llegue al final");
+    
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elif_list",30, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4492,7 +4490,7 @@ class CUP$parser$actions {
 		
         UltimoElif = false;
         existeElif = true;
-        System.out.println("me faltan elif");
+        
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elif_list",30, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -4506,7 +4504,7 @@ class CUP$parser$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-    System.out.println("soy contador" + contadorIF);
+    
     C3D.append("goto if_1_fin;\n");
     String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
     C3D.append("\n" + etiquetaEncabezado + ":\n");
@@ -4556,7 +4554,7 @@ class CUP$parser$actions {
                         
                         C3D.append("if " + param + " goto " + etiquetaBloque + ";\n");
 
-                        System.out.println("wuju" + UltimoElif);
+                        
                         if (UltimoElif) {
                             C3D.append("goto if_1_fin;\n");
                         } else {
@@ -4578,7 +4576,7 @@ class CUP$parser$actions {
           case 146: // elif_part ::= elif_part_left left_block loop_content right_block 
             {
               Object RESULT =null;
-		 System.out.println("elif"); 
+		  
 
             
             eliminarDireccionBreak();
@@ -4594,7 +4592,7 @@ class CUP$parser$actions {
               Object RESULT =null;
 		
 
-    System.out.println("soy contador else" + contadorIF);
+    
     C3D.append("goto if_1_fin;\n");
     String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
     C3D.append("\n" + etiquetaEncabezado + ":\n");
@@ -4624,7 +4622,7 @@ class CUP$parser$actions {
           case 149: // else_part ::= else_part_left left_block loop_content right_block 
             {
               Object RESULT =null;
-		 System.out.println("else"); desapilarTablaDeSimbolos();
+		  desapilarTablaDeSimbolos();
               CUP$parser$result = parser.getSymbolFactory().newSymbol("else_part",34, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -4664,7 +4662,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
-		 System.out.println("Loop");  
+		  
         //Verificar que la expresión lógica sea booleana
         String[] expresion = e.toString().split("::");
         if(!(expresion[1].equals("bool"))){
@@ -4758,7 +4756,7 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-                    System.out.println("break"); 
+                    
                     String direccion = obtenerDireccionActual();
                     //String etiquetaaAvanzar = ""
                     C3D.append("\n" + "goto " + direccion  + ";\n");
@@ -4801,7 +4799,7 @@ class CUP$parser$actions {
 
             String etiquetaFinFor = "fin_for" + contadorFor;
             AgregarDireccion(etiquetaFinFor);
-            System.out.println("for loop int to"); 
+            
             //Crear la tabla de símbolos
             String temp = registroTemporalI();
             C3D.append("\n" + temp + " = " + paso + ";\n");
@@ -4950,7 +4948,7 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		 
-            System.out.println("fin for"); desapilarTablaDeSimbolos();
+            desapilarTablaDeSimbolos();
             C3D.append("\n" + "goto for_inicio" + contadorFor + ":");
             C3D.append("\n" + "fin_for " + contadorFor + ":\n");
             eliminarDireccionBreak();
@@ -5040,7 +5038,7 @@ class CUP$parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 
-                    System.out.println("Crear tabla de símbolos para función int: " +id); 
+                     
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
 
@@ -5058,7 +5056,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 System.out.println("Crear tabla de símbolos para función flotante: " +id); 
+		 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
 
@@ -5076,7 +5074,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 System.out.println("Crear tabla de símbolos para función bool: " +id); 
+		
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
                     
@@ -5094,7 +5092,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 System.out.println("Crear tabla de símbolos para función char: " +id); 
+		 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
 
@@ -5112,7 +5110,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 System.out.println("Crear tabla de símbolos para función string: " +id); 
+		 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
 
@@ -5378,7 +5376,7 @@ class CUP$parser$actions {
 		int rleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int rright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String r = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("return vacio"); 
+		  
                     //Verificar que el retorno void coincida con una función void.
                     String tipoFuncion = tablaDeFunciones.obtenerTipoFuncion(funcionActual);
                     if(!(tipoFuncion.equals("void"))){
@@ -5403,7 +5401,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("return expresion logica"); 
+		 
                     //Verificar que el retorno coincida.
                     String tipoFuncion = tablaDeFunciones.obtenerTipoFuncion(funcionActual);
                     String[] expresion = e.toString().split("::");
@@ -5425,7 +5423,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 System.out.println("Llamada a funcion sin argumentos"); 
+		 
                RESULT = id + "::" + tablaDeFunciones.obtenerTipoFuncion(id) + "::"+ (idleft + 1) + "::" + idright;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("function_call",43, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -5441,7 +5439,7 @@ class CUP$parser$actions {
 		int arleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int arright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object ar = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Llamada a funcion con argumentos"); 
+		
                     //Verificaciones. En ar se tiene algo así por ejemplo a::null;;b::null;;1::int;;1.2::float donde es valor::tipo;;valor::tipo...
                     boolean existeLaFuncion = tablaDeFunciones.existeLaFuncion(id);
                     String retorno = id + "::null::" + (idleft + 1) + "::" + idright;
@@ -5685,7 +5683,7 @@ class CUP$parser$actions {
           case 202: // block ::= left_block statements right_block 
             {
               Object RESULT =null;
-		 System.out.println("bloque con statement"); 
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("block",18, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -5694,7 +5692,7 @@ class CUP$parser$actions {
           case 203: // block ::= left_block right_block 
             {
               Object RESULT =null;
-		 System.out.println("bloque vacio"); 
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("block",18, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -5858,7 +5856,7 @@ class CUP$parser$actions {
           case 220: // principal ::= principal_left block 
             {
               Object RESULT =null;
-		 System.out.println("\n>> FUNCION PRINCIPAL reconocida"); desapilarTablaDeSimbolos(); 
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("principal",46, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -5885,12 +5883,12 @@ class CUP$parser$actions {
           case 223: // program ::= global_variables functions principal 
             {
               Object RESULT =null;
-		 System.out.println("\n========== PROGRAMA COMPLETO VALIDADO ==========\n"); 
+		 
          C3D.append("\n" + "fin principal\n");
          parser.sePuedeoNo();
-         System.out.println("\nFUNCIONA EL 3 DIRECCIONES?\n");
+         
          mostrarCodigo3Direcciones();
-         System.out.println("\nEsto está al final de la producción program");
+         
          
               CUP$parser$result = parser.getSymbolFactory().newSymbol("program",49, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

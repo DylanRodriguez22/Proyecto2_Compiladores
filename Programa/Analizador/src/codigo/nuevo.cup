@@ -1976,14 +1976,14 @@ array_literals ::= int_literal:e
                     String temp = registroTemporalI();
                     C3D.append("\n" + temp + " = " + e + ";\n");
                     RESULT = rec + "::" + e + ";;int;;" + temp;  
-                    System.out.println("DEBUG - resultado: " + RESULT);
+                    
                 :}
                  |  array_literals:rec comma_keyword CHAR_LITERAL:e
                     {:
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + e + ";\n");
                         RESULT = rec + "::" + e + ";;char;;" + temp;
-                        System.out.println("DEBUG - resultado: " + RESULT);
+                        
 
                     :}
                  |  array_literals:rec comma_keyword identifier:n
@@ -2002,7 +2002,7 @@ array_literals ::= int_literal:e
                  ;
 
 assign_elements_array ::= identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator arithmetic_expression:element delimiter
-                {: System.out.println("Asignacion a elemento de arreglo"); 
+                {:  
                     String[] posicionArreglo = op.toString().split("::");
                     String[] elementoAsignado = element.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], elementoAsignado[1], posicionArreglo[0], elementoAsignado[0]);
@@ -2024,9 +2024,7 @@ assign_elements_array ::= identifier:id left_bracket arithmetic_expression:op ri
                 
 
                 |  identifier:id left_bracket arithmetic_expression:op right_bracket assignment_operator CHAR_LITERAL:element delimiter
-                {: System.out.println("Asignacion a elemento de arreglo"); 
-                   System.out.println(op);
-                   System.out.println(id);
+                {: 
                     String[] posicionArreglo = op.toString().split("::");
                     agregarElementoArregloPosicionEspecifica(id.toString(), (idleft + 1), posicionArreglo[1], "char", posicionArreglo[0], element.toString());
                      
@@ -2043,7 +2041,7 @@ assign_elements_array ::= identifier:id left_bracket arithmetic_expression:op ri
 // esto es algo como x[2 + 3] RECORDAR HACERLO DESPUÉS PORQUE NO ENTIENDO
 array_access ::= identifier:id left_bracket arithmetic_expression:op right_bracket
                 {: //Verificar que exista el arreglo y que la expresión sea entero. Tipo arrayInt o arrayChar 
-                    System.out.println(op);
+                   
                     String[] posicionArreglo = op.toString().split("::");
                     String elemento = accederElementoDeArreglo(id, posicionArreglo[0], posicionArreglo[1], (idleft + 1), idright); //valor::tipo::fila::columna
                     
@@ -2056,7 +2054,7 @@ array_access ::= identifier:id left_bracket arithmetic_expression:op right_brack
 // input y output
 input_statement ::= input_keyword identifier:i delimiter
                  {: 
-                    System.out.println("Input reconocido");
+                    
                     String temp = registroTemporalI();
                     C3D.append("\n" + "input " + " = " + temp + ";\n");
                     C3D.append("\n" + i + " = " + temp + ";\n");
@@ -2072,8 +2070,8 @@ input_statement ::= input_keyword identifier:i delimiter
 // FALTAN ERRORES EN OUTPUT
 output_statement ::= output_keyword identifier:i delimiter
                 {: 
-                    System.out.println("Output id"); 
-                    System.out.println("output reconocido");
+                    
+                    
                     String temp = registroTemporalI();
                     C3D.append("\n" + "output " + " = " + temp + ";\n");
                     C3D.append("\n" + i + " = " + temp + ";\n");
@@ -2085,15 +2083,15 @@ output_statement ::= output_keyword identifier:i delimiter
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + i + ";\n");
                         C3D.append("\n" + "output " + " = " + temp + ";\n");
-                        System.out.println("Output entero"); 
+                        
                         :}
                   |  output_keyword float_literal:f delimiter
                     {: 
-                        System.out.println("Output float"); 
+                        
                         String temp = registroTemporalF();
                          C3D.append("\n" + temp + " = " + f + ";\n");
                         C3D.append("\n" + "output " + " = " + temp + ";\n");
-                        System.out.println("Output float");                        
+                                               
 
                     :}
                   |  output_keyword bool_literal:b delimiter
@@ -2101,18 +2099,18 @@ output_statement ::= output_keyword identifier:i delimiter
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + b + ";\n");
                         C3D.append("\n" + "output " + " = " + temp + ";\n");
-                        System.out.println("Output booleano");                        
+                                                
                         :}
                   |  output_keyword CHAR_LITERAL:c delimiter
                     {: 
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + c + ";\n");
                         C3D.append("\n" + "output " + " = " + temp + ";\n");
-                        System.out.println("Output char");                      
+                                              
                         :}
                   |  output_keyword STRING_LITERAL:s delimiter
                     {: 
-                        System.out.println("Output string"); 
+                         
                     
                         String temp = registroTemporalI();
                         C3D.append("\n" + temp + " = " + s + ";\n");
@@ -2200,7 +2198,7 @@ decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
             C3D.append("goto if_1_fin;\n");
             
             C3D.append("\nif_1_fin:\n");
-            System.out.println("decide of normal"); 
+             
             eliminarDireccionBreak(); 
                 
                 
@@ -2210,7 +2208,7 @@ decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
                 C3D.append("\nif_" + (contadorIF + 1) + "_encabezado:\n");
                 C3D.append("goto if_1_fin;\n");
                 C3D.append("\nif_1_fin:\n");
-            System.out.println("decide of con varias condiciones"); 
+            
             eliminarDireccionBreak();
 
             
@@ -2225,7 +2223,7 @@ decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
                 
                 C3D.append("\nif_1_fin:\n");
                 
-                System.out.println("decide of con else"); 
+                
                 eliminarDireccionBreak();
                 
                 
@@ -2244,7 +2242,7 @@ decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
 
 
 
-                System.out.println("decide of con varias condiciones y else"); 
+                
                 :}
             | decide_keyword of_keyword left_parenthesis error right_parenthesis minus_operator greater_operator left_block loop_content right_block end_keyword decide_keyword delimiter
            {: System.err.println("Error en condicion de decide of"); :}
@@ -2252,17 +2250,17 @@ decide_of ::= decide_of_left_and_content end_keyword decide_keyword delimiter
 
 elif_list ::= elif_part {:
     UltimoElif = true;
-    System.out.println("llegue al final");
+    
 :}
         |  elif_list elif_part {:
         UltimoElif = false;
         existeElif = true;
-        System.out.println("me faltan elif");
+        
         :}
            ;
 
 elif_helper ::= left_parenthesis:i {:
-    System.out.println("soy contador" + contadorIF);
+    
     C3D.append("goto if_1_fin;\n");
     String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
     C3D.append("\n" + etiquetaEncabezado + ":\n");
@@ -2303,7 +2301,7 @@ elif_part_left ::= elif_helper logical_expresion_and:e right_parenthesis minus_o
                         
                         C3D.append("if " + param + " goto " + etiquetaBloque + ";\n");
 
-                        System.out.println("wuju" + UltimoElif);
+                        
                         if (UltimoElif) {
                             C3D.append("goto if_1_fin;\n");
                         } else {
@@ -2320,7 +2318,7 @@ elif_part_left ::= elif_helper logical_expresion_and:e right_parenthesis minus_o
                 ;
 
 elif_part ::= elif_part_left left_block loop_content right_block 
-           {: System.out.println("elif"); 
+           {:  
 
             
             eliminarDireccionBreak();
@@ -2329,7 +2327,7 @@ elif_part ::= elif_part_left left_block loop_content right_block
             
 else_helper ::= else_keyword {:
 
-    System.out.println("soy contador else" + contadorIF);
+    
     C3D.append("goto if_1_fin;\n");
     String etiquetaEncabezado = "if_" + encabezado + "_encabezado";
     C3D.append("\n" + etiquetaEncabezado + ":\n");
@@ -2348,7 +2346,7 @@ else_part_left ::= else_helper minus_operator greater_operator
                     :}
                     ;
 else_part ::= else_part_left left_block loop_content right_block
-           {: System.out.println("else"); desapilarTablaDeSimbolos();:}
+           {:  desapilarTablaDeSimbolos();:}
 ;
 
 // Estoy aquí
@@ -2371,7 +2369,7 @@ loop_left ::= loop_helper
                 apilarNuevaTablaDeSimbolos(t); 
             :};
 loop ::= loop_left loop_content exit_keyword when_keyword logical_expresion_and:e delimiter end_keyword loop_keyword delimiter
-      {: System.out.println("Loop");  
+      {:  
         //Verificar que la expresión lógica sea booleana
         String[] expresion = e.toString().split("::");
         if(!(expresion[1].equals("bool"))){
@@ -2422,7 +2420,7 @@ loop_content ::= statement
 
 break_statement ::= break_keyword delimiter
                  {: 
-                    System.out.println("break"); 
+                    
                     String direccion = obtenerDireccionActual();
                     //String etiquetaaAvanzar = ""
                     C3D.append("\n" + "goto " + direccion  + ";\n");
@@ -2447,7 +2445,7 @@ for_loop_left ::=
 
             String etiquetaFinFor = "fin_for" + contadorFor;
             AgregarDireccion(etiquetaFinFor);
-            System.out.println("for loop int to"); 
+            
             //Crear la tabla de símbolos
             String temp = registroTemporalI();
             C3D.append("\n" + temp + " = " + paso + ";\n");
@@ -2544,7 +2542,7 @@ for_loop_left ::=
 
 for_loop ::= for_loop_left left_block loop_content right_block
         {: 
-            System.out.println("fin for"); desapilarTablaDeSimbolos();
+            desapilarTablaDeSimbolos();
             C3D.append("\n" + "goto for_inicio" + contadorFor + ":");
             C3D.append("\n" + "fin_for " + contadorFor + ":\n");
             eliminarDireccionBreak();
@@ -2606,7 +2604,7 @@ function_left ::=
            // Solo para enteros 
             function_helper identifier:id
                 {: 
-                    System.out.println("Crear tabla de símbolos para función int: " +id); 
+                     
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
 
@@ -2614,7 +2612,7 @@ function_left ::=
                     agregarFuncion(id, "int", (idleft + 1));
                 :}
             |  function_helperF identifier:id
-                {: System.out.println("Crear tabla de símbolos para función flotante: " +id); 
+                {: 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
 
@@ -2622,7 +2620,7 @@ function_left ::=
                     agregarFuncion(id, "float", (idleft + 1));
                 :}
             |  function_helperB identifier:id
-                {: System.out.println("Crear tabla de símbolos para función bool: " +id); 
+                {:
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
                     
@@ -2630,7 +2628,7 @@ function_left ::=
                     agregarFuncion(id, "bool", (idleft + 1));
                 :}
             |  function_helperC identifier:id
-                {: System.out.println("Crear tabla de símbolos para función char: " +id); 
+                {: 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
 
@@ -2638,7 +2636,7 @@ function_left ::=
                     agregarFuncion(id, "char", (idleft + 1));
                 :}
             |  function_helperS identifier:id
-                {: System.out.println("Crear tabla de símbolos para función string: " +id); 
+                {: 
                     TablaDeSimbolos t = crearTablaDeSimbolos(id); //Crear la nueva tabla
                     apilarNuevaTablaDeSimbolos(t); //Se coloca esta tabla como la actual y la que estaba en esa variable como la anterior de esta
 
@@ -2805,7 +2803,7 @@ param ::= int_keyword identifier:id {:
        ;
 
 return_statement ::= return_keyword:r delimiter
-                  {: System.out.println("return vacio"); 
+                  {:  
                     //Verificar que el retorno void coincida con una función void.
                     String tipoFuncion = tablaDeFunciones.obtenerTipoFuncion(funcionActual);
                     if(!(tipoFuncion.equals("void"))){
@@ -2817,7 +2815,7 @@ return_statement ::= return_keyword:r delimiter
                     
                   :}
                   |  return_keyword:r declaration_values:e delimiter
-                  {: System.out.println("return expresion logica"); 
+                  {: 
                     //Verificar que el retorno coincida.
                     String tipoFuncion = tablaDeFunciones.obtenerTipoFuncion(funcionActual);
                     String[] expresion = e.toString().split("::");
@@ -2831,10 +2829,10 @@ return_statement ::= return_keyword:r delimiter
                   ;
 
 function_call ::= identifier:id left_parenthesis right_parenthesis
-               {: System.out.println("Llamada a funcion sin argumentos"); 
+               {: 
                RESULT = id + "::" + tablaDeFunciones.obtenerTipoFuncion(id) + "::"+ (idleft + 1) + "::" + idright;:}
                |  identifier:id left_parenthesis args:ar right_parenthesis
-               {: System.out.println("Llamada a funcion con argumentos"); 
+               {:
                     //Verificaciones. En ar se tiene algo así por ejemplo a::null;;b::null;;1::int;;1.2::float donde es valor::tipo;;valor::tipo...
                     boolean existeLaFuncion = tablaDeFunciones.existeLaFuncion(id);
                     String retorno = id + "::null::" + (idleft + 1) + "::" + idright;
@@ -2936,9 +2934,9 @@ args ::= int_literal:e  {: RESULT = e + "::int"; :} //valor::tipo
 
 //Bloques de código y statemets
 block ::= left_block statements right_block
-        {: System.out.println("bloque con statement"); :}
+        
        |  left_block right_block
-         {: System.out.println("bloque vacio"); :}
+         
        |  left_block error right_block
        {: System.err.println("bloque con error"); :}
        ;
@@ -2979,7 +2977,6 @@ principal_left ::= void_keyword:id principal_keyword left_parenthesis right_pare
                      :} 
                      ;
 principal ::= principal_left block
-           {: System.out.println("\n>> FUNCION PRINCIPAL reconocida"); desapilarTablaDeSimbolos(); :}
            ;
 
 //Funciones agrupadas
@@ -2990,10 +2987,10 @@ functions ::= /* empty */
 
 //Símbolo inicial. Ya se inicia con funciones y luego la principal
 program ::= global_variables  functions principal
-         {: System.out.println("\n========== PROGRAMA COMPLETO VALIDADO ==========\n"); 
+         {: 
          C3D.append("\n" + "fin principal\n");
          parser.sePuedeoNo();
-         System.out.println("\nFUNCIONA EL 3 DIRECCIONES?\n");
+         
          mostrarCodigo3Direcciones();
-         System.out.println("\nEsto está al final de la producción program");
+         
          :};
