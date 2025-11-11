@@ -1,7 +1,13 @@
-let int gInt$
 float miFunc є э¿return 1.2$?
-char miFunc2 є э¿return 'a'$?
 
+
+int absoluto є int n э¿
+    decide of є n < 0 э -> ¿
+        return n$
+    ?
+    end decide$
+    return n$
+?
 void principal є э ¿
     let float a = miFunc є э * 1.2$
     let float boyaka = 1.2 * 2.5 + -1.5 + a++ / 2.2$
@@ -9,39 +15,7 @@ void principal є э ¿
     let int contador = 5$
     let int resultado = contador ++$
     let int result2 = contador --$
-    let string a = "hola mundo cruel !·¿%+çç-´´+-.,·$·%$·&$%/&$%(%&()/%&(%(%&''123124214521"$
-    let char b = ''$
-    let bool booleano = True$
-    output hola$
-    output gInt$
-    
-    decide of є booleano @ bbcita - contador + contador++ > 5 @ boyaka < 5.2 + miFunc є э  @ Σbooleano э  -> ¿
-        let float callese = boyaka$ 
-    ? є 5 > 5 +2 *1 + -5 //3 э -> ¿
-        let float callese = boyaka$ 
-    ?
-    
-    end     decide      $
-        return$
-    loop    
-        let float callese = boyaka$ 
-        decide of є booleano @ bbcita - contador + contador++ > 5 @ booleano э  -> ¿
-        let float callese = boyaka$ 
-        break$
-        return$
-    ? є 5 > 5 +2 *1 + -5 //3 э -> ¿
-        let float callese = boyaka$ 
-        break$
-    ?
-    end     decide      $
-    exit when booleano @ Σbbcita - contador + contador++ > 5 @ boyaka < 5.2 + miFunc є э  @ Σbooleano$
-    end loop$
-    
-    let float i$
-    for i = 1.2$ step 1.2 downto 1.5 do ¿
-        let float callese = boyaka$
-        break$
-    ?
     return$
+    output hola$
     
 ?

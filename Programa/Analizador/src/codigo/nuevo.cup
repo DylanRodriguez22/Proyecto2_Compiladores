@@ -639,6 +639,16 @@ parser code {:
         }
     }
 
+    public String veoTipo(String valor) {
+        if (valor.equals("float")) {
+            return registroTemporalF();
+        } else {
+            return registroTemporalI();
+        }
+    }
+
+
+
     public boolean esTemporal(String valor){
         if (valor.matches("t[0-9]+")){
             return true; 
@@ -868,18 +878,17 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                             
                             // revisamos si la parte izq es temporal  
                             if(!esTemporal(sumaiz) && esLiteralVerdadero(sumaiz)){ 
-                                String tempIzq = registroTemporalI();
+                                String tempIzq = veoTipo(verificacion);
                                 C3D.append("\n" + tempIzq + " = " + sumaiz + ";\n");
                                 sumaiz = tempIzq;
                             }
                             
                             if(!esTemporal(sumader) && esLiteralVerdadero(sumader)){ 
-                                String tempDer = registroTemporalI();
+                                String tempDer = veoTipo(verificacion);
                                 C3D.append("\n" + tempDer + " = " + sumader + ";\n");
                                 sumader = tempDer;
                             }
-
-                            String temp = registroTemporalI();
+                            String temp = veoTipo(verificacion);
                             C3D.append("\n" + temp + " = " + sumaiz + " + " + sumader + ";\n");
 
                             RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
@@ -897,18 +906,18 @@ arithmetic_expression ::= arithmetic_expression:e1 plus_operator term:e2
                             String restaIzq = partesE1[0]; // parte izquierda de la resta
                             String restaDer = partesE2[0]; // parte derecha de la resta
                             if(!esTemporal(restaIzq) && esLiteralVerdadero(restaIzq)){ 
-                                String tempIzq = registroTemporalI();
+                                String tempIzq = veoTipo(verificacion);
                                 C3D.append("\n" + tempIzq + " = " + restaIzq + ";\n");
                                 restaIzq = tempIzq;
                             }
                             
                             if(!esTemporal(restaDer) && esLiteralVerdadero(restaDer)){ 
-                                String tempDer = registroTemporalI();
+                                String tempDer = veoTipo(verificacion);
                                 C3D.append("\n" + tempDer + " = " + restaDer + ";\n");
                                 restaDer = tempDer;
                             }
 
-                            String temp = registroTemporalI();
+                            String temp = veoTipo(verificacion);
                             C3D.append("\n" + temp + " = " + restaIzq + " - " + restaDer + ";\n");
 
 
@@ -930,18 +939,18 @@ term ::= term:e1 multiplication_operator power:e2
         String mulIzq = partesE1[0]; // parte izquierda de la multiplicacion
         String mulDer = partesE2[0]; // parte derecha de la multiplicacion
         if(!esTemporal(mulIzq) && esLiteralVerdadero(mulIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + mulIzq + ";\n");
             mulIzq = tempIzq;
         }
         
         if(!esTemporal(mulDer) && esLiteralVerdadero(mulDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + mulDer + ";\n");
             mulDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + mulIzq + " * " + mulDer + ";\n"); 
 
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
@@ -957,18 +966,18 @@ term ::= term:e1 multiplication_operator power:e2
         String divsimpleIzq = partesE1[0]; // parte izquierda de la division
         String divsimpleDer = partesE2[0]; // parte derecha de la division
         if(!esTemporal(divsimpleIzq) && esLiteralVerdadero(divsimpleIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + divsimpleIzq + ";\n");
             divsimpleIzq = tempIzq;
         }
         
         if(!esTemporal(divsimpleDer) && esLiteralVerdadero(divsimpleDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + divsimpleDer + ";\n");
             divsimpleDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + divsimpleIzq + " / " + divsimpleDer + ";\n");
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       :}
@@ -982,18 +991,18 @@ term ::= term:e1 multiplication_operator power:e2
         String diventeraIzq = partesE1[0]; // parte izquierda de la division entera
         String diventeraDer = partesE2[0]; // parte derecha de la division entera
         if(!esTemporal(diventeraIzq) && esLiteralVerdadero(diventeraIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + diventeraIzq + ";\n");
             diventeraIzq = tempIzq;
         }
         
         if(!esTemporal(diventeraDer) && esLiteralVerdadero(diventeraDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + diventeraDer + ";\n");
             diventeraDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + diventeraIzq + " // " + diventeraDer + ";\n");
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
 
@@ -1007,18 +1016,18 @@ term ::= term:e1 multiplication_operator power:e2
         String moduloIzq = partesE1[0]; // parte izquierda del modulo entera
         String moduloDer = partesE2[0]; // parte derecha del moduloentera
         if(!esTemporal(moduloIzq) && esLiteralVerdadero(moduloIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + moduloIzq + ";\n");
             moduloIzq = tempIzq;
         }
         
         if(!esTemporal(moduloDer) && esLiteralVerdadero(moduloDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + moduloDer + ";\n");
             moduloDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + moduloIzq + " % " + moduloDer + ";\n");
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
 
@@ -1037,18 +1046,18 @@ power ::= factor:e1 power_operator power:e2
         String elevadoIzq = partesE1[0]; // parte izquierda de la potencia
         String elevadoDer = partesE2[0]; // parte derecha de la potencia
         if(!esTemporal(elevadoIzq) && esLiteralVerdadero(elevadoIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + elevadoIzq + ";\n");
             elevadoIzq = tempIzq;
         }
         
         if(!esTemporal(elevadoDer) && esLiteralVerdadero(elevadoDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + elevadoDer + ";\n");
             elevadoDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + elevadoIzq + " ^ " + elevadoDer + ";\n");
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
 
@@ -2678,14 +2687,12 @@ function ::=
             {: 
                 int cont = contadorTemporalINT - 1;
                 if(funcInt == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcion" + contadorFuncINT + ":\n");
                 contadorTemporalINT++;
                 contadorFuncINT++;
                 funcInt = false;
                 }
                 if ( funcFloat == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionFloat" + contadorFuncFLOAT + ":\n");
                 contadorTemporalFLOAT++;
                 contadorFuncFLOAT++;
@@ -2693,7 +2700,6 @@ function ::=
 
                 }
                 if (funcBool == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionBool" + contadorFuncBOOL + ":\n");
                 contadorTemporalINT++;
                 contadorFuncBOOL++;
@@ -2701,7 +2707,6 @@ function ::=
 
                 }
                 if (funcChar == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionChar" + contadorFuncCHAR + ":\n");
                 contadorTemporalINT++;
                 contadorFuncCHAR++;
@@ -2709,7 +2714,6 @@ function ::=
 
                 }
                 if (funcString == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionString" + contadorFuncSTRING + ":\n");
                 contadorTemporalINT++;
                 contadorFuncSTRING++;
@@ -2839,6 +2843,7 @@ return_statement ::= return_keyword:r delimiter
                          erroresSemanticos++;
                          parser.erroresSemanticos++;
                     }
+                    RESULT = null;
                     
                   :}
                   |  return_keyword:r declaration_values:e delimiter
@@ -2852,6 +2857,22 @@ return_statement ::= return_keyword:r delimiter
                          erroresSemanticos++;
                          parser.erroresSemanticos++;
                     }
+
+                    String valorRetorno;
+                        if (expresion.length > 4 && expresion[4] != null) {
+                            valorRetorno = expresion[4];  
+                        } else {
+                            valorRetorno = expresion[0];  
+                        }
+                        
+                        if (!esTemporal(valorRetorno) && esLiteralVerdadero(valorRetorno)) {
+                            String temp = veoTipo(expresion[1]);  
+                            C3D.append(temp + " = " + valorRetorno + ";\n");
+                            valorRetorno = temp;
+                        }
+                        
+                        C3D.append("return " + valorRetorno + ";\n");
+                        RESULT = valorRetorno; 
                   :}
                   ;
 

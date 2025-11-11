@@ -1291,7 +1291,7 @@ public class parser extends java_cup.runtime.lr_parser {
     }
 
     public boolean esLiteral(String valor){
-        if(!valor.matches("t[0-9]+") || !valor.matches("f[0-9]+")){
+        if(!valor.matches("t[0-9]+")){
             return true; // seria literal
         }
         else {
@@ -1331,6 +1331,16 @@ public class parser extends java_cup.runtime.lr_parser {
             return false; // sino
         }
     }
+
+    public String veoTipo(String valor) {
+        if (valor.equals("float")) {
+            return registroTemporalF();
+        } else {
+            return registroTemporalI();
+        }
+    }
+
+
 
     public boolean esTemporal(String valor){
         if (valor.matches("t[0-9]+")){
@@ -1868,18 +1878,17 @@ class CUP$parser$actions {
                             
                             // revisamos si la parte izq es temporal  
                             if(!esTemporal(sumaiz) && esLiteralVerdadero(sumaiz)){ 
-                                String tempIzq = registroTemporalI();
+                                String tempIzq = veoTipo(verificacion);
                                 C3D.append("\n" + tempIzq + " = " + sumaiz + ";\n");
                                 sumaiz = tempIzq;
                             }
                             
                             if(!esTemporal(sumader) && esLiteralVerdadero(sumader)){ 
-                                String tempDer = registroTemporalI();
+                                String tempDer = veoTipo(verificacion);
                                 C3D.append("\n" + tempDer + " = " + sumader + ";\n");
                                 sumader = tempDer;
                             }
-
-                            String temp = registroTemporalI();
+                            String temp = veoTipo(verificacion);
                             C3D.append("\n" + temp + " = " + sumaiz + " + " + sumader + ";\n");
 
                             RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
@@ -1917,18 +1926,18 @@ class CUP$parser$actions {
                             String restaIzq = partesE1[0]; // parte izquierda de la resta
                             String restaDer = partesE2[0]; // parte derecha de la resta
                             if(!esTemporal(restaIzq) && esLiteralVerdadero(restaIzq)){ 
-                                String tempIzq = registroTemporalI();
+                                String tempIzq = veoTipo(verificacion);
                                 C3D.append("\n" + tempIzq + " = " + restaIzq + ";\n");
                                 restaIzq = tempIzq;
                             }
                             
                             if(!esTemporal(restaDer) && esLiteralVerdadero(restaDer)){ 
-                                String tempDer = registroTemporalI();
+                                String tempDer = veoTipo(verificacion);
                                 C3D.append("\n" + tempDer + " = " + restaDer + ";\n");
                                 restaDer = tempDer;
                             }
 
-                            String temp = registroTemporalI();
+                            String temp = veoTipo(verificacion);
                             C3D.append("\n" + temp + " = " + restaIzq + " - " + restaDer + ";\n");
 
 
@@ -1979,18 +1988,18 @@ class CUP$parser$actions {
         String mulIzq = partesE1[0]; // parte izquierda de la multiplicacion
         String mulDer = partesE2[0]; // parte derecha de la multiplicacion
         if(!esTemporal(mulIzq) && esLiteralVerdadero(mulIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + mulIzq + ";\n");
             mulIzq = tempIzq;
         }
         
         if(!esTemporal(mulDer) && esLiteralVerdadero(mulDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + mulDer + ";\n");
             mulDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + mulIzq + " * " + mulDer + ";\n"); 
 
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
@@ -2019,18 +2028,18 @@ class CUP$parser$actions {
         String divsimpleIzq = partesE1[0]; // parte izquierda de la division
         String divsimpleDer = partesE2[0]; // parte derecha de la division
         if(!esTemporal(divsimpleIzq) && esLiteralVerdadero(divsimpleIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + divsimpleIzq + ";\n");
             divsimpleIzq = tempIzq;
         }
         
         if(!esTemporal(divsimpleDer) && esLiteralVerdadero(divsimpleDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + divsimpleDer + ";\n");
             divsimpleDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + divsimpleIzq + " / " + divsimpleDer + ";\n");
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
       
@@ -2057,18 +2066,18 @@ class CUP$parser$actions {
         String diventeraIzq = partesE1[0]; // parte izquierda de la division entera
         String diventeraDer = partesE2[0]; // parte derecha de la division entera
         if(!esTemporal(diventeraIzq) && esLiteralVerdadero(diventeraIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + diventeraIzq + ";\n");
             diventeraIzq = tempIzq;
         }
         
         if(!esTemporal(diventeraDer) && esLiteralVerdadero(diventeraDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + diventeraDer + ";\n");
             diventeraDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + diventeraIzq + " // " + diventeraDer + ";\n");
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
 
@@ -2095,18 +2104,18 @@ class CUP$parser$actions {
         String moduloIzq = partesE1[0]; // parte izquierda del modulo entera
         String moduloDer = partesE2[0]; // parte derecha del moduloentera
         if(!esTemporal(moduloIzq) && esLiteralVerdadero(moduloIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + moduloIzq + ";\n");
             moduloIzq = tempIzq;
         }
         
         if(!esTemporal(moduloDer) && esLiteralVerdadero(moduloDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + moduloDer + ";\n");
             moduloDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + moduloIzq + " % " + moduloDer + ";\n");
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
 
@@ -2147,18 +2156,18 @@ class CUP$parser$actions {
         String elevadoIzq = partesE1[0]; // parte izquierda de la potencia
         String elevadoDer = partesE2[0]; // parte derecha de la potencia
         if(!esTemporal(elevadoIzq) && esLiteralVerdadero(elevadoIzq)){ 
-            String tempIzq = registroTemporalI();
+            String tempIzq = veoTipo(verificacion);
             C3D.append("\n" + tempIzq + " = " + elevadoIzq + ";\n");
             elevadoIzq = tempIzq;
         }
         
         if(!esTemporal(elevadoDer) && esLiteralVerdadero(elevadoDer)){ 
-            String tempDer = registroTemporalI();
+            String tempDer = veoTipo(verificacion);
             C3D.append("\n" + tempDer + " = " + elevadoDer + ";\n");
             elevadoDer = tempDer;
         }
 
-        String temp = registroTemporalI();
+        String temp = veoTipo(verificacion);
         C3D.append("\n" + temp + " = " + elevadoIzq + " ^ " + elevadoDer + ";\n");
         RESULT = temp + "::" + verificacion + "::" + partesE1[2] + "::" + partesE1[3];
 
@@ -3002,7 +3011,7 @@ class CUP$parser$actions {
                 } 
                 
                 // si es un temporal entonces lo asigno de una vez 
-                else if (!parteUnica.matches("f[0-9]+")) {
+                else if (!continuouNo(parteUnica)) {
                     String tempExtra = registroTemporalF();
                     C3D.append("\n" + tempExtra + " = " + parteUnica + ";\n");
                     parteUnica = tempExtra;
@@ -5158,14 +5167,12 @@ class CUP$parser$actions {
 		 
                 int cont = contadorTemporalINT - 1;
                 if(funcInt == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcion" + contadorFuncINT + ":\n");
                 contadorTemporalINT++;
                 contadorFuncINT++;
                 funcInt = false;
                 }
                 if ( funcFloat == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionFloat" + contadorFuncFLOAT + ":\n");
                 contadorTemporalFLOAT++;
                 contadorFuncFLOAT++;
@@ -5173,7 +5180,6 @@ class CUP$parser$actions {
 
                 }
                 if (funcBool == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionBool" + contadorFuncBOOL + ":\n");
                 contadorTemporalINT++;
                 contadorFuncBOOL++;
@@ -5181,7 +5187,6 @@ class CUP$parser$actions {
 
                 }
                 if (funcChar == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionChar" + contadorFuncCHAR + ":\n");
                 contadorTemporalINT++;
                 contadorFuncCHAR++;
@@ -5189,7 +5194,6 @@ class CUP$parser$actions {
 
                 }
                 if (funcString == true){
-                C3D.append("\n" + "return " + "t" +cont + ":\n");
                 C3D.append("\n" + "fin_funcionString" + contadorFuncSTRING + ":\n");
                 contadorTemporalINT++;
                 contadorFuncSTRING++;
@@ -5412,6 +5416,7 @@ class CUP$parser$actions {
                          erroresSemanticos++;
                          parser.erroresSemanticos++;
                     }
+                    RESULT = null;
                     
                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("return_statement",42, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -5438,6 +5443,22 @@ class CUP$parser$actions {
                          erroresSemanticos++;
                          parser.erroresSemanticos++;
                     }
+
+                    String valorRetorno;
+                        if (expresion.length > 4 && expresion[4] != null) {
+                            valorRetorno = expresion[4];  
+                        } else {
+                            valorRetorno = expresion[0];  
+                        }
+                        
+                        if (!esTemporal(valorRetorno) && esLiteralVerdadero(valorRetorno)) {
+                            String temp = veoTipo(expresion[1]);  
+                            C3D.append(temp + " = " + valorRetorno + ";\n");
+                            valorRetorno = temp;
+                        }
+                        
+                        C3D.append("return " + valorRetorno + ";\n");
+                        RESULT = valorRetorno; 
                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("return_statement",42, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
