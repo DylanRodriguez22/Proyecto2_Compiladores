@@ -2856,7 +2856,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: int sin valor con id "+ id); agregarSimbolo("int", id); C3D.append("\n" + "data_int " + id + ":\n");
+		  agregarSimbolo("int", id); C3D.append("\n" + "data_int " + id + ":\n");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2868,7 +2868,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: float sin valor con id " + id); agregarSimbolo("float", id); C3D.append("\n" + "data_float " + id + ":\n");
+		  agregarSimbolo("float", id); C3D.append("\n" + "data_float " + id + ":\n");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2880,7 +2880,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: bool sin valor con id " + id); agregarSimbolo("bool", id); C3D.append("\n" + "data_bool " + id + ":\n");
+		  agregarSimbolo("bool", id); C3D.append("\n" + "data_bool " + id + ":\n");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2892,7 +2892,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: char sin valor con id " + id); agregarSimbolo("char", id); C3D.append("\n" + "data_char " + id + ":\n");
+		  agregarSimbolo("char", id); C3D.append("\n" + "data_char " + id + ":\n");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2904,7 +2904,7 @@ class CUP$parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: string sin valor con id "+ id); agregarSimbolo("string", id); C3D.append("\n" + "data_string " + id + ":\n");
+		  agregarSimbolo("string", id); C3D.append("\n" + "data_string " + id + ":\n");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaration",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2921,7 +2921,7 @@ class CUP$parser$actions {
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 
                 /// Preguntarle al profe sobre esto 
-                System.out.println("Declaracion: int con valor con el id "+ id); 
+                
                 //Verificar si el tipo de la expresión coincide con el del identificador
                  String[] partesOperador = e.toString().split("::");
                 if(validacionAsignacion(id, "int", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
@@ -2929,7 +2929,7 @@ class CUP$parser$actions {
                 }
                 
                 String parteUnica = partesOperador[0];
-                System.out.println("Valor a guardar en int: " + parteUnica);
+               
 
                 // Si es literal, creamos un temporal
                 if (esLiteral(parteUnica)) {
@@ -2966,7 +2966,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: float con valor con el id "+ id); 
+		  
 
                 //Verificar si el tipo de la expresión coincide con el del identificador
                  String[] partesOperador = e.toString().split("::");
@@ -2974,7 +2974,7 @@ class CUP$parser$actions {
                     agregarSimbolo("float", id);
                 }
                 String parteUnica = partesOperador[0];
-                System.out.println("Valor a guardar en float: " + parteUnica);
+                
 
                 // Si es un numero siempre hacemos temporal
                 if (esLiteral(parteUnica)) {
@@ -3011,7 +3011,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: bool con valor con el id " + id); 
+		  
                  //Verificar si el tipo de la expresión coincide con el del identificador
                  String[] partesOperador = e.toString().split("::");
                 if(validacionAsignacion(id, "bool", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
@@ -3026,7 +3026,7 @@ class CUP$parser$actions {
                     parteUnica = partesOperador[0];
                 }
                 
-                System.out.println("Valor a guardar en bool: " + parteUnica);
+                
 
                 // Solo creamos un temporal sino es un temporal 
                 if (!continuouNo(parteUnica)) {
@@ -3054,14 +3054,14 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: char con valor con el id " + id); 
+		  
                 String[] partesOperador = e.toString().split("::");
                 String guarda = partesOperador[0];
                 if(validacionAsignacion(id, "char", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("char", id);
                 }
                 String parteUnica = partesOperador[0];
-                System.out.println("Valor a guardar en bool: " + parteUnica);
+                
 
                 // Si es un char siempre hacemos temporal
                 if (esChar(parteUnica)) {
@@ -3098,13 +3098,13 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Declaracion: string con valor con el id " + id);
+		 
                 String[] partesOperador = e.toString().split("::");
                 if(validacionAsignacion(id, "string", partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright))){
                     agregarSimbolo("string", id);
                 }
                 String parteUnica = partesOperador[0];
-                System.out.println("Valor a guardar en bool: " + parteUnica);
+                
 
                 // Si es un string siempre hacemos temporal
                 if (esString(parteUnica)) {
@@ -3366,7 +3366,7 @@ class CUP$parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object e = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 System.out.println("Reasignación"); 
+		  
                 //De momento es solo el print. Ya para el código 3 direcciones si podría influir si se reasigna o no
                 String[] partesOperador = e.toString().split("::");
                 validacionReasignacion(id,  partesOperador[1], String.valueOf(idleft + 1), String.valueOf(idright));
@@ -3380,7 +3380,7 @@ class CUP$parser$actions {
                     // sino entonces sigue siendo un numero 
                     parteUnica = partesOperador[0];
                 }
-                System.out.println("Valor a reasignar: " + parteUnica); // esto es para debug
+                
 
                 // Solo creamos un temporal sino es un temporal 
                 if (!continuouNo(parteUnica)) {
@@ -3436,7 +3436,7 @@ class CUP$parser$actions {
 		int opleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int opright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object op = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 System.out.println("Declaracion: array int sin nada"); 
+		 
                     //Verificar que sea una operacion de enteros
                     String[] partesOperador = op.toString().split("::");
                     if(!(partesOperador[1].equals("int"))){
@@ -3461,7 +3461,7 @@ class CUP$parser$actions {
                         parteUnica = partesOperador[0];
                     }
                     
-                    System.out.println("Valor a guardar en arr: " + parteUnica);
+                    
 
                     // Solo creamos un temporal sino es un temporal 
                     if (!continuouNo(parteUnica)) {
@@ -3562,7 +3562,7 @@ class CUP$parser$actions {
 		int opleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int opright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object op = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-		 System.out.println("Declaracion: array char sin nada"); 
+		  
                     //Verificar que sea una operacion de enteros
                     String[] partesOperador = op.toString().split("::");
                     if(!(partesOperador[1].equals("int"))){
@@ -3586,7 +3586,7 @@ class CUP$parser$actions {
                         parteUnica = partesOperador[0];
                     }
                     
-                    System.out.println("Valor a guardar en arr cchar: " + parteUnica);
+                   
 
                     // Solo creamos un temporal sino es un temporal 
                     if (!continuouNo(parteUnica)) {
@@ -3683,7 +3683,7 @@ class CUP$parser$actions {
 		int recright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		 
-                    System.out.println("Declaracion: array int con valores"); 
+                     
                     
                     // Lo dividimos para que así sea más fácil acceder a lo que se ocupa
                     String[] elementosArray = rec.toString().split("::");
@@ -3820,7 +3820,7 @@ class CUP$parser$actions {
 		int recright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object rec = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		 
-                    System.out.println("Declaracion: array char con valores"); 
+                    
                     String[] elementosArray = rec.toString().split("::");
                     ArrayList<Simbolo> simbolosArreglo = new ArrayList<>();
 
