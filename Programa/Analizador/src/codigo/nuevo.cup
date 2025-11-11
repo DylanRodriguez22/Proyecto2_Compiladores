@@ -14,7 +14,16 @@ action code {:
          System.out.println(tablaActual.toString());
     }
     
-
+    public void validacionSemanticaAsignacionFor(String tipoIdentificador, String tipoStep, String fila, String columna){
+        if(!(tipoIdentificador.equals(tipoStep))){
+            System.err.println(String.format(
+                "Error Semantico: La variable asignada para el for es de tipo %s. Debe ser de tipo %s. Fila %s columna %s.", 
+                tipoIdentificador, tipoStep, fila, columna 
+            ));
+            erroresSemanticos++;
+            parser.erroresSemanticos++;
+        }
+    }
 
 
     public String verificacionAritmeticaDivisionFlotante(String tipo1, String tipo2, String linea1, String linea2, String columna1, String columna2){
@@ -2271,7 +2280,7 @@ elif_part_left ::= elif_helper logical_expresion_and:e right_parenthesis minus_o
                         if(!(expresion[1].equals("bool"))){
                             System.err.println(String.format(
                             "Error Semantico: La expresion %s es de tipo %s. Debe ser de tipo bool para poder se utilizada como condicion en la estructura Decide Of. Linea %s.", 
-                            expresion[0], expresion[1], ileft+1
+                            expresion[0], expresion[1], eleft+1
                         ));
                         erroresSemanticos++;
                         parser.erroresSemanticos++;
@@ -2431,7 +2440,11 @@ for_helperInicio ::= for_keyword
 //For
 for_loop_left ::= 
         for_helperInicio reassignment:var step_keyword int_literal:paso to_keyword int_literal:hasta do_keyword 
-        {: 
+        {:  
+            //Validación
+            Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));         
+            validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "int", String.valueOf(varleft+1), String.valueOf(varright));
+
             String etiquetaFinFor = "fin_for" + contadorFor;
             AgregarDireccion(etiquetaFinFor);
             System.out.println("for loop int to"); 
@@ -2450,9 +2463,16 @@ for_loop_left ::=
             C3D.append("\n" + var + " = " + temp4 + ";\n");
             TablaDeSimbolos t = crearTablaDeSimbolos("for"); 
             apilarNuevaTablaDeSimbolos(t); 
+
+            
         :}
           |  for_helperInicio reassignment:var step_keyword int_literal:paso downto_keyword int_literal:hasta do_keyword 
-        {: System.out.println("for loop int downto"); 
+        {: 
+            //Validación
+            //Validación
+            Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));         
+            validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "int", String.valueOf(varleft+1), String.valueOf(varright));
+
             //Crear la tabla de símbolos
 
             //Crear la tabla de símbolos
@@ -2475,7 +2495,11 @@ for_loop_left ::=
           |  for_helperInicio reassignment:var step_keyword float_literal:paso to_keyword float_literal:hasta do_keyword 
         {: 
 
-            System.out.println("for loop float to"); 
+            //Validación
+            //Validación
+            Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));         
+            validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "float", String.valueOf(varleft+1), String.valueOf(varright));
+
             String temp = registroTemporalF();
             C3D.append("\n" + temp + " = " + paso + ";\n");
             C3D.append("\n" + "for_stepDO = " + temp + ";\n");
@@ -2495,7 +2519,10 @@ for_loop_left ::=
         :}
           |  for_helperInicio reassignment:var step_keyword float_literal:paso downto_keyword float_literal:hasta do_keyword 
         {:
-             System.out.println("for loop float downto"); 
+            //Validación
+            Simbolo simboloReasignacion = buscarSimbolo(String.valueOf(var));         
+            validacionSemanticaAsignacionFor(simboloReasignacion.getTipo(), "float", String.valueOf(varleft+1), String.valueOf(varright));
+
             //Crear la tabla de símbolos
             String temp = registroTemporalF();
             C3D.append("\n" + temp + " = " + paso + ";\n");
@@ -2789,7 +2816,7 @@ return_statement ::= return_keyword:r delimiter
                     }
                     
                   :}
-                  |  return_keyword:r logical_expresion_and:e delimiter
+                  |  return_keyword:r declaration_values:e delimiter
                   {: System.out.println("return expresion logica"); 
                     //Verificar que el retorno coincida.
                     String tipoFuncion = tablaDeFunciones.obtenerTipoFuncion(funcionActual);
@@ -2934,7 +2961,7 @@ statement ::= declaration
 
 // Variables globales
 global_variables ::= /* empty */
-                  |  global_variables declaration //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada  :}
+                  |  global_variables declaration //Puedo hacer que si no hay tabla ya creada la haga. Sino no hace nada 
                   ;
 
 

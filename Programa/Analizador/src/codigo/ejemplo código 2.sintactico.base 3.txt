@@ -14,10 +14,12 @@ float mi  є int dif, char otra   э ¿  |sintactico
 	let int _otra$
 	let string str="Hola $~&|?$& э  mundo"$
         let int a$
+        let float s1$
+        let int var2$
 	for  i=20 $ step -2 downto 0  do  | puede dar sintactico
 	 ¿ 
 		loop
-		  	var2 = var2 - 1$ |semantico
+		  	s1 = var2 - 1$ |semantico
 			var = var - 1$ |semantico
                         break$
 		exit    when є var2>12.2 @ Σ є12> є 34+35 ээ  э $ |semantico
@@ -40,19 +42,19 @@ float mi  є int dif, char otra   э ¿  |sintactico
 		else ->
 		 ¿ 
 			decide of  |semantico otra
-				 є otra == 1 э  -> ¿ 
+				 є _otra == 1 э  -> ¿ 
 					output  "!|"  $ ?
-				є otra == 2  э -> ¿
-					otra = 10$
+				є _otra == 2  э -> ¿
+					_otra = 10$
 					 ? 
 
 				else  -> ¿ | sintactico
-					otra = -10.5 * -1.9$ ?
+					_otra = -10.5 * -1.9$ ?
                                         end decide $
 
 
 			decide of  |semantico otra2 
-				 є otra2 == 10  э -> ¿ 
+				 є _otra2 == 10  э -> ¿ 
 					output  "un case" $ ?
 end     decide      $
 		 ?
@@ -67,7 +69,7 @@ end     decide      $
   ? 
 
  void principal є э  ¿ | semantico tipo int, sintactico?
-        arr = 10 - arr[67 + i++ - 1 + 4] * func1  є 'h', ola, true, "hola mundo", 4.5, 'a' э $ 
+        arr = 10 - arr[67 + i++ - 1 + 4] * func1  є 'h', ola, True, "hola mundo", 4.5, 'a' э $ 
 	arr [ 67 ] = -0.01 + arr [ 67 ] $  | semantico
 	let bool b1$ |semantico
 	let string s1$ |semantico
