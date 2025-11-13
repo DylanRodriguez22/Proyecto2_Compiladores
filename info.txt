@@ -9,11 +9,10 @@ Nombre de los Estudiantes y Carnet:
 	Dylan Rodríguez Chavarría - 2023161347
 
 Número de Proyecto Programado:
-	1ero
+	Segundo
 
 Fecha de Entrega:
-	6/10/2025
+	12/11/2025
 
 Estatus de la Entrega:
-	Regular
-asdasdsdasdasdsad
+	Muy Buena
